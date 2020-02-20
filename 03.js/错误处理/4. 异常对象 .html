@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>异常对象</title>
+	<!-- https://zh.javascript.info/try-catch#error-dui-xiang -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 异常发生，JS 会生成一个异常对象 -->
+	<script>
+		try {
+		  lalala; // 异常，变量未定义！
+		} catch(err) {
+		  print(err.name);
+		  print(err.message);
+		  print(err.stack); 
+
+		  // 可以转化成 "name: message" 形式的字符串
+		  print(err); // ReferenceError: lalala is not defined
+		  print('');
+		}
+	</script>
+
+	<!-- 使用内置的异常构造器，创建异常对象 -->
+	<script>
+		var error = new Error("Error Object");
+		var error = new SyntaxError("SyntaxError Object");
+		var error = new SyntaxError("SyntaxError Object");
+		var error = new ReferenceError("ReferenceError Object");
+		var error = new TypeError("TypeError Object");
+		
+		print(error.name); // TypeError
+		print(error.message); // TypeError Object	
+		print('');
+	</script>
+
+	<!-- 技术上讲，我们可以使用任何东西来作为一个异常对象 -->
+	<script>
+		try {
+			throw 1;
+		} catch(e) {
+			print(e.name); // undefined
+			print(e.message); // undefined
+			print(e); // 1
+			print('');
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JSON.stringify方法</title>
+	<!-- https://zh.javascript.info/json -->
+	<!-- JSON (JavaScript Object Notation) 是表示值和对象的通用格式 -->
+	<!-- 
+		// ===  JSON.stringify   	对象 -> JSON 字符串
+		// 完整语法： let json = JSON.stringify(value[, replacer, space])
+		//  (1) value - 要编码的值
+		//  (2) replacer - 要编码的属性数组或映射函数 function(key, value)
+		//  (3) space - 文本添加缩进、空格和换行符
+	-->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+		
+		//（1）如果我们传递一组属性给【JSON.stringify 的第二个参数】，只有这一组属性会被编码
+		function test1() {
+			let meetup = {
+			  	title: "Conference",
+			  	participants: [{name: "John"}, {name: "Alice"}],
+			};
+
+			print( JSON.stringify(meetup, ['title', 'participants']) ); // 属性列表应用于整个对象结构，name 不在列表中，所以不会被编码
+			// {"title":"Conference","participants":[{},{}]}
+		}
+
+		//（2）存在“循环引用”的对象，不能被整体编码，需去掉导致循环引用的属性
+		function test2() {
+			let room = {
+			  	number: 23
+			};
+
+			let meetup = {
+			 	title: "Conference",
+			  	participants: [{name: "John"}, {name: "Alice"}],
+			  	place: room // meetup references room
+			};
+
+			room.occupiedBy = meetup; // room references meetup
+
+			print( JSON.stringify(meetup, ['title', 'participants', 'place', 'name', 'number']) ); // 包含除了会导致循环引用的 room.occupiedBy 之外的所有属性
+		}
+
+		//（3）使用：传递函数作为 replacer，
+		//     replacer 函数获取包括嵌套对象和数组项的每个键/值对，它被递归地应用。
+		//     replacer 里面 this 的值是包含当前属性的对象。
+		function test3() {
+			let room = {
+			  	number: 23
+			};
+
+			let meetup = {
+			  	title: "Conference",
+			  	participants: [{name: "John"}, {name: "Alice"}],
+			  	place: room // meetup references room
+			};
+
+			room.occupiedBy = meetup; // room references meetup
+
+			print( JSON.stringify(meetup, function replacer(key, value) {
+				// 函数将调用每个 (key,value) 对，返回 “replacement” 值，代替原来的值
+			  	return (key == 'occupiedBy') ? undefined : value; // “忽略 occupiedBy 属性”。返回 undefined，属性在编码时被跳过
+			}));
+		}
+
+		//（4）格式化：spacer，为字符串化的对象提供“缩进”和额外的“空格”
+		function test4() {
+			let user = {
+				name: "John",
+				age: 25,
+				roles: {
+					isAdmin: false,
+					isEditor: true
+				}
+			};
+
+			// alert( JSON.stringify(user, null, 0) );
+			// alert( JSON.stringify(user, null, 4) );
+			print( JSON.stringify(user, null, 0) );
+			print( JSON.stringify(user, null, 4) );
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+		
+	</script>
+</body>
+</html>

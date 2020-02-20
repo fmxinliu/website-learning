@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>智能函数参数</title>
+	<!-- https://zh.javascript.info/destructuring-assignment -->
+	<!-- 对象让我们能够把许多信息打包到一个单一的实体中，数组则让我们能够存放有序的集合 -->
+	<!-- 解构赋值是一种特殊的语法，它让我们可以将数组或对象进行“拆包”，存放到一系列的变量中 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 有时候一个函数可能有很多参数，大部分的参数是可选的，对用户界面来说就尤其如此。
+		// 想象一下这种情况：有一个创建菜单的函数，可能有宽度参数，高度参数，标题参数和菜单中的菜单项等等。
+
+		// 以下是这种函数的一个不好的写法：
+		function showMenu(title = "Untitled", width = 200, height = 100, items = []) {
+			// ...
+		}
+
+		// Q:存在 2 个问题
+		//  (1) 你怎么记得住这么多参数的顺序
+		//  (2) 当大部分的参数采用默认值就好的情况下，怎么调用这个函数。
+		//  	showMenu("My Menu", undefined, undefined, ["Item1", "Item2"]) // 可读性变差 !!!!!!
+
+		// Solution:解构赋值语法前来救援！
+		// 思路：我们可以把所有参数当作一个对象来传递，然后函数马上把这个对象解构成多个变量
+
+		function test1() {
+			// 我们传递一个对象给函数
+			let options = {
+				title: "My menu",
+				items: ["Item1", "Item2"]
+			};
+
+			// ...然后函数马上把对象展开成变量
+			function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {
+				// title, items – 从 options 参数提取出来,
+				// width, height – 使用默认值
+				print( `${title} ${width} ${height}` ); // My Menu 200 100
+				print( items ); // Item1, Item2
+			}
+
+			showMenu(options);
+		}
+		
+		function test2() {
+			let options = {
+				title: "My menu",
+				items: ["Item1", "Item2"]
+			};
+
+			function showMenu({
+				title = "Untitled", 
+				width: w = 100,  // width 赋值给 w
+  				height: h = 200, // height 赋值给 h
+  				items: [item1, item2] // items 第一个元素赋值给 item1, 第二个元素赋值给 item2
+				}) {
+				print( `${title} ${w} ${h}` ); // My Menu 200 100
+				print( item1 ); // Item1
+				print( item2 ); // Item2
+			}
+
+			showMenu(options);
+		}
+
+		// 所有参数使用默认值
+		function test3() {
+			function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {
+				print( `${title} ${width} ${height}` );
+				print( items );
+			}
+
+			// showMenu(); // error !!!!!!!!
+			showMenu({}); // 递一个空的对象
+		}
+
+		// 所有参数使用默认值 - 简化
+		function test4() {
+			function showMenu({title = "Untitled", width = 200, height = 100, items = []} = {}) { // 设置整个参数对象的默认值为 {}
+				print( `${title} ${width} ${height}` );
+				print( items );
+			}
+
+			showMenu();
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+
+	</script>
+</body>
+</html>

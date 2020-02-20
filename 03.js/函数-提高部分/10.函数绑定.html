@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数绑定</title>
+	<!-- https://zh.javascript.info/bind -->
+	<!-- 在 JavaScript 中，this 很容易就会丢失。一旦一个方法被传递到另一个与对象分离的地方 —— this 就丢失了。 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+		let user = {
+			firstName: "John",
+  			sayHi() {
+    			print(`Hello, ${this.firstName}....`);
+  			}
+		};
+	</script>
+
+
+	<!-- 丢失 “this” -->
+	<script>
+		setTimeout(user.sayHi, 1000); // Hello, undefined!
+
+		// 等价于：
+			// let f = user.sayHi;  // 对象与方法分离
+			// setTimeout(f, 1000); // 用户上下文丢失  this=window
+	</script>	
+
+	<!-- 如何确保对象方法传递时，能在正确的上下文中被调用呢？ -->
+
+	<!-- 解决方案 1：包装层 -->
+	<script>
+		// (1) 包装函数
+		setTimeout(function() {
+				user.sayHi(); // Hello, John!
+			}, 1000);
+
+		// (2) 使用箭头函数
+		setTimeout(() => user.sayHi(), 1000); // Hello, John!
+
+		// (3) 存在漏洞!!!
+		+function() {
+			let user1 = Object.assign({}, user);
+			setTimeout(() => user1.sayHi(), 1000); // ************
+
+			// 执行前，改变了 user1 的值，影响了预期设定
+			user1 = { sayHi() { print("************"); } };
+		}();
+	</script>
+
+	<!-- 解决方案 2：bind -->
+	<script>
+		// (1) 基本语法  let boundFunc = func.bind(context, ...args); // this=context，typeof boundFunc : function
+		!function() {
+			let user = { firstName: "John" };
+
+			function func(phrase) {
+				print(phrase + ', ' + this.firstName);
+			}
+
+			// 将 this 绑定给 user
+			let funcUser = func.bind(user);
+			funcUser("Hello"); // Hello, John（参数 "Hello" 被传递了，并且 this=user）
+			print(`===bind 函数：固定住 this，并返回一个 ${typeof funcUser}===`);
+		}();
+
+		// (2) 避免了 包装层 的漏洞
+		(function() {
+			let user = {
+				firstName: "John",
+		  		say(phrase) {
+			    	print(`${phrase}, ${this.firstName}!`);
+			  	}
+			};
+
+			let say = user.say.bind(user);
+
+			say("Bye"); // Bye, John ("Bye" 被传递给了函数 say)
+			setTimeout(() => say("bye bye"), 1000); // bye bye, John!
+			// user = null;
+		})();
+
+
+		// (3) 可以 “批量绑定”
+		(function() {
+			let user = {
+				name: "Mr liu",
+				age: 100,
+				sayName() { print(`my neme is ${this.name}`); },
+				sayAge() { print(`my age is ${this.age}`); }
+			};
+
+			let arr = [];
+			for (let key in user) {
+				if (typeof user[key] == 'function') {
+					let func = user[key].bind(user);
+					arr.push(func);
+				}
+			}
+
+			for (let f of arr) f();
+		}());
+
+	</script>
+}
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+div{
+   width: 200px;
+   height: 150px;
+   border: 1px solid red;
+}
+#box1{
+	float: left;
+	width: 200px;
+	height: 200px;
+}
+#box2{
+	float: left;
+}
+#box3{
+	float: left;
+}

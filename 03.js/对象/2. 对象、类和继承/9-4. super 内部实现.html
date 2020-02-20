@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>super 内部实现</title>
+	<!-- https://zh.javascript.info/class-inheritance#super-nei-bu-ji-yu-homeobject-shi-xian -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- super.method() 可以从当前对象的原型中获取吗？ -->
+	<script>
+		let animal = {
+			name: "Animal",
+			eat() {
+				print(`${this.name} eats.`);
+			}
+		}
+		
+		let rabbit = {
+			__proto__: animal,
+			name: "Rabbit",
+			test() {
+				// 从原型上获取 eat()
+
+				// (1)在原型的上下文中调用
+				this.__proto__.eat(); // Animal eats.
+			
+				// (2)在当前对象的上下文中调用
+				this.__proto__.eat.call(this); // Rabbit eats.
+				
+				// (3)如何检索 eat ？？？ 同 (2) ？？？
+				super.eat(); // Rabbit eats.
+			},
+
+			eat() {
+				// ...新建一个兔子并调用父类的方法
+				this.__proto__.eat.call(this); // (*)
+			}
+		}
+
+		let longEar = {
+			__proto__: rabbit,
+			name: "LongEar",
+			eat() {
+				// ...用长耳朵做一些事情，并调用父类（rabbit）的方法
+    			this.__proto__.eat.call(this); // (**)
+			}
+		}
+
+		rabbit.test();
+
+		//
+		rabbit.eat();
+
+		debugger
+		// (*) 和 (**) 这两行中，this=longEar。造成了 rabbit.eat() 无线递归，而不是在原型链上向上寻找方法
+		// longEar.eat(); // Error: Maximum call stack size exceeded
+
+	</script>
+
+
+	<!-- JavaScript 为函数额外添加了一个特殊的内部属性：[[HomeObject]] -->
+	<script type="module">
+		let animal = {
+		  name: "Animal",
+		  eat() {         // [[HomeObject]] == animal
+		    alert(`${this.name} eats.`);
+		  }
+		};
+
+		let rabbit = {
+		  __proto__: animal,
+		  name: "Rabbit",
+		  eat() {         // [[HomeObject]] == rabbit
+		    super.eat();
+		  }
+		};
+
+		let longEar = {
+		  __proto__: rabbit,
+		  name: "Long Ear",
+		  eat() {         // [[HomeObject]] == longEar
+		    super.eat();
+		  }
+		};
+
+		// [[HomeObject]] 只有使用 super 调用父类的方法是才会被使用。
+		// 每个方法都会在内部的 [[HomeObject]] 属性上标记它的对象。然后 super 利用它来解析父级原型。
+		// 保证了在原型链上向上寻找方法。
+		longEar.eat();  // Long Ear eats.
+	</script>
+
+</body>
+</html>

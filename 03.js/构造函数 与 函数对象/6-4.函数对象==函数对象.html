@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数对象，内部无法添加属性</title>
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>
+		// "use strict"
+		function animal() {
+			function hi() { // <-- ok，内部，可以声明其他函数对象
+				print("hi");
+			}
+
+			//=============== 函数对象：内部，无法添加属性 =============== 
+			// say() { <-- error !!!
+			// 	print("animal");
+			// }//,
+			// name: "rabbit" // <-- error !!! 
+			
+			//=============== 非构造函数中，this指向不明 =============== 
+			this.say = function() { // <-- 给 this 对象添加属性 say，this 并不指向 animal
+				print("animal");
+			}
+		}
+
+
+		animal.walk = function() { // <-- 外部，可以添加属性
+			print("walk");
+		};
+
+		animal.walk();
+		animal();
+		animal.say(); // <-- error !!!
+
+	</script>
+	
+</body>
+</html>

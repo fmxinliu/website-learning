@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>inline间隙问题</title>
+	<style type="text/css">
+		a{
+			background:pink;
+			font-size: 24px; /*2.必须设置子元素的字体大小，才能正确显示子元素的文字*/
+		}
+		div{
+			font-size: 0; /*1.设置父元素的字体大小，注意：父元素中的所有文字都不可见了*/
+	</style>
+</head>
+<body>
+	<p>inline元素之间有间隙</p>
+	<a href="http://www.baidu.com">百度</a>
+	<a href="http://www.imooc.com">慕课网</a>
+	
+	<hr />
+	
+	<p>去掉inline元素之间的间隙</p>
+	<div>
+		<a href="http://www.baidu.com">百度</a>
+		<a href="http://www.imooc.com">慕课网</a>
+	</div>
+
+</body>
+</html>
+

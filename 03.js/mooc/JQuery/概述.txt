@@ -1,0 +1,5 @@
+（1）快速、简洁的第三方js库 write less, do more
+（2）对DOM操作的终极简化，屏蔽了浏览器的兼容性问题{核心DOM：万能，但繁琐；HTMO DOM：简单，但不是万能}
+（3）应用：DOM操作、事件、动画效果、Ajax
+（4）使用：下载JQuery.js 或者 使用JQuery CND
+（5）工厂函数：$()

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型继承的读写规则</title>
+	<!-- https://zh.javascript.info/prototype-inheritance#du-xie-gui-ze -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 写/删除操作直接在对象上进行操作。 -->
+	<script>
+		let animal = {
+			eats: true,
+			walk() {
+				print("Animal walk");
+			}
+		};
+
+		var rabbit = {
+			__proto__: animal
+		};
+
+		// 原型仅用于读取属性。
+		print("<br/>不能通过 rabbit 删除 animal 的数据属性 walk");
+		delete rabbit.walk;
+		animal.walk(); // Animal walk
+		rabbit.walk(); // Animal walk
+
+		rabbit.walk = function() { // <-- 给 rabbot 自己添加属性
+			print("Rabbit! Bounce-bounce!");
+		}
+
+		print("<br/>不能通过 rabbit 修改 animal 的数据属性 walk");
+		animal.walk(); // Animal walk
+		rabbit.walk(); // Rabbit! Bounce-bounce!
+	</script>
+
+
+	<!-- 对于 getters/setters —— 如果也无法去修改原型中的值。 -->
+	<script>
+		"use strcit"
+		let user = {
+		  	name: "John",
+		  	surname: "Smith",
+
+		  	set fullName(value) {
+		    	[this.name, this.surname] = value.split(" ");
+		  	},
+
+		  	get fullName() {
+		    	return `${this.name} ${this.surname}`;
+		  	}
+		};
+
+		let admin = {
+			__proto__: user,
+			isAdmin: true
+		};
+
+		print(admin.fullName); // John Smith
+
+		admin.fullName = "Alice Cooper"; // <-- 给 admin 添加了一个数据属性，并没有调用 setter
+
+		print(user.fullName); // John Smith
+		print(admin.fullName); // "Alice Cooper"
+	</script>
+
+</body>
+</html>

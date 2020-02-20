@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数对象</title>
+	<!-- https://zh.javascript.info/function-object -->
+	<!-- 在 JavaScript 里，函数是对象，有如下属性
+		（1）name – 函数的名字。不仅仅在函数定义指定时存在，而且在赋值或者对象属性中也会有。
+		（2）length – 函数定义时的入参个数。余参不参与计数
+		（3）可自定义属性。 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>
+		test1$1();
+		test1$2();
+		test1$3();
+		test1$4();
+		test1$5();
+
+		test2$1();
+		test2$2();
+
+		test3$1();
+		test3$2();
+
+		// =========== 属性 “name” =============
+		
+		//  函数声明方式
+		function test1$1() {
+			function sayHi() {
+				alert("Hi");
+			}
+
+			print(sayHi.name); // 「上下文命名」
+		}
+
+		// 函数表达式方式
+		function test1$2() {
+			let sayHi = function() {
+			  	alert("Hi");
+			}
+
+			print(sayHi.name);
+		}
+
+		// 函数默认值形式
+		function test1$3() {
+			function f(sayHi = function() {}) {
+				print(sayHi.name);
+			}
+
+			f();
+		}
+
+		// 对象方法也有名字
+		function test1$4() {
+			let user = {
+				sayHi() {
+
+				},
+
+				sayBye: function() {
+
+				}
+			}
+
+			print(user.sayHi.name); // sayHi
+			print(user.sayBye.name); // sayBye
+		}
+
+		// 无法推测名字的情况
+		function test1$5() {
+			// 函数在数组中创建
+			let arr = [function() {}];
+			print(arr[0].name);// <空字符串>
+			// 引擎无法得到正确的名字，所以没有值
+		}
+
+
+		// =========== 属性 “length” =============
+		
+		function test2$1() {
+			function f1(a) {}
+			function f2(a, b) {}
+			function many(a, b, ...more) {}
+
+			// 返回函数入参的个数
+			print(f1.length); // 1
+			print(f2.length); // 2
+			print(many.length); // 2  余参不参与计数
+		}
+
+		function test2$2() {
+			function ask(question, ...handlers) {
+				let isYes = confirm(question);
+
+				// 多态性
+				for (let handler of handlers) {
+					if (handler.length == 0) {
+						if (isYes) handler(); // 无参函数
+					} else {
+						handler(isYes); // 有参函数
+					}
+				}
+			}
+
+			// 正向回答，两个 handler 都会被调用
+			// 负向回答，只有个第二个被调用
+			ask("Question?", () => alert('You said yes'), result => alert(result));
+		}
+
+		// =========== 自定义属性 =============
+
+		function test3$1() {
+			function sayHi() {
+				print("Hi");
+
+				// 增加了 counter 属性，用来跟踪总的调用次数
+  				sayHi.counter++;
+			}
+
+			sayHi.counter = 0; // 初始值
+
+			sayHi();
+			sayHi();
+			print( `调用了 ${sayHi.counter} 次`); // 调用了 2 次
+		}
+
+		// 函数属性有时会用来替代闭包
+		function test3$2() {
+			function makeCounter() {
+				// 不再用：
+  				// let count = 0 // 如果 count 定义在外层（函数），那么外部的代码无法访问到它，只有嵌套的函数可以修改它
+  				function counter() {
+  					return counter.count++;
+  				}
+
+  				counter.count = 0;
+
+  				return counter;
+			}
+
+			let counter = makeCounter();
+
+			counter.count = 10; // 如果 count 直接被存储在函数里，外部可以直接访问
+
+			print( counter() ); // 10
+			print( counter() ); // 11
+		}
+
+	</script>
+	
+</body>
+</html>

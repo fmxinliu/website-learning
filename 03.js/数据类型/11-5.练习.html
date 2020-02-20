@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JSON 方法 - 练习</title>
+	<!-- https://zh.javascript.info/json -->
+	<!-- JSON (JavaScript Object Notation) 是表示值和对象的通用格式 -->
+	<!-- 
+		// ===  JSON.parse   	JSON 字符串 -> 对象
+		// 完整语法： let value = JSON.parse(str[, reviver]);
+		//  (1) str - 要解析的 JSON 字符串
+		//  (2) reviver - 将为每个 (key,value) 对调用的可选函数（键，值）进行转换
+	-->
+
+	<!-- JSON 不支持注释。向 JSON 添加注释无效 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		let room = {
+		  	number: 23,
+
+		  	toString() {
+		  		return "[object Object](room)";
+		  	}
+		};
+
+		let meetup = {
+		  	title: "Conference",
+		  	occupiedBy: [{name: "John"}, {name: "Alice"}],
+		  	place: room,
+
+		  	toString() {
+		  		return "[object Object](meetup)";
+		  	}
+		};
+
+		// circular references
+		room.occupiedBy = meetup;
+		meetup.self = meetup;
+
+		// (1) 第一个调用很特别。它是使用特殊的“包装对象”制作的： {"": meetup}。换句话说，第一个 (key,value) 对是空键，并且该值是整个目标对象。这就是为什么上面的例子中第一行是 ":[object Object]" 的原因。
+		alert( JSON.stringify(meetup, function replacer(key, value) {
+			print(`${key}:${value}`); // to see what replacer gets
+			return (key != "" && value == meetup) ? undefined : value; // (2) 需要判断 key=="" 以排除第一个调用时 value 是 meetup 的情况
+		}));
+
+		/* result should be:
+		{
+		  "title":"Conference",
+		  "occupiedBy":[{"name":"John"},{"name":"Alice"}],
+		  "place":{"number":23}
+		}
+		*/
+
+	</script>
+</body>
+</html>

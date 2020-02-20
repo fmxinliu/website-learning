@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>this</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 1.方法中访问属性，请使用 this
+		let test = {
+			name : "lili", // 逗号不能省略 !!!!!
+
+			sayName() {
+				print(name); // 无法访问"name"属性
+				print(this.name); // "this" 指代调用的对象
+				print(test.name); // "test" 替代 "this"，访问的不是调用对象的属性  #1
+			}
+		};
+		test.sayName();
+
+		// // #2 导致错误
+		// let test2 = test;
+		// test = null; 
+		// test2.sayName();
+
+		// 2.this 可以用于任何函数
+		let user = { name: "John" };
+		let admin = { name: "Admin" };
+
+		function sayHi() {
+		  print( this.name );  // JavaScript 中，this 是『自由』的，它的值是在调用时进行求值的。并不是总是指向定义对象，即『绑定 this』
+		}
+
+		// 在两个对象中使用的是相同的函数
+		user.f = sayHi;
+		admin.f = sayHi;
+
+		// 它们调用时有不同的 this 值。
+		// 函数内部的 "this" 是点之前的这个对象。
+		user.f(); // John  (this == user)
+		admin.f(); // Admin  (this == admin)
+
+		admin['f'](); // Admin（使用点或方括号语法来访问这个方法，都没有关系。）
+
+		user.f; // 这里并没有调用函数 !!!!!
+		
+	</script>
+</body>
+</html>

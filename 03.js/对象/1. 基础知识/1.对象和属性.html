@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>对象和属性</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 1.空的对象
+		var user = new Object(); // “构造函数” 的语法
+		var user = {};  // “字面量” 的语法
+
+		// 2.属性[键值对]
+		var user = {	   // 一个对象
+			name: "John",  // 键 "name"，值 "John"
+  			age: 30,        // 键 "age"，值 30
+  			"likes birds": true,  // 多词属性名必须加引号
+		};
+
+		// 点操作符 >>>>>>>>>>>>>>>>>>>>>>>>>>
+		print(user.name);
+
+		// 添加属性
+		user.isAdmin = true;
+		print(user.isAdmin);
+
+		// 移除属性
+		delete user.age;
+		print(user.age);
+
+
+		// 方括号操作符 >>>>>>>>>>>>>>>>>>>>>>>
+		// user.likes birds = false // 语法错误
+		user["likes birds"] = false;
+		print(user["likes birds"]); // 方括号中的字符串要放在引号中
+
+		// 方括号提供了通过其他表达式来获取属性名的方式
+		let key = prompt("What do you want to know about the user?", "name");
+		print(user[key]);
+
+		// 计算属性
+		let fruit = prompt("Which fruit to buy?", "apple");
+		let bag = {
+			[fruit] : 5, // 属性名从 fruit 变量中计算
+		};
+		print(bag.apple);
+	</script>
+</body>
+</html>

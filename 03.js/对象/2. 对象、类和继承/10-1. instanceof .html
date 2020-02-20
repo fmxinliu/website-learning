@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>instanceof</title>
+	<!-- https://zh.javascript.info/instanceof#ref-instanceof -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 语法： obj instanceof Class  用来判断 obj 是否隶属于 Class 类（或者是 Class 类的衍生类）-->
+	<script>
+		class People extends Object {}
+
+		var people = new People();
+
+		// instanceof 沿着原型链搜寻与 Class.prototype 相等的原型，构造器是不参与检测的 !!!
+
+		print(people instanceof People); // true
+		// people.___proto__ === People.prototype (match!)
+
+		print(people instanceof Object); // true
+		// people.___proto__.___proto__ === Object.prototype(match!)
+
+		print(People instanceof Object); // true
+		// People.__proto__.__proto__.__proto__ === Object.prototype (match!)
+
+		print('');
+	</script>
+
+
+	<!-- 易错 -->
+	<script>
+		class A {}
+		class B extends A {}
+		class C extends B {}
+		
+		// 原型链见图 10-1
+		print(B instanceof A); // false  <--  B -> A.prototype 无法到达
+		print(C instanceof B); // false  <--  C -> B.prototype 无法到达
+		print(C instanceof A); // false  <--  C -> A.prototype 无法到达
+		print('');
+
+		print(A instanceof Object); // true
+		print(B instanceof Object); // true
+		print(C instanceof Object); // true
+		print('');
+
+		print(new B() instanceof A); // true
+		print(new C() instanceof B); // true
+		print(new C() instanceof A); // true
+		print('');
+
+		print(Object.__proto__ === Function.prototype); // true
+	</script>
+</body>
+</html>

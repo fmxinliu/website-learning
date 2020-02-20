@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>嵌套解构</title>
+	<!-- https://zh.javascript.info/destructuring-assignment -->
+	<!-- 对象让我们能够把许多信息打包到一个单一的实体中，数组则让我们能够存放有序的集合 -->
+	<!-- 解构赋值是一种特殊的语法，它让我们可以将数组或对象进行“拆包”，存放到一系列的变量中 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 语法：等号左侧必须和等号右侧有相同的结构
+
+		let options = {
+			size: {
+				width: 100,
+				height: 200
+			},
+			items: ["Cake", "Donut"],
+			extra: true    // 一些不会被解构的额外属性
+		};
+
+		// 为了清晰起见，解构赋值语句被写成多行
+		let {
+			size: { // 把 size 赋值到这里
+				width,
+				height
+			},
+			items: [item1, item2], // 把 items 赋值到这里
+			title = "Menu", // 在对象中不存在的属性（会使用默认值)
+			...rest // 必须是最后一个
+		} = options;
+
+		print(title);
+		print(width);
+		print(height);
+		print(item1);
+		print(item2);
+		print( Object.entries(rest) ); // 对象，rest 也是一个对象；数组，rest 也是一个数组
+
+		// 将 size 作为一个整体取出赋值给一个变量，忽略剩下的所有
+		let { size } = options;
+		print( Object.entries(size) );
+
+	</script>
+</body>
+</html>

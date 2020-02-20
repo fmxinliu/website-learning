@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>超链接样式</title>
+	<style type="text/css">
+		#othernews {
+			text-align:left;
+			font-size:14px;
+			line-height:1.5em;
+		}
+		/*== 4种伪类选择器（按顺序定义Love&Hate）==*/
+		/*未被访问的链接*/
+		a:link {
+			color: #09f;/*浅蓝*/
+			text-decoration: none;
+		}
+		/*已访问的链接*/
+		a:visited {
+			text-decoration: none;
+			color: #930;/*红*/
+		}
+		/*鼠标指针悬停于链接上方*/
+		a:hover {
+			text-decoration: underline;
+			color: #03c;/*深蓝*/
+		}
+		/*链接正在被点击（或点击后正在下载）*/
+		a:active {
+			text-decoration: none;
+			color: #ccc;/*灰色*/
+		}
+	</style>
+</head>
+
+<body> 
+	<div id = "othernews">
+		相关阅读:<!-- 这里换行会在:后添加一个空格 -->
+		<p><a href="#1">迪拜华商财富缩水 瞻望前景信心犹豫</a></p>
+		<p><a href="#2">全球华商总资产恢复增至3.9万亿美元</a></p>
+		<p><a href="#3">华商基金胡宇权：行业不平衡将带来投资机会</a></p>
+	</div>
+</body>
+</html>

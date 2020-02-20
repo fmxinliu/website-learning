@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>柯里化</title>
+	<!-- https://zh.javascript.info/currying-partials#ke-li-hua -->
+	<!-- Currying 是一项将一个调用形式为 f(a, b, c) 的函数转化为调用形式为 f(a)(b)(c) 的技术。 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+	</script>
+
+	<!-- 一系列的封装  -->
+	<script>
+		"use strict"
+		function curry(func) {
+			return function(a) {
+				return function(b) {
+					return func(a, b);
+				};
+			};
+		}
+
+		function sum(a, b) {
+			return a + b;
+		}
+
+		let f = curry(sum);
+		print(f(11)(22));
+
+	</script>
+
+	<!-- 柯里化之后，还可以使用之前的函数，而且很方便生成偏函数 -->
+	<script>
+		"use strict"
+		function curry(func) {
+			return function curried(...args) {
+				// 如果 args.length == func.length（args 和 func 的参数数量相同），那么调用 func
+				// 否则的话返回一个偏函数，将 args 作为第一个参数
+    			if (args.length >= func.length) {
+    				return func.apply(this, args);
+    			} else {
+    				return curried.bind(this, ...args); // <-- 返回一个函数 ####
+    				// return function(...args2) {
+    				//  	return curried.apply(this, args.concat(args2)); // <-- 函数调用 ####
+    				// };
+    			}
+			}
+		}
+
+		function log(date, importance, message) {
+		  	print(`[${date.getHours()}:${date.getMinutes()}] [${importance}] ${message}`);
+		}
+
+		// 柯里化
+		log = curry(log);
+
+		// (0) 正常调用
+		log(new Date(), "DEBUG", "some debug");
+
+		// (1) 完全柯里化形式
+		log(new Date())("DEBUG")("some debug"); // log(a)(b)(c)
+
+		// (2) 先按第 1 个参数确定偏函数，然后用另外两个参数调用它
+		let todayLog = log(new Date());
+		todayLog("INFO", "message"); // log(a)(b, c)
+
+		// (3) 先按前 2 个参数确定偏函数，然后用另外第 3 个参数调用它
+		let todayDebug = todayLog("DEBUG");
+		todayDebug("message");  // log(a, b)(c)
+
+	</script>
+
+</body>
+</html>

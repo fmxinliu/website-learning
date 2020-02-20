@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>更改原生原型</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- ## 更改原生原型 [#原生-原型-更改] -->
+	<script>
+		String.prototype.show = function() { // <-- 原生的原型是可以被修改，可以被所有字符串对象使用
+			print(this);
+		};
+
+		"BOOM!".show();  // BOOM! // <-- 原型是全局的，很容易造成冲突，不推荐!!!
+	</script>
+
+	<!-- polyfills  -->
+	<script>
+		if (!String.prototype.repeat) { //假设没有这个方法
+			//把它添加到原型上
+
+			String.prototype.repeat = function(n) {
+				//重复字符串 n 次
+
+				//实际上代码是比这个更复杂的，
+			    //当 "n" 的值为负数的时候抛出异常
+			    //完整的算法在规范中
+			    return new Array(n + 1).join(this);
+			};
+		}
+
+		print( "La".repeat(3) ); // LaLaLa
+	</script>
+</body>
+</html>

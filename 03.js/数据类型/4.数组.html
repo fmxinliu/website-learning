@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组</title>
+	<!-- https://zh.javascript.info/array -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		/* ------------- 声明 -------------- */
+		let fruits = ["Apple", "Orange", "Plum"];
+		fruits[fruits.length] = 'Lemon'; // 新加一个元素
+		print(fruits);
+
+		// 数组可以存储任何类型的元素
+		let arr = [ 'Apple', { name: 'John' }, true, function() { print('hello'); } ]; // 混合值
+		print( arr[1].name ); // John
+		arr[3](); // hello
+
+		/* ------------- 数组 pop/push, shift/unshift 方法 -------------- */
+		// (1) pop 末端取出
+		print(fruits.pop());
+		print(fruits);
+
+		// (2) push 末端添加
+		print(fruits.push("Pear")); // 返回元素个数
+		print(fruits);
+
+		// (3) shift 前端取出
+		print(fruits.shift());
+		print(fruits);
+
+		// (4) unshift 前端添加
+		print(fruits.unshift("Apple", "Banana")); // 返回元素个数
+		print(fruits);
+
+		/* ------------- 性能 -------------- */
+		print("push/pop 方法运行的比较快，而 shift/unshift 比较慢");
+
+		/* ------------- 数组是一种特殊的对象 -------------- */
+		// 因为数组是基于对象的。我们可以给它们添加任何属性
+		let arr2 = [];
+		arr2.test = "demo";
+		arr2[100] = "1";
+		print(arr2);
+
+		/*
+		数组误用的几种方式:
+		(1) 添加一个非数字的属性比如 arr.test = 5。
+		(2) 制造空洞，比如：添加 arr[0] 后添加 arr[1000] (它们中间什么都没有)。
+		(3) 以倒序填充数组, 比如 arr[1000]，arr[999] 等等。
+
+		请将数组视为作用于有序数据的特殊结构，它们为此提供了特殊的方法。数组在 JavaScript 引擎内部是经过特殊调整的，使得更好的作用于连续的有序数据，所以请以这种方式使用数组。如果你需要任意键值，那很有可能实际上你需要的是常规对象 {}。
+		*/
+
+		/* ------------- 数组遍历 -------------- */
+		// (1)
+		print("=== for")
+		for (var i = 0; i < fruits.length; i++) { // 运行最快
+			print(fruits[i]);
+		}
+
+		// (2)
+		print("=== for..of");
+		for (let fruit of fruits) { // 只能访问 items，不能获取当前元素的索引
+			print(fruit);
+		}
+
+		// (3)
+		print("=== for..in");
+		for (let key in fruits) { // 会迭代所有属性，不仅仅是数字属性，适用于普通对象，不适用于数组，而且会慢 10-100 倍（不推荐使用!!!!!）
+			print(fruits[key]);
+		}
+
+		/* ------------- 关于 “length” -------------- */
+		// (1) length 并不是数组里元素的个数，而是最大的数字索引值加一
+		let arr3 = [];
+		arr3[123] = "Apple";
+		print( arr3.length ); // 124
+
+		//（2）length 属性的另一个有意思的点是它是可写的。
+		arr = [1, 2, 3, 4, 5];
+		arr.length = 2;
+		print( arr ); // [1, 2]
+
+		arr.length = 5;
+		print( arr[3] ); // undefined: 被截断的那些数值并没有回来
+
+		// 清空数组最好的方法就是：arr.length = 0;
+		arr.length = 0;
+		print(arr);
+
+		/* ------------- new Array() 创建数组，不推荐使用 -------------- */
+		let arr4 = new Array("Apple", "Pear", "etc");
+		print(arr4);
+
+		/// 易错!!!!
+		let arr5 = new Array(2); // 会创建一个数组 [2] 吗？？？
+		print(arr5); // new Array(number) 会创建一个指定长度的数组，且不含有任何项
+		print(arr5[0]); // undefined！没有元素.
+		print(arr5.length); // length 2
+		/// 
+
+		/* ------------- 多维数组 -------------- */
+		let matrix = [
+		  [1, 2, 3],
+		  [4, 5, 6],
+		  [7, 8, 9]
+		];
+		print( matrix[1][1] );
+
+
+		/* ------------- toString -------------- */
+		let arr6 = [1, 2, 3];
+		print(String(arr6) === "1,2,3"); // true
+
+		print( [] + 1 ); // "1"
+		print( [1] + 1 ); // "11"
+		print( [1,2] + 1 ); // "1,21"
+
+		//////////////////////////////////////////////////////////
+		print("===== 练习1 （在数组上下文调用）=====");
+		let arr7 = ["a", "b"];
+		arr7.push(function() {
+			print(this);
+		});
+
+		arr7[2]();
+
+		print("===== 练习2 （最大连续子数组和）=====");
+		/*print("复杂度 O(n2)");*/
+		function getMaxSubSum1(arr) {
+			let maxSum = 0; // 如果没有取到任何元素，就返回 0
+
+			for (let i = 0; i < arr.length; i++) {
+				let sumFixedStart = 0;
+				for (let j = i; j < arr.length; j++) {
+					sumFixedStart += arr[j];
+					maxSum = Math.max(maxSum, sumFixedStart);
+				}
+			}
+
+			return maxSum;
+		}
+
+		/*print("复杂度 O(n)");*/
+		function getMaxSubSum(arr) {
+			let maxSum = 0;
+			let partialSum = 0;
+
+			for (let item of arr) { // arr 中的每个 item
+				partialSum += item; // 将其添加到 partialSum
+				maxSum = Math.max(maxSum, partialSum); // 记住最大值
+				if (partialSum < 0) partialSum = 0; // 如果是负数就置为 0
+			}
+
+			return maxSum;
+		}
+
+		function test(func) {
+			print( func([-1, 2, 3, -9]) ); // 5
+			print( func([-1, 2, 3, -9, 11]) ); // 11
+			print( func([-2, -1, 1, 2]) ); // 3
+			print( func([1, 2, 3]) ); // 6
+			print( func([100, -9, 2, -3, 5]) ); // 100
+		}
+
+		test(getMaxSubSum);
+		test(getMaxSubSum);
+	</script>
+</body>
+</html>

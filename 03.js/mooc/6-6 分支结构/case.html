@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>switch...case</title>
+</head>
+<body>
+	<script>
+		function test(){
+			var a,b,sum,mul;
+			a=prompt("请输入a：");
+			b=prompt("请输入b：");
+			sum=a+b; // 字符串链接
+			mul=a*b
+			alert(mul);
+			mul*=100;
+			alert(mul);
+		}
+		
+		// switch 和 case 都允许任意表达式。
+		let arg = prompt("Enter a value?")
+		switch (arg) {
+		  case '0':
+		  case '1':
+		    alert( 'One or zero' );
+		    break;
+
+		  case '2':
+		    alert( 'Two' );
+		    break;
+
+		  case 3: // “严格相等”。 if 替换 switch 时，必须使用严格相等 '==='
+		    alert( 'Never executes!' );
+		    break;
+		  default:
+		    alert( 'An unknown value' )
+		}
+	</script>
+</body>
+</html>

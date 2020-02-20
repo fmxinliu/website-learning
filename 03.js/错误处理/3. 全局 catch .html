@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>全局 catch</title>
+	<!-- https://zh.javascript.info/try-catch#quan-ju-catch -->
+	<!-- (1) Node.JS 有 process.on(‘uncaughtException’) 
+		 (2) 对于浏览器环境，我们可以绑定一个函数到 window.onerror -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 捕获全局异常 -->
+	<script>
+		window.onerror = function(message, url, line, col, error) {
+			alert(`${message}\n At ${line}:${col} of ${url}`);
+		};
+
+		function readData() {
+    		badFunc(); // 哦，出问题了！
+  		}
+
+  		readData();
+	</script>
+</body>
+</html>

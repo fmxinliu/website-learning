@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>引用复制与比较</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 1.引用复制【浅拷贝】
+		let user = { name: 'John' };
+		let admin = user;
+		admin.name = 'Pete'; //  改变 "admin" 的引用
+		print(user.name); // 'Pete', changes are seen from the "user" reference
+
+		// 2.比较引用
+		let a = {};
+		let b = a; // 复制引用
+		let c = {};
+		print( a == b ); // true，两个变量指向同一个对象
+		print( a === b ); // true
+		print( a == c ); // false，两个独立的对象
+
+		// 3.常量对象
+		const stu = { name: "student" };
+		user.age = 25; // (*) const 仅仅修饰 stu。在这里 stu 始终存储的都是同一个对象的引用。引用的地址没有变，只是引用的对象被修改了
+		print(user.age); 
+		// stu = { name: "Pete" }; // 错误（不能再给 stu 赋值）
+	</script>
+</body>
+</html>

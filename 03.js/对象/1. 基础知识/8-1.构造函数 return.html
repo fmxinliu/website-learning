@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数 return</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	/* 通常，构造函数没有 return 语句。他们的任务是将所有必要的东西写入 this，并自动转换。
+	 * 但是，如果有 return 语句，那么规则很简单：
+	 *  1.如果 return 对象，则返回它，而不是 this
+	 *	2.如果 return 一个原函数，返回 this
+	 */
+	 	// 1.
+	 	function BigUser() {
+			this.name = "John";
+			return { name : "Godzilla" };  // <-- returns 一个 object
+		}
+
+		print(new BigUser().name);
+
+		// 2.
+		function SmallUser() {
+			this.name = "John";
+			//return;
+			return null; // 完成执行，returns this
+		}
+
+		print(new SmallUser().name);
+
+	</script>
+</body>
+</html>

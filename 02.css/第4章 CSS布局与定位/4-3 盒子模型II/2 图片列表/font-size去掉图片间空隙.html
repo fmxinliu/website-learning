@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>font-size去掉图片间空隙</title>
+	<style type="text/css">
+		/*对浏览器默认的设置清除*/
+		*{
+			padding: 0;
+			margin: 0px auto;
+		}
+		#container{
+			margin: 50px auto;
+		}
+		#newsimglist{
+			text-align: center;	
+			font-size: 0; /*否则图间有空隙*/
+		}
+		#newsimglist1{
+			text-align: center;	
+		}
+		img{	
+			height: 100px;
+			width: 100px;
+		    margin-left: 0;
+			border: 1px solid #0cf;
+			padding: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container">
+		<!-- 浏览器默认设置，图片间会有空隙 -->
+		<div id="newsimglist1">
+			<img src = "images/crisis.jpg" />
+			<img src = "images/crisis.jpg" />
+			<img src = "images/crisis.jpg" />
+		</div>
+		<!-- 去掉图间空隙 -->
+		<div id="newsimglist">
+			<img src = "images/crisis.jpg" />
+			<img src = "images/crisis.jpg" />
+			<img src = "images/crisis.jpg" />
+		</div>
+	</div>	  
+</body>
+</html>

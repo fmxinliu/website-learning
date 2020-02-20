@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数-test</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// (1)Two functions – one object
+		let obj = {};
+
+		function A() { return obj; }
+		function B() { return obj; }
+
+		print( new A() == new B() ); // true
+
+		// (2)创建一个可扩展的 calculator
+		function Calculator() {
+			this.calculate =  calculate;
+			// this.addMethod = addOperator;
+			this.addMethod = (name, func) => this[name] = func;
+		}
+
+		function calculate(str) {
+			// 解析“表达式”
+			let arr = str.split(' ');
+			if (arr.length == 3) {
+				let op = arr[1];
+				let a = arr[0];
+				let b = arr[2];
+				if (op in this) {
+					// 调用方法
+					return this[op](a, b);
+				}
+			}
+			return 0;
+		}
+
+		// 添加运算符方法
+		function addOperator(name, func) {
+			this[name] = func;
+		}
+
+		let powerCalc = new Calculator;
+		powerCalc.addMethod("*", (a, b) => a * b);
+		powerCalc.addMethod("/", (a, b) => a / b);
+		powerCalc.addMethod("**", (a, b) => a ** b);
+
+		let result = powerCalc.calculate("2 ** 3");
+		alert( result ); // 8
+
+	</script>
+</body>
+</html>

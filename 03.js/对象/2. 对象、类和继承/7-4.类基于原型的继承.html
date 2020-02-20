@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>类基于原型的继承</title>
+	<!-- https://zh.javascript.info/class-patterns#lei-ji-yu-yuan-xing-de-ji-cheng -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+	</script>
+
+	
+	<!-- 原型链 -->
+	<script>
+		function Animal(name) {
+	  		this.name = name;
+		}
+
+		Animal.prototype.eat = function() {
+	  		print(`${this.name} eats.`);
+		};
+
+		function Rabbit(name) {
+  			this.name = name;
+		}
+
+		Rabbit.prototype.jump = function() {
+			print(`${this.name} jumps!`);
+		};
+
+		// 设置继承链
+		Rabbit.prototype.__proto__ = Animal.prototype;
+
+		let rabbit = new Rabbit("White Rabbit");
+		rabbit.eat();
+		rabbit.jump();
+
+	</script>
+
+	<!-- 查看原型链 -->
+	<script>
+		console.dir(rabbit);
+
+		debugger
+		print("<br/>查看 4 级原型链");
+		rabbit.__proto__.jump(); // undefined jumps!
+		rabbit.__proto__.__proto__.eat(); // undefined eats.
+		print(rabbit.__proto__.__proto__.toString()); // [object Object]
+		print(rabbit.__proto__.__proto__.__proto__.__proto__); // null
+
+
+		print('');
+		print(Object.prototype.__proto__ === null); // true
+		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		print(Object.__proto__ === Function.prototype); // true
+		print(Function.prototype.__proto__ === Object.prototype); // true !!!
+		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		print(Rabbit.__proto__ === Animal); // true <-- 如果 class Rabbit extends Animal
+		print(Animal.__proto__ === Object); // false
+		print(Animal.__proto__ === Function.prototype); // true
+		
+		/*
+	 →	Function.prototype	↘			   null				(4)
+	│							↘		 	
+			↑[[Prototype]]			↘  	 	↑
+	│	Object 				→			Object.prototype	(3)
+										 	
+	│									 	↑
+	 ─	Animal 				→			Animal.prototype	(2)
+										 	
+(extends)	↑			prototype			↑
+		Rabbit  			→			Rabbit.prototype	(1)
+										 	
+										 	↑ [[Prototype]]
+									   	rabbit
+		*/
+	</script>
+</body>
+</html>

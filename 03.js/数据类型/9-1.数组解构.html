@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组解构</title>
+	<!-- https://zh.javascript.info/destructuring-assignment -->
+	<!-- 对象让我们能够把许多信息打包到一个单一的实体中，数组则让我们能够存放有序的集合 -->
+	<!-- 解构赋值是一种特殊的语法，它让我们可以将数组或对象进行“拆包”，存放到一系列的变量中 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 语法：let [item1 = default, item2, ...rest] = array;
+
+		// 1.“解构"并不意味着"破坏”
+		let arr = ["Liu", "Xin"]
+		let [firstName, surname] = arr; // 数组本身并没有被修改
+		print(`${firstName} ${surname}`);
+		print(arr);
+
+		// 2.忽略第一个元素
+		let [, , title] = ["Julius", "Caesar", "Consul", "of the Roman Republic"]; // 数组第 1,2,4 个元素被跳过
+		print(title);
+
+		// 3.等号右侧，可以是任何可迭代对象
+		let [a, b, c] = "abc"; // ["a", "b", "c"]
+		print(`${a} ${b} ${c}`);
+		let [one, two, three] = new Set([1, 2, 3]);
+		print(`${one} ${two} ${three}`);
+
+		// 4.等号左侧，可以是任何“可以被赋值的”变量
+		let user = {};
+		// [user.name, user.surname] = "Liu Xin"; // error !!!!!!!!!!!!!!!!
+		[user.name, user.surname] = "Liu Xin".split(' ');
+		print(Object.values(user));
+
+		// 5.使用 .entries() 循环
+		user = {
+			name: "John",
+  			age: 30
+		};
+
+		print("== for..in");
+		for (let item in user) { // for..in 遍历键-值对
+			print(`${item}:${user[item]}`);
+		}
+
+		print("== for..of");
+		for (let item of Object.keys(user)) { // for..of 遍历键-值对
+			print(`${item}:${user[item]}`);
+		}
+
+		print("== for..of 解构赋值");
+		for (let [key, value] of Object.entries(user)) { // “解构赋值”遍历键-值对
+			print(`${key}:${value}`);
+		}
+
+		// 6.剩余的 ‘…’
+		let [name1, name2, ...rest] = ["Julius", "Caesar", "Consul", "of the Roman Republic"]; // rest 变量的值就是数组中剩下的 2 个元素组成的数组
+		print(rest);
+		print(rest.length);
+
+		// 7.默认值
+		[firstName, surname] = [];
+		print(`${firstName} ${surname}`); // 未赋值的变量被当作 undifined
+
+		[firstName = "Guest", surname = "Anonymous"] = ["Julius"];
+		print(`${firstName} ${surname}`); // 未赋值的变量被赋予默认值（表达式或函数只会在变量未被赋值时被计算。）
+		// let [name = prompt('name?'), surname = prompt('surname?')] = ["Julius"];
+	
+		// 8.调换数组元素
+		let nums = [1, 2];
+		[nums[0], nums[1]] = [nums[1], nums[0]];
+		print(nums);
+	</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>偏函数</title>
+	<!-- https://zh.javascript.info/currying-partials#wu-shang-xia-wen-shi-yong-pian-han-shu -->
+	<!-- 偏函数：当我们确定一个函数的一些参数时，返回的函数（更加特定）被称为偏函数 -->
+	<!-- 获得方法：1.使用 bind 来获取； 2.封装返回一个固定了部分参数的 function -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+	</script>
+
+	<!-- bind 的完整语法：let bound = func.bind(context, arg1, arg2, ...); 不仅可以绑定 this，还有参数 -->
+	<script>
+		"use strict"	
+		function mul(a, b) {
+		  	return a * b;
+		}
+
+		let double = mul.bind(null, 2);
+		let triple = mul.bind(null, 3);
+
+		print(double(3)); // = mul(2, 3) = 6
+		print(triple(3)); // = mul(3, 3) = 9
+	</script>
+
+	<!-- 无上下文偏函数 -->
+	<script>
+		"use strict"
+		function partial(func, ...argsBound) {
+			print(this); // <-- undefined
+			return function(...args) {
+				print(this); // <-- object [user]
+				// return func.call(this, ...argsBound, ...args); // 绑定 this
+				// return func(...argsBound, ...args); // <-- 下次传递时，会丢失 this !
+			};
+		}
+
+		// 用法：
+		let user = {
+			firstName: "John",
+			say(time, phrase) {
+				print(`[${time}] ${this.firstName}: ${phrase}!`);
+			}
+		};
+
+		// 添加一个偏函数方法，现在 say 这个函数可以作为第一个函数
+		user.sayNow = partial(user.say, new Date().getHours() + ':' + new Date().getMinutes());
+
+		user.sayNow("Hello"); // [10:00] John: Hello!
+	</script>
+
+</body>
+</html>

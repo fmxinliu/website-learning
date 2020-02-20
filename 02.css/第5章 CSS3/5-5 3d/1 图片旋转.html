@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3D</title>
+	<style> 
+		#stage{
+			width: 300px;
+			margin:100px auto;
+			perspective: 200px; /*透视距离（近大远小）*/
+		}
+		.box{
+			width: 100px;
+	        height:100px;
+	        float: left; /*浮动*/
+	        transition: linear 1s; /*线性过渡*/
+	        transform-style: preserve-3d; /*3d变换*/
+		}
+		img
+		{
+			width:100px;
+			height:100px;
+		}
+		.x:hover
+		{		
+			transform:rotateX(60deg);
+		}
+		.y:hover
+		{		
+			transform:rotateY(60deg);
+		}
+		.z:hover
+		{		
+			transform:rotateZ(60deg);
+		}
+	</style>
+</head>
+<body>
+	<!-- 舞台（透视距离） -->
+	<div id="stage">
+		<!-- 父容器（变换属性） -->
+		<div class="box x">
+			<!-- 内容 -->
+			<img src="frog.jpg" />
+		</div>
+		<div class="box y">
+			<img src="frog.jpg" />
+		</div>
+		<div class="box z">
+			<img src="frog.jpg" />
+		</div>
+	</div>
+</body>
+</html>

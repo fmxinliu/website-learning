@@ -1,0 +1,43 @@
+<!--
+	1.浏览器是从上到下依次加载并解析的, js可以放在任意位置。
+	2.当浏览器加载html文件并解析到<head>时, 页面也就是<body>并没有被解析, 浏览器会等到<head>中的js执行完再加载页面（挂载DOM树）。
+	3.当执行<head>中的js时, 由于页面还没有被加载, 此时进行DOM操作并不会起作用
+-->
+
+<script type="text/javascript">
+	console.log("1-start");
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<script type="text/javascript">
+		console.log("2-html");
+</script>
+
+<head>
+	<meta charset="UTF-8">
+	<title>将JS嵌入在元素事件中</title>
+	<script type="text/javascript">
+		console.log("3-head");
+	</script>
+</head>
+<body>
+	<p>JS是弱类型、解释性的脚本语言，由嵌入到浏览器内核的JS解释器解释</p>
+	<p>JS包括核心、DOM文【档对象模型，与网页交互】、BOM【浏览器对象模型，与浏览器交互】</p>
+	<p>浏览器用来渲染网页，2大功能：内容+样式【html+css】；解释脚本【js】</p>
+	
+	<!-- 注意单双引号的使用 -->
+	<button onclick="console.log('hello world');">
+		打印消息
+	</button>
+
+	<script type="text/javascript">
+		console.log("4-body");
+	</script>
+</body>
+</html>
+
+<script type="text/javascript">
+	console.log("5-end");
+</script>

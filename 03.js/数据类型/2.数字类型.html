@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数字类型</title>
+	<!-- https://zh.javascript.info/number -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		/* ----------------------- 进制  ------------------- */
+		let a = 0xff; // 十六进制
+		let b = 0o377; // 八进制
+		let c = 0b11111111; // 二进制
+		print(b == c);
+
+		// toString(base) 2≤base≤36
+		print((255).toString(16));
+		print((255).toString(8));
+		print((255).toString(2));
+		// print(123456.toString(36)); // error!!!
+		print(123456..toString(36)); // 使用..  第一个.指示小数点，第二个.指示方法调用
+
+		/* ----------------------- 四舍五入  ------------------- */
+		function f(func) {
+			print("==" + func);
+			print( func(3.1) );
+			print( func(3.6) );
+			print( func(-1.1) );
+			print( func(-1.6) );
+		}
+
+		f(Math.floor); // 向下舍入
+		f(Math.ceil);  // 向上舍入
+		f(Math.round); // 向最近的整数舍入
+		f(Math.trunc); // 删除小数点后的所有内容而不舍入
+
+		// 四舍五入到小数点后的第三个数字
+		let num = 1.23456;
+		print( Math.round(num * 1000) / 1000);
+		print( num.toFixed(3) );
+		print( 12.34.toFixed(5) ); // "12.34000", toFixed 的结果是一个字符串。如果小数部分比所需要的短，则在结尾添加零
+
+		/* ----------------------- 不精确计算  ------------------- */
+		print("===== 不精确计算");
+		print(1e500); // 数字太大，溢出
+		print(0.1 + 0.2 == 0.3); // false, 精度损失
+		print(0.1 + 0.2);
+		print(0.1.toFixed(20));
+		print((0.1 + 0.2).toFixed(2) == 0.3); // true
+		print((0.1 * 10 + 0.2 * 10) / 10 == 0.3); // true, 转换为整数，无精度损失
+
+		/* ---------- isFinite 验证字符串值是否为常规数字 ----------- */
+		print("===== isFinite");
+		print( isFinite("15") );  // true
+		/*所有数字函数（包括 isFinite）中的空字符串或空格字符串均被视为 0*/
+		print( isFinite("") ); // true
+		print( isFinite(" ")); // true
+		print( isFinite("Infinity") ); // false
+		print(`NaN === NaN: ${NaN === NaN}`); // false, “NaN” 是独一无二的，它不等于任何东西，包括它本身
+		print( Object.is(NaN, NaN) ); // true
+		print( Object.is(0, -0) ); // false
+
+		/* ---------- parseInt 和 parseFloat 软转换 ----------- */
+		print("===== parseInt");
+		print( +'123px' );
+		print( Number('123px'));
+		print( parseInt('+123px') );
+		print( parseInt('a123') );
+		print( parseFloat('1.2.3') );
+		print( parseInt('0xff', 16) );
+		print( parseInt('ff', 16)); // 255, without 0x also works
+
+
+		//////////////////////////////////////////////////////////
+		print("===== 练习1 （为什么 6.35.toFixed(1) == 6.3？）=====");
+		print( 1.35.toFixed(20) ); // 精确表示
+		print( 6.35.toFixed(20) ); // 精度缺失 6.34999999999999964473
+		print( 1.35.toFixed(1) ); // 1.4
+		print( 6.35.toFixed(1) ); // 6.3 #######
+		print( (6.35 * 10).toFixed(20) ); // 63.50000000000000000000
+		print( Math.round(6.35 * 10) / 10); // 6.35 -> 63.5 -> 64(rounded) -> 6.4
+
+		print("===== 练习2 （重复检测，直到输入是一个数字）=====");
+		function readNumber() {
+		  let num;
+
+		  do {
+		    num = prompt("Enter a number please?", 0);
+		  } while ( !isFinite(num) );
+
+		  // null（取消）和 空行
+		  if (num === null || num === '') return null;
+
+		  return +num;
+		}
+
+		alert(`Read: ${readNumber()}`);
+
+		print("===== 练习3 （一个偶发的无限循环）=====");
+		let i = 0;
+		while (i != 10) {
+			i += 0.2; // + 0.2 发生精度损失
+			if (i > 9.8 && i < 10.2) break; // 在处理小数部分时避免相等检查。
+		}
+	</script>
+</body>
+</html>

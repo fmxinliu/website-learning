@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>盒子模型</title>
+	<style>
+	
+	/*CSS盒子宽=content+padding+border+margin*/
+	div{
+		width: 50px; /*content宽*/
+		height:50px; /*content高*/
+		padding:10px;
+		margin:1px;
+	}
+	.brd1{
+	    border-width:1px; /*边框宽*/
+	    border-style:solid;
+	    border-color:red;
+	}
+	.brd2{
+	    border:1px solid red; /*宽度、线条、颜色*/
+	}
+	.brd3{
+		border-style: solid;
+		border-color: red green blue gray; /*上、右、下、左*/
+	}
+	.brd4{
+	     border-bottom:1px solid red;
+	}
+
+	/*用盒子模型实现水平分割条*/
+	.line {
+		height:1px;
+		width:500px;
+		border-top:1px solid #e5e5e5;
+	}
+
+	</style>
+</head>
+<body>
+	<div class="brd1">发斯蒂芬斯蒂fafaff芬</div>
+	<div class="brd2"></div>
+	<div class="brd3"></div>
+	<div class="brd4"></div>
+	<div class="line"></div>
+</body>
+</html>

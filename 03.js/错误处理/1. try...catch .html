@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>try...catch</title>
+	<!-- https://zh.javascript.info/try-catch -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- try...catch 只能处理“runtime errors” -->
+	<script>
+		try {
+		  {{{{{{{{{{{{ // <-- 代码包含语法错误，不能正常工作
+		} catch(e) {
+		  alert("The engine can't understand this code, it's invalid");
+		}
+	</script>
+
+	<!-- try...catch 不能捕获异步的异常 -->
+	<script>
+		try {
+		  setTimeout(function() {
+		    noSuchVariable; // 代码在这里停止执行
+		  }, 1000);
+		} catch (e) {
+		  alert( "won't work" );
+		}
+	</script>
+
+	<!-- try...catch works synchronously -->
+	<script>
+		setTimeout(function() {
+		  try {
+		    noSuchVariable; // try..catch 处理异常！
+		  } catch (e) {
+		    alert( "error is caught here!" );
+		  }
+		}, 1000);
+	</script>
+</body>
+</html>

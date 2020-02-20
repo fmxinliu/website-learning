@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>命名函数表达式（NFE）</title>
+	<!-- https://zh.javascript.info/function-object -->
+	<!-- 命名函数表达式（NFE，Named Function Expression），指代有名字的函数表达式的术语。 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>
+		test1();
+		test2();
+		test2$1();
+		test2$2();
+		test2$3();
+		
+
+		// 一般的函数表达式
+		function test1() {
+			let sayHi = function(who) {
+			  	print(`Hello, ${who}`);
+			};
+
+			sayHi("John");
+		}
+
+
+		// 给函数表达式，增加一个可选的名字
+		function test2() {
+			// (1) func 允许函数在内部引用自己。
+			let sayHi = function func(who) { // <-- 仍然是一个函数表达式
+			  	if (who) {
+			  		print(`Hello, ${who}`);
+			  	} else {
+			  		func("Guest"); // 使用 func 再次调用自己
+			  	}
+			};
+
+			sayHi(); // Hello, Guest
+
+			// (2) func 在函数外是不可见的。
+			// func(); // Error !!!!!!
+		}
+
+		// (1) 为什么不直接使用 sayHi ??????  -------> sayHi 的值可能会被改变
+		function test2$1() {
+			let sayHi = function(who) {
+			  	if (who) {
+			  		print(`Hello, ${who}`);
+			  	} else {
+			  		sayHi("Guest"); // <----- 没有局部的 sayHi，所以外部变量 sayHi 被使用
+			  	}
+			};
+
+			let welcome = sayHi;
+			sayHi = null;
+			// welcome(); // Error，嵌套调用 sayHi 不再有效！
+		}
+
+		// (2) 函数表达式的特性「内部名」
+		function test2$2() {
+			let sayHi = function func(who) {
+			  	if (who) {
+			  		print(`Hello, ${who}`);
+			  	} else {
+			  		func("Guest"); // func 是一个「内部函数名」，是函数局部域的，在外部不可见
+			  	}
+			};
+
+			let welcome = sayHi;
+			sayHi = null;
+			welcome(); // works！
+		}
+
+		// (3) 「内部名」特性只针对函数表达式，函数声明没有「内部名」
+		function test2$3() {
+			function sayHi(who) {
+			  	if (who) {
+			  		print(`Hello, ${who}`);
+			  	} else {
+			  		sayHi("Guest"); // func 是一个「内部函数名」，是函数局部域的，在外部不可见
+			  	}
+			};
+
+			let welcome = sayHi;
+			// sayHi = null;
+			welcome(); 
+		}
+
+
+	</script>	
+</body>
+</html>

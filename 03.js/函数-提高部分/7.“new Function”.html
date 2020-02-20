@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>"new Function" 语法</title>
+	<!-- https://zh.javascript.info/new-function -->
+	<!-- 在运行时，使用描述函数的字符串来创建函数 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>	
+		test1();
+		test2$1();
+		test2$2();
+		test3();
+
+
+		// 语法
+		function test1() {
+			let sum = new Function('a', 'b', 'return a + b');  // 字符串 -> 函数
+			print( sum(1, 2) );
+		}
+		
+		
+		function test2$1() {
+			function getFunc() {
+			  	let value = "test";
+			  	// 使用 函数声明 or 函数表达式 创建函数，函数的 [[Environment]] -> 指向当前的词法环境
+			  	let func = function() { print(value); }; 
+			  	return func;
+			}
+
+			getFunc()();
+		}
+
+		// 不能在新函数中直接使用外部变量
+		function test2$2() {
+			function getFunc() {
+			  	let value = "test";
+			  	// 使用 new Function 创建函数，函数的 [[Environment]] -> 并不指向当前的词法环境，而是指向全局环境
+			  	let func = new Function('print(value)');
+			  	return func;
+			}
+
+			// getFunc()(); // error：value 未定义
+		}	
+
+
+		function test3() {
+			// 三种形式表现一致
+			print( new Function('a', 'b', 'return a + b')(11, 22) ); // 基础语法
+			print( new Function('a,b', 'return a + b')(11, 22) ); // 逗号分隔
+			print( new Function('a, b', 'return a + b')(11, 22) ); // 逗号和空格分隔
+		}
+	</script>	
+</body>
+</html>

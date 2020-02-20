@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Map 测试</title>
+	<!-- 易错的 [key, value] “迭代” 方法 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// Map 测试
+		function map_test() {
+			let map = new Map();
+			map.set(1, "A");
+			map.set(2, "B");
+			map.set(3, "C");
+			map.set(4, "D");
+
+			test1();
+			test2();
+			test3();
+
+			// 操作[key, value]
+			function test1() {
+				let arr = Array.from(map.entries()); // [k, v] 数组
+
+				// if (!arr.length) {
+				// 	return;
+				// }
+
+				print("==[k, v] 键值对，是一个数组");
+				arr.find(item => {
+					print("item is Array :" + Array.isArray(item)); // [k, v] 键值对，是一个数组
+				});
+
+				// 查找成功，find 返回一个 [k, v] 数组
+				let ret = arr.find(item => {
+					print(Array.isArray(item));
+					return item[0] == 3; // true：迭代结束
+				});
+
+				// 如果查找 ok，返回 [k, v] 数组
+				print("ret is Array : " + Array.isArray(ret));
+				
+				// 注意：find() 迭代 key-value 数组对，一定要判断 find 返回的是一个数组，才能使用 length 属性 !!!!!!!!!!!!!!!!!!!!
+				if (Array.isArray(ret) && ret.length > 1) {
+					print("==结果");
+					print(`map[${ret[0]}] = "${ret[1]}"`);
+				}
+			}
+
+			function test2() {
+				let arr = Array.from(map.entries());
+
+				// 注意：find() 迭代 key-value 数组对，一定要判断 find 返回的是一个数组，才能解构赋值 !!!!!!!!!!!!!!!!!!
+				// let [key, value] = arr.find(item => item[0] == 3); // 解构赋值
+				let ret = arr.find(item => item[0] == 3);
+				if (Array.isArray(ret)) {
+					print("==解构赋值");
+					let [key, value] = ret;
+					print(`map[${key}] = "${value}"`);
+				}
+			}
+
+			// 操作 key
+			function test3() {
+				let arr = Array.from(map.keys());
+
+				// 注意：find() 迭代 keys，不会受到 map 是否为空的影响 !!!!!!!!!!!!!!!!!!
+				print("==操作 map_key");
+				let key = arr.find(item => item == 3); // 解构赋值
+				print(`map[${key}] = "${map.get(key)}"`);
+			}
+		}
+		
+		map_test();
+
+	</script>
+</body>
+</html>

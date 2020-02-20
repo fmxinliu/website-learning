@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>工厂函数</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<ul id="myList">
+		<li id="m1">首页</li>
+		<li id="m2">企业介绍</li>
+		<li id="m3">联系我们</li>
+	</ul>
+
+	<script type="text/javascript">
+		var dom = document.getElementById("myList");
+		console.log(dom);
+		var jq = $("#myList");
+		console.log(jq);
+		$(function(){
+			console.log('hello world');
+		});
+	</script>
+</body>
+</html>

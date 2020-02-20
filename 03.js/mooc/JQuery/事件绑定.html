@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JQuery事件绑定</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<button id="prompt">
+		提示
+	</button>
+	<button id="query">
+		？
+	</button>
+	<button id="test" onclick="f($(test).text())">
+		事件测试
+	</button>
+	<script type="text/javascript">
+		$("#prompt").bind("click", function(){
+			document.write("hello");
+		});
+		$("#query").click(function(e){
+			/*e - 事件对象，如鼠标位置、按键值*/
+			document.write("world");
+		})
+
+		function f(e){
+			document.write(e);
+		}
+	</script>
+</body>
+</html>

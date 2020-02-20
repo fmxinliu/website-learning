@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>htm5 Canvas特性</title>
+	<style>
+		#myCanvas {
+		    border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<!-- 
+		1.定义画布
+		2.设置画布样式
+		3.JS准备绘图上下文环境
+		4.JS绘图
+	 -->
+	<canvas id="myCanvas" width="860" height="480">
+		浏览器不支持HTML5:canvas	
+	</canvas>
+</body>
+	<script>
+		function draw(event){
+			var canvas = document.getElementById("myCanvas");
+			var pen = canvas.getContext("2d"); // 画笔
+			pen.moveTo(50,50);
+			pen.lineTo(300,300);
+			pen.lineWidth = 5;
+			pen.strokeStyle = "red";
+			pen.stroke();
+		}
+
+		// 由窗体的加载事件触发draw
+		window.onload = draw;
+	</script>
+</html>

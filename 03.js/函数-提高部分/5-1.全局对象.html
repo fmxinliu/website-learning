@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>浏览器 window 对象</title>
+	<!-- https://zh.javascript.info/global-object -->
+	<!-- (1) window - 浏览器中的“全局对象” -->
+	<!-- (2) window - “浏览器窗口”功能 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>
+		// (3) a，b 可被后续的所有脚本共享
+		var a = 1;
+		let b = 2;
+	</script>
+
+	<script>
+		// (3) 可引用前面脚本定义的全局变量
+		function test3() {
+			print("可引用前面脚本定义的全局变量");
+			print(a); // 1
+			print(b); // 2
+		}
+	</script>
+
+	<script>
+		test1();
+		test2();
+		test3();
+		test4();
+
+
+		// (1) window - 浏览器中的“全局对象” 
+		function test1() {
+			window.document.write("hello<br />");
+		}
+
+		// (2) window - “浏览器窗口”功能
+		function test2() {
+			print(window.innerHeight); // 显示浏览器窗口高度
+			// window.open('http://www.baidu.com'); // 打开一个新的浏览器窗口
+		}
+
+		// (4) 全局范围内 this 的值
+		function test4() {
+			print(this); // window
+		}
+
+	</script>
+
+	<script>
+		// (5) 顶级 var 变量和函数声明后自动成为 window 的属性
+		print("<br />顶级 var 变量和函数声明后自动成为 window 的属性");
+		var x = 5;
+		print(window.x); // 5 (变量 x 成为 window 的一个属性)
+	
+		window.x = 0;
+		print(x); // 0, 变量已修改
+
+		window.test(); // test 成为 window 的一个属性
+
+		function test() {
+			var x = 10;
+			print(window.x); // 非顶级 var，不会创建 window 属性
+		}
+
+
+		print("<br />顶级 let / const 声明不会发生这种情况");
+		let y = 5;
+		print(window.y); // undefined ("let" 不会创建 window 属性)
+
+	</script>
+
+	
+</body>
+</html>

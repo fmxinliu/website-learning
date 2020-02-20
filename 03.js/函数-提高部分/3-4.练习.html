@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/closure#tasks -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg + ' ');
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+
+
+		function test1() {
+			// 为了使第二个括号有效，第一个（括号）必须返回一个函数
+			print("<br />闭包 sum（函数）: 编写一个像 sum(a)(b) = a+b 这样工作的 sum 函数<br />");
+			function sum(a) {
+			  	return function(b) {
+			  		return a + b; // // 从外部词法环境获得 a
+			  	}
+			}
+
+			print(`sum(1)(2) = ${sum(1)(2)}`);
+		}
+
+		function test2() {
+			print("<br />通过函数筛选: 制造一系列过滤器 f，传给数组内建的 arr.filter(f) 方法<br />");
+			function inBetween(a, b) {
+			  	// return x >= a && x <= b; // x 未定义!!!!!!!!!
+			  	return function(x) {
+			  		return x >= a && x <= b;
+			  	}
+			}
+
+			function inArray(arr, ...args) {
+			  	return function(x) {
+			  		if (args.includes(x)) {
+			  			return true;
+			  		} else {
+			  			return Array.isArray(arr) ? arr.includes(x) : (arr == x);
+			  		}
+			  	}
+			}
+
+			/* .. inBetween 和 inArray 的代码 */
+			let arr = [1, 2, 3, 4, 5, 6, 7];
+			print(`arr.filter(inBetween(3, 6)) = ${arr.filter( inBetween(3, 6) )}`);
+			print(`arr.filter(inArray([1, 2, 10]) = ${arr.filter( inArray(...[1, 2, 10]) )}`);
+		}
+
+		function test3() {
+			print("<br />按字段排序: 让调用更加简洁<br />");
+			function byField(field) {	  	
+			  	return (a, b) => a[field] > b[field] ?  1 : -1;
+			}
+
+			let users = [
+			  { name: "John", age: 20, surname: "Johnson" },
+			  { name: "Pete", age: 18, surname: "Peterson" },
+			  { name: "Ann", age: 19, surname: "Hathaway" }
+			];
+
+			users.sort(byField('name'));
+			users.forEach(user => print(user.name)); // Ann, John, Pete
+
+			print('<br />');
+			users.sort(byField('age'));
+			users.forEach(user => print(user.name)); // Pete, Ann, John
+		}
+
+		function test4() {
+			print("<br />函数大军: 每个函数输出它的数字<br />");
+			function makeArmy1() {
+				let shooters = [];
+
+			  	let i = 0;
+			  	while (i < 10) {
+			    	let shooter = function() { // shooter 函数
+			      		print( i ); // 应该显示它自己的数字
+			    	};
+		    		shooters.push(shooter);
+			    	i++;
+			 	}
+
+			  	return shooters;
+			}
+
+			function makeArmy2() {
+				let shooters = [];
+
+				// 每次循环都创建一个新的词法环境，其中具有对应的 i 的值
+			  	for(let i = 0; i < 10; i++) {
+			    	let shooter = function() { // shooter 函数
+			      		print( i ); // 应该显示它自己的数字
+			    	};
+			    	shooters.push(shooter);
+			  	}
+
+			  	return shooters;
+			}
+
+
+			let army1 = makeArmy1();
+			let army2 = makeArmy2();
+
+			army1[0](); // 10
+			army1[5](); // 10
+			
+	      	print('<br />');
+			army2[0](); // 0
+			army2[5](); // 5
+		}
+
+	</script>
+</body>
+</html>

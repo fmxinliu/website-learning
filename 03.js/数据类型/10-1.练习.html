@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>日期和时间-练习</title>
+	<!-- https://zh.javascript.info/date -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		
+		function test1() {
+			print("==创建日期");
+			// 创建一个 Date 对象，日期是：Feb 20, 2012, 3:12am。时区是当地时区。
+			print( new Date(2012, 1, 20, 3, 12) );
+			print( new Date(Date.parse("2012-02-20T03:12:00.000+08:00")) );
+		}
+
+		
+		function test2() {
+			print("==展示星期数");
+			function getWeekDay(date) {
+			  let days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+			  return days[date.getDay()];
+			}
+
+			let date = new Date(2014, 0, 3); // 3 Jan 2014
+			print( getWeekDay(date) ); // FR
+		}
+
+
+		function test3() {
+			print("==欧洲的星期表示方法数");
+			// 欧洲国家的星期计算是从星期一（数字 1）开始，然后星期二（数字 2），直到星期日（数字 7）
+			function getLocalDay(date) {
+			  let day = date.getDay();
+			  if (day == 0) { // 0，改为 7
+			    day = 7;
+			  }
+
+			  return day;
+			}
+
+			print( getLocalDay(new Date(2012, 0, 3)) ); // 2
+		}
+
+
+		function test4() {
+			print("==许多天之前是该月的哪一天？");
+			function getDateAgo(date, days) {
+			  let dateCopy = new Date(date);
+
+			  dateCopy.setDate(date.getDate() - days);
+			  return dateCopy.getDate();
+			}
+
+
+			let date = new Date(2015, 0, 2);
+
+			print( getDateAgo(date, 1) ); // 1, (1 Jan 2015)
+			print( getDateAgo(date, 2) ); // 31, (31 Dec 2014)
+			print( getDateAgo(date, 365) ); // 2, (2 Jan 2014)
+		}
+		
+		
+		function test5() {
+			print("==某月的最后一天？");
+			function getLastDayOfMonth(year, month) {
+			  let date = new Date(year, month + 1, 0); // 传递下个月，日为 0 (从 1 开始计数，0 表示前一天) the date will autoadjust itself
+			  return date.getDate();
+			}
+
+			print( getLastDayOfMonth(2012, 0) ); // 1-31
+			print( getLastDayOfMonth(2012, 1) ); // 2-29
+			print( getLastDayOfMonth(2013, 1) ); // 2-28
+		}
+
+
+		function test6() {
+			print("==格式化相对日期");
+			
+			function formatDate1(date) {
+				let diff = Date.now() - date;  // 差值用毫秒表示
+
+				if (diff < 1000)  {
+				    return '刚刚';
+				}
+
+				let sec = Math.floor(diff / 1000); // 将间隔转化为秒
+				if (sec < 60) {
+					return sec + ' 秒之前';
+				}
+
+				let min = Math.floor(diff / 60000); // 将间隔转化为分钟
+				if (min < 60) {
+					return min + ' 分钟之前';
+				}
+
+				// 格式化日期
+  				// 在单个数值之前加 0 日/月/小时/分钟
+  				let d = date;
+  				d = [
+  					'0' + d.getDate(),
+  					'0' + (d.getMonth() + 1),
+  					'' + d.getFullYear(),
+  					'0' + d.getHours(),
+  					'0' + d.getMinutes()
+  				].map(component => component.slice(-2)); // 得到每个组件的后两位
+
+  				// 将时间信息和日期组合在一起，格式："DD.MM.YY HH:mm"
+  				return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
+			}
+
+			function formatDate2(date) {
+				let dayOfMonth = date.getDate(); // 1 - 31
+				let month = date.getMonth() + 1; // 1 - 12
+				let year = date.getFullYear(); // 4 位
+				let hour = date.getHours();
+				let minutes = date.getMinutes();
+				let diffMs = new Date() - date;
+				let diffSec = Math.round(diffMs / 1000);
+				let diffMin = diffSec / 60;
+				let diffHour = diffMin / 60;
+
+				// 格式化
+				year = year.toString().slice(-2);
+				month = month < 10 ? '0' + month : month;
+				dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
+				hour = hour < 10 ? '0' + hour : hour;
+				minutes = minutes < 10 ? '0' + minutes : minutes;
+
+				if (diffSec < 1) {
+					return 'right now';
+				} else if (diffMin < 1) {
+					return `${diffSec} sec. ago`
+				} else if (diffHour < 1) {
+					return `${diffMin} min. ago`
+				} else {
+					return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`
+				}
+			}
+
+			function test(f) {
+				print( f(new Date(new Date - 1)) ); // "right now"
+				print( f(new Date(new Date - 30 * 1000)) ); // "30 sec. ago"
+				print( f(new Date(new Date - 5 * 60 * 1000)) ); // "5 min. ago"
+				// yesterday's date like 31.12.2016, 20:00
+				print( f(new Date(new Date - 86400 * 1000)) );
+			}
+		
+			test(formatDate1);
+			test(formatDate2);
+		}
+
+
+		test1();
+		test2();
+		test3();
+		test4();
+		test5();
+		test6();
+		
+	</script>
+</body>
+</html>

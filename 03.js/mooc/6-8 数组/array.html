@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>索引数组/关联数组</title>
+</head>
+<body>
+	<script>
+		document.write("<h3>索引数组</h3>");
+
+		// 1.不限制数组的元素个数：长度可变【稀疏数组】
+		test1();
+		function test1(){
+			var arr=[0, 1, 2, 3];
+			arr.length -= 1; // 数组后删除元素
+			arr.length += 1; // 数组后追加元素
+			print(arr);
+		}
+
+		// 2.不限制下标越界
+		test2();
+		function test2(){
+			var arr=[]; // 空数组
+			alert("初始arr数组长度：" + arr.length);
+			// arr[0]=1; // undefined
+			// arr[1]=""; // undefined
+			arr[2]="结束"; // 后面追加元素，length自动增加
+			alert("插入arr[2]后，数组长度：" + arr.length);
+			alert("数组第4个元素：" + arr[4]); // 获取元素：不会抛出“下标越界”异常，返回undefined
+			print(arr);
+		}
+
+		// 3.不限制元素的数据类型
+		var arr1 = new Array(0.0, "1", true);
+		print(arr1);
+
+		var arr2 = new Array(5);
+		document.write("new Array(5)数组长度length=" + arr2.length);
+		document.write("<br />");
+
+		var arr3 = new Array('5');
+		document.write("new Array('5')数组长度length=" + arr3.length);
+		document.write("<br />");
+
+		
+		var arr4 = [1, 2, 3, "hello"];
+		printArray(arr4);
+
+		document.write("<hr />");
+		document.write("<h3>关联数组</h3>");
+
+		// 定义关联数组
+			// 1.定义空数组
+			var arr4 = new Array();
+			// 2.插入元素，并自定义下标名称
+			arr4['name'] = "西游记";
+			arr4['price'] = 35.5;
+			print(arr4);
+			document.write("关联数组长度length=" + arr4.length); // length属性无法获取关联数组中元素的个数
+			document.write("<br />");
+
+		// 遍历基本数组
+		function print(arr){
+			for (var i = 0; i < arr.length; i++) {
+				document.write(arr[i]);
+			}
+			document.write("<br />");
+		}
+
+		// 遍历关联数组
+		function print(hash){
+			for (var key in hash) {
+				document.write(key + ":" + hash[key]);
+				document.write("<br />");
+			}
+		}
+
+		// 打印索引数组
+		function printArray(arr){
+			document.write(arr + "<br />");
+		}
+
+		// 打印消息
+		function printMsg(msg){
+			document.write(msg + "<br />");
+		}
+	</script>
+</body>
+</html>

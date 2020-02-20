@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spread 操作符（展开操作符）</title>
+	<!-- https://zh.javascript.info/rest-parameters-spread-operator#spread-operator -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+
+		// 我们已经学会了如何把一系列的参数收集到数组中。“Rest 参数”
+		// 不过有时候我们也需要做与之相反的事情。如何做？“Spread操作符”
+
+		test1();
+		test2();
+		test3();
+		test4();
+		test5();
+		test6();
+		test7();
+		test8();
+
+		// (1) 传入数组
+		function test1() {		  	 
+		  	let arr = [3, 5, 1];
+		  	print( Math.max(arr) ); // NaN
+		}
+
+		// (2) Spread 操作符『当在函数调用时使用...arr，它会把可迭代的对象 arr “展开”为逗号分隔的参数列表』
+		function test2() {
+			let arr = [3, 5, 1];
+
+			print( Math.max(...arr) ); // 5（Spread 操作符把数组转为参数列表）
+			print( Math.max( [...arr] ) ); // NaN（... 与 [] 操作正好相反，相互抵消）====================
+		}
+  
+  		// (3) 传递多个被展开的迭代对象
+  		function test3() {
+			let arr1 = [1, -2, 3, 4];
+			let arr2 = [8, 3, -8, 1];
+			print( Math.max(...arr1, ...arr2) ); // 8
+		}
+
+		// (4) 在普通的参数间使用展开操作符
+		function test4() {
+			let arr1 = [1, -2, 3, 4];
+			let arr2 = [8, 3, -8, 1];
+			print( Math.max(1, ...arr1, 2, ...arr2, 25) ); // 25
+		}
+
+		// (5) 使用 Spread 操作符合并数组
+		function test5() {
+			let arr1 = [3, 5, 1];
+			let arr2 = [8, 9, 15];
+
+			let merged = [0, ...arr1, 2, ...arr2];
+
+			print( merged ); // 0,3,5,1,2,8,9,15（0，然后是 arr1 的值，2，然后是 arr2 的值）	
+		}
+
+		// (6) Spread 和 [...]
+		function test6() {
+			let arr = [3, 5, 1];
+
+			print( ...arr ); // 3
+			print( [...arr] ); // 3,5,1 ============= 数组初始化操作符
+			print( typeof [...arr] ); // object
+			print( Array.isArray([...arr]) ); // true ========== 数组
+
+			print('');
+			print(`[...[11,22,33]] = ${[...[11,22,33]]}`);
+			print(`Array.isArray( [...[11,22,33]] ) = ${Array.isArray( [...[11,22,33]] )}`);
+		}
+
+		// (7) Spread 操作符，适用于『可遍历的对象』(for...of)，如数组、字符串等
+		function test7() {
+			let str = "Hello";
+
+			print("<br />把字符串展开为字符数组")
+			print(`[..."${str}"] = ${[...str]}`); // H,e,l,l,o
+			print(`"${str}".split('') = ${str.split('')}`); // H,e,l,l,o
+			print(`Array.from("${str}") = ${Array.from(str)}`); // H,e,l,l,o
+
+			// let value = ...str; // error ====================
+			// (1) ... Spread 展开操作符，...str 得到“字符串序列”
+			// (2) []  数组初始化 操作符，[...str]得到“字符数组”
+
+			// 使用 Array.from(obj) 和使用 [...obj] 存在细微差别：
+			// (1) Array.from 同时适用于类数组对象和可遍历对象。
+			// (2) Spread 操作符只能操作可遍历对象。
+		}
+
+		// (8) 小结
+		function test8() {
+			print("<br />小结")
+			print(`当我们在代码中遇到 "..." 时，它不是 Rest 参数就是 Spread 操作符。`);
+			print(`我们可以使用下列方法区分二者：`);
+			print(`(1) 若 ... 出现在函数的参数列表，那它表示的就是 Rest 参数，它会把函数多余的实参收集到一个数组中。`);
+			print(`(2) 若 ... 出现在函数调用或类似的表达式中，那它就是 Spread 操作符，它会把一个数组展开为逗号分隔的元素列表。`);
+			print(`<br />使用场景：`);
+			print(`(1) Rest 参数用于创建可接收任意个参数的函数。`);
+			print(`(2) Spread 操作符可以在函数调用传参时，把含有参数的数组展开为函数需要的参数列表形式。`);
+			print(`<br />这两个操作符的出现方便了我们在参数数组和参数列表间来回转换。`);
+			print(`“旧式”的 arguments（类数组对象）也依然能够帮助我们获取函数调用时的所有参数。`);
+
+			// let value = ...str; // error ====================
+			// (1) ... Spread 展开操作符，...str 得到“字符串序列”
+			// (2) []  数组初始化 操作符，[...str]得到“字符数组”
+
+			// 使用 Array.from(obj) 和使用 [...obj] 存在细微差别：
+			// (1) Array.from 同时适用于类数组对象和可遍历对象。
+			// (2) Spread 操作符只能操作可遍历对象。
+		}
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>使用 Object 的 toString 方法来揭示类型</title>
+	<!-- https://zh.javascript.info/instanceof#fu-li-shi-yong-object-de-tostring-fang-fa-lai-jie-shi-lei-xing -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 内置的 toString 方法可以从对象中提取出来，以其他值作为上下文（context）对象进行调用，调用结果取决于传入的上下文对象 -->
+	<script>
+		function show(context) {
+			// 保存 toString 方法的引用，方便后面使用
+			let objectToString = Object.prototype.toString;
+			print( objectToString.call(context) );
+		}
+	</script>
+
+	<!-- 测试 -->
+	<script>
+		// (1) 7 种基本类型
+		show(123); 				// [object Number]
+		show(true);				// [object Boolean]
+		show(null);				// [object Null]
+		show(undefined);		// [object Undefined]
+		show({});				// [object Object]
+		show(Symbol("123"));	// [object Symbol]
+		show("123");			// [object String]
+
+		print('');
+
+		// (2) 内置对象类型
+		show([]);				// [object Array]
+		show(new Map());		// [object Map]
+		show(new Set());		// [object Set]
+		show(function() {});	// [object Function]
+		show(class Animal{});	// [object Function]
+
+		print('');
+	</script>
+
+
+	<!-- 对象的 toString 方法可以使用 Symbol.toStringTag 这个特殊的对象属性进行自定义输出。 -->
+	<script>
+		let user = {
+			[Symbol.toStringTag]: "User"
+		};
+
+		// (3) 支持自定义类型
+		print( user[Symbol.toStringTag]); // User
+		print( {}.toString.call(user) ); // [object User]
+		print('');
+	</script>
+
+</body>
+</html>

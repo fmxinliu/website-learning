@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Map、Set、WeakMap 和 WeakSet</title>
+	<!-- https://zh.javascript.info/map-set-weakmap-weakset -->
+	<!-- Map:键值对	Set:集合 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		
+		/* ------------------- Map ------------------------*/
+		let map = new Map;
+		map.set('1', 'string'); // 字符串作为 key
+		map.set(1, 'number');   // 数字作为 key
+		map.set(true, 'bool');	// 布尔值作为 key
+
+		// 还记得普通对象 Object 吗？它将会吧所有的键转化为字符串类型
+		// 但是 Map 将会保留键的类型，所以下面这两个是不同的：
+		print(map.get('1'));
+		print(map.get(1));
+
+		//
+		let john = { name: 'John'};
+		map.set(john, 'object'); // 对象作为 key
+		print(map.get(john));
+		
+		//
+		map.set(NaN, 'NaN');	// NaN作为 key
+		print(map.get(NaN));
+
+		// 链式调用
+		map.set(null, 'null') // null 作为key
+		  .set("undefine", 'undefine'); // undefined 不能作为 key
+		print(map.get(null));
+		print(map.get("undefine"));
+
+		/* ------------------- 将 Object 转化为 Map ------------------------*/
+		map = new Map([ // 传递一个数组（或其他可迭代对象）给构造函数x
+		 	['1',  'str1'],
+			[1,    'num1'],
+			[true, 'bool1']
+		]);
+		print( map.size );
+
+		let keyValues = Object.entries({ // 返回一个对象的键值对数组
+			name: "John",
+  			age: 30
+		});
+		print(keyValues); // keyValues 是一个键值对数组
+
+		map = new Map(keyValues);
+		print( map.size )
+
+		/* ------------------- 遍历 Map ------------------------*/
+		// 有四种方法可以循环遍历 map：
+		//  (1) map.keys() – 返回键的迭代器，
+		//  (2) map.values() – 返回值的迭代器，
+		//  (3) map.entries() – 返回 [key, value] 迭代器入口，for..of 循环会默认使用它。
+		//  (4) map.forEach(function(value, key, map) {} )
+
+		let recipeMap = new Map([
+		  ['cucumber', 500],
+		  ['tomatoes', 350],
+		  ['onion',    50]
+		]);
+
+		print("==迭代Map");
+		// ============= 和普通 Object 不同，迭代器的迭代顺序和值被插入的顺序一致，Map 会保留这个顺序 ============
+		// 迭代键（vegetables）
+		for (let vegetable of recipeMap.keys()) {
+		  print(vegetable); // cucumber, tomatoes, onion
+		}
+
+		// 迭代值（amounts）
+		for (let amount of recipeMap.values()) {
+		  print(amount); // 500, 350, 50
+		}
+
+		// 迭代键值对 [key, value]
+		for (let entry of recipeMap) { // 和 recipeMap.entries() 一样
+		  print(entry); // cucumber,500（等等）
+		}
+
+		// forEach
+		recipeMap.forEach( (value, key, map) => {
+			print(`${key} : ${value}`);
+		});
+
+		print("==迭代Set");
+		/* -------------------遍历 Set ------------------------*/
+		// 同 Map 一样
+		let set = new Set(["oranges", "apples", "bananas"]);
+		set.add('etc...').add('etc...');
+
+		// (1)
+		for (let key of set.keys()) {
+			print(key);
+		}
+
+		// (2)
+		for (let value of set.values()) {
+			print(value);
+		}
+
+		// (3)
+		for (let entry of set.entries()) {
+			print(entry);
+		}
+
+		//
+		for (let entry of set) {
+			print(entry);
+		}
+
+		// (4)
+		set.forEach( (value, valueAgain, set) => { // 兼容 Map，key 和 value 相同
+			print(`${value} : ${valueAgain}`);
+		}); 
+
+
+		/* -------------------WeakMap 和 WeakSet ------------------------*/
+		// 1. WeakMap 仅允许对象作为键， WeakSet 仅存储对象。
+		// 2. 对象不可引用的时候，自动将其删除。
+		// 3. 不支持整体的操作，如无法遍历、获取 size 属性、clear()  【不确定垃圾处理何时回收】
+
+		function test1() {
+			let john = { name: "John" };
+
+			// map: user => visits count
+			let visitsCountMap = new Map();  // 存储对象访问次数
+
+			// john 是 map 的键
+			visitsCountMap.set(john, 123);
+
+			// 现在 john 离开了，我们不需要他了
+			john = null;
+
+			// 但是记录依旧在 map 中，我们需要清理它！
+			print( visitsCountMap.size ); // 1
+			
+			// 它还在内存中，因为 Map 将它作为键
+			for (let key of visitsCountMap.keys()) {
+				if (key.name == 'John') {
+					print(visitsCountMap.get(key));
+					break;
+				}
+			}
+		}
+
+		function test2() {
+			let john = { name: "John" };
+
+			let visitsCountMap = new WeakMap(); // 存储对象访问次数
+
+			visitsCountMap.set(john, 123);
+
+			// 现在 john 离开了，我们不需要他了
+			john = null;
+
+			// 除了 WeakMap 没有其他引用了，
+			// 所以这个对象会自动的从内存和 visitsCountMap 中删除
+			// 但是，并不知道什么时候会清理
+		}
+
+		test1();
+		test2();
+
+	</script>
+</body>
+</html>

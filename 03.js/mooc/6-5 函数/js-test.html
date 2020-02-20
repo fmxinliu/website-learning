@@ -1,0 +1,51 @@
+<!-- 脚本可位于 HTML 的任意位置 -->
+<script type="text/javascript">
+	var carname = "Volvo";
+	var carname;
+	document.write(carname);
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js易错</title>
+	<script type="text/javascript">
+		var t = 10; 
+		function test(test){
+			// 这里会将t定义提前，等价于 var t;
+		    t = t + test; 
+		    console.log(t);
+		    var t = 3; // t = 3;
+		} 
+		
+		test(t); 
+		console.log(t); 
+	</script>
+	<script type="text/javascript">
+		// 1.这里，页面<body>还没有被加载解析，DOM树还没有被挂载，无法操作DOM
+		var div = document.getElementById("container");
+		console.log(div);
+	</script>
+</head>
+<body>
+	<script type="text/javascript">
+		// 2.这里，页面<body>还没有被加载解析，DOM树还没有被挂载，无法操作DOM
+		var div = document.getElementById("container");
+		console.log(div);
+	</script>
+	<div id="container">
+		窗体
+	</div>
+		<script type="text/javascript">
+			// 3.这里，页面<body>还没有被完全加载解析，可以操作挂载的DOM
+			var div = document.getElementById("container");
+			console.log(div);
+			// 4.这里，页面<body>还没有被完全加载解析，不可操作后续元素
+			var div = document.getElementById("footer");
+			console.log(div);
+		</script>
+
+	<div id="footer">123</div>
+</body>
+</html>

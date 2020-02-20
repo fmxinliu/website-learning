@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>“arguments” 变量</title>
+	<!-- https://zh.javascript.info/rest-parameters-spread-operator#arguments-bian-liang -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + " ");
+		}
+
+		test1("Julius", "Caesar");
+		test2("<br />箭头函数自身是没有 this 的，现在我们更进一步还知道它缺少 arguments 这个特殊的对象。<br />");
+		
+
+		// (1) arguments 是一个类数组且可遍历的变量，但它终究不是数组
+		function test1() {		  	 
+		  	print(`arguments is Array? ${Array.isArray(arguments)}<br />`);
+		  	debugger
+
+		  	print( arguments.length );
+		  	// 它是可遍历的
+  			for(let arg of arguments) print(arg);
+
+  			// 它不是数组，没法直接调用数组的方法
+  			// arguments.map(name => print(name));
+		}
+
+		// (2) 箭头函数是没有 "arguments" 的
+		function test2() {
+			// 箭头函数中访问 arguments，此时的 arguments 并不属于箭头函数，而是属于箭头函数外部的“普通”函数。
+			let showArg = () => print(arguments[0]); 
+  			showArg();
+		}
+  
+
+	</script>
+</body>
+</html>

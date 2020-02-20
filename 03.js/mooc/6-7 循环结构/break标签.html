@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>break标签</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			"use strict";
+
+			/*break outer 向上寻找名为 outer 的标签并跳出当前循环。控制权直接从 (*) 转至 alert('Done!')。*/
+			outer:for (var i = 0; i < 3; i++) {
+				for (var j = 0; j < 5; j++) {
+					let input = prompt(`Value at coords (${i},${j})`, '');
+					// 如果是空字符串或已取消，则中断这两个循环。
+					// if (input == '' || input == null)
+					if (!input) { // ！将name从string -> bool 类型
+						break outer; // (*)
+						// break end; // 标签不允许我们跳到任意代码位置，并且标签必须位于指令上方的某个位置【不同于goto】
+					}
+				}
+			}
+			end:alert("end"); // 
+		</script>
+	</body>
+</html>

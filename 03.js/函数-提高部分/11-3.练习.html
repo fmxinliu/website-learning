@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/currying-partials#tasks -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+	</script>
+
+	<!-- 偏函数在登录中的应用 -->
+	<script>	
+		"use strict"
+		function askPassword(ok, fail) {
+			let password = prompt("Password?", 'rockstar');
+			if (password == "rockstar") ok();
+			else fail();
+		}
+
+		var user = {
+			name: 'John',
+
+			login(result) {
+				print( this.name + (result ? ' logged in' : ' failed to log in') );
+			}
+		};
+
+		askPassword(() => user.login(true), () => user.login(false)); // 执行期间，依赖于 user
+
+		askPassword(user.login.bind(user, true), user.login.bind(user, false));
+
+	</script>
+</body>
+</html>

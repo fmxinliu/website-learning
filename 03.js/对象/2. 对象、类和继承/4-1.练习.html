@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/function-prototype#tasks -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 基本 -->
+	<script>
+		function Rabbit() {};
+		Rabbit.prototype = {
+			eats: true
+		};
+
+		var rabbit = new Rabbit();
+		print(rabbit.eats); // true
+	</script>
+
+	<!-- 修改 1 -->
+	<script>
+		function Rabbit() {};
+		Rabbit.prototype = {
+			eats: true
+		};
+
+		var rabbit = new Rabbit();
+		Rabbit.prototype = {}; // <-- 影响修改后新创建的对象 Rabbit.prototype.constructor = Object
+		print(rabbit.eats); // true
+	</script>
+
+	<!-- 修改 2 -->
+	<script>
+		function Rabbit() {};
+		Rabbit.prototype = {
+			eats: true
+		};
+
+		var rabbit = new Rabbit();
+		Rabbit.prototype.eats = false; // <-- Rabbit.prototype 和 rabbit 的 [[Prototype]] 引用的是同一个对象
+		print(rabbit.eats); // fasle
+
+	</script>
+
+	<!-- 修改 3 -->
+	<script>
+		function Rabbit() {};
+		Rabbit.prototype = {
+			eats: true
+		};
+
+		var rabbit = new Rabbit();
+		delete rabbit.eats; // <-- 所有 delete 操作都直接应用于对象，所以这句的意思是“试图从 rabbit 中删除 eats 属性”
+		print(rabbit.eats); // true
+
+	</script>
+
+	<!-- 修改 4 -->
+	<script>
+		function Rabbit() {};
+		Rabbit.prototype = {
+			eats: true
+		};
+
+		var rabbit = new Rabbit();
+		delete Rabbit.prototype.eats; // <-- 属性 eats 从原型中删除，它不再存在
+		print(rabbit.eats); // undefined
+
+	</script>
+</body>
+</html>

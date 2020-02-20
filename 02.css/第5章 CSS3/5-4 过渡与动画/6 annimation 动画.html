@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>变色动画</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		div{
+
+			width: 176px;
+			height: 125px;
+			background-color: black;
+		}
+		@keyframes mycolor
+		{
+			0%		{ }
+		    10%		{background-image:url("0 动画示例/HORSE1.GIF");}
+		    20%		{background-image:url("0 动画示例/HORSE2.GIF");}
+		    30% 	{background-image:url("0 动画示例/HORSE3.GIF");}
+		    40% 	{background-image:url("0 动画示例/HORSE4.GIF");}
+		    50% 	{background-image:url("0 动画示例/HORSE5.GIF");}
+		    60% 	{background-image:url("0 动画示例/HORSE6.GIF");}
+		    70% 	{background-image:url("0 动画示例/HORSE7.GIF");}
+		    80% 	{background-image:url("0 动画示例/HORSE8.GIF");}
+		    90%   	{background-image:url("0 动画示例/HORSE9.GIF");}
+		    100%	{background-image:url("0 动画示例/HORSE10.GIF");}
+		}
+		div:hover
+		{
+		    animation: mycolor 5s linear
+		}
+	</style>
+
+</head>
+<body>
+	<div>
+		
+	</div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组练习</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		print("将 border-left-width 转换成 borderLeftWidth");
+		function camelize(str) {
+			let arr = str.split('-');
+			for (let i = 1; i < arr.length; i++) {
+				// 空字符串，[] 返回 undefined，charAt() 返回 ''
+				arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+			}
+
+			return arr.join('');
+		}
+
+		print(camelize("list-style-image"));
+		print(camelize("-webkit-transition"))
+
+		print("过滤范围");
+		function filterRange(arr, a, b) {
+			let filterArr = [];
+
+			for (let item of arr) {
+				if (item >= a && item <= b) {
+					filterArr.push(item);
+				}
+			}
+
+			return filterArr;
+		}
+
+		let arr = [5, 3, 8, 1];
+		let filtered = filterRange(arr, 1, 4);
+		print( filtered ); // 3,1（匹配值）
+		print( arr ); // 5,3,8,1（未修改）
+
+
+		function filterRangeInPlace(arr, a, b)  {
+			for (let i = 0; i < arr.length; i++) {
+				if (!(arr[i] >= a && arr[i] <= b)) {
+					arr.splice(i, 1);
+				}	
+			}
+		}
+
+		filterRangeInPlace(arr, 1, 4); // 删除了从 1 到 4 之外的数字
+		print( arr ); // [3, 1]
+
+
+		print("倒序");
+		arr = [5, 2, 1, -10, 8];
+		arr.sort((a, b) => b - a);
+		print( arr );
+
+
+		print("复制和排序数组");
+		function copySorted(arr) {
+			return arr.slice().sort(); // sort() 会改变原数组，因此使用 slice() 来创建一个副本并对其进行排序
+		}
+
+		arr = ["HTML", "JavaScript", "CSS"];
+		let sorted = copySorted(arr);
+		print( sorted ); // 原数组不变
+		print( arr );
+
+		print("映射到 names")
+		let john = { name: "John", surname: "Smith", id: 1 };
+		let pete = { name: "Pete", surname: "Hunt", id: 2 };
+		let mary = { name: "Mary", surname: "Key", id: 3 };
+		// 对象数组
+		let users = [ john, pete, mary ];
+		let names = users.map(user => user.name);
+		print( names ); // John, Pete, Mary
+
+		print("映射到对象");
+		// let usersMapped = users.map(user => { 
+		// 	return {
+		// 		fullName : user.name + " " + user.surname,
+		// 		id		 : user.id,
+		// }});
+
+		// 有两个箭头函数写法：直接返回值value => expr 和带主体的 value => {...}
+		let usersMapped = users.map(user => ({  // 必须添加括号，否则 JS 会把 { 作为函数体的开始，而不是对象的开始
+			fullName : `${user.name} ${user.surname}`,
+			id		 : user.id,
+		}));
+
+		print( usersMapped[0].id );
+		print( usersMapped[0]["fullName"] );
+
+		print("排序对象");
+		function sortByName(arr) {
+			arr.sort((a, b) => a.name > b.name);
+		}
+
+		sortByName(users);
+		// now: [john, mary, pete]
+		print(users[1].name);
+
+
+		print("随机排序");
+		function test(func) {
+			// 出现所有可能排列的次数
+			let count = {
+			  '123': 0,
+			  '132': 0,
+			  '213': 0,
+			  '231': 0,
+			  '321': 0,
+			  '312': 0
+			};
+
+			for (let i = 0; i < 1000000; i++) {
+			  let array = [1, 2, 3];
+			  func(array);
+			  count[array.join('')]++;
+			}
+
+			// 显示所有可能的排列的数量
+			for (let key in count) {
+			  print(`${key}: ${count[key]}`);
+			}
+		}
+
+		function shuffle(array) {
+			array.sort(() => Math.random - 0.5);
+		}
+
+		//  Fisher-Yates shuffle.
+		function shuffle2(array) {
+			for (let i = array.length - 1; i > 0; i--) {
+				let j = Math.floor(Math.random() * (i + 1)); // r 从 0 到 i 的随机索引
+				[array[i], array[j]] = [array[j], array[i]]; // 交换元素 ================================
+			}
+		}
+
+		// test(shuffle);
+		// test(shuffle2); // 相同的概率
+
+		print("获取平均");
+		function getAverageAge(users) {
+			return users.reduce((prev, user) => prev + user.id, 0) / users.length;
+		}
+
+		print( getAverageAge(users) );
+
+		print("数组去重");
+		function unique(arr) {
+			let result = [];
+
+			for (let str of arr) {
+				// includes 内部遍历 result
+				if (!result.includes(str)) { // 性能问题。该方案仅适用于小型数组
+					result.push(str);
+				}
+			}
+
+			return result;
+		}
+
+		let strings = ["Hare", "Krishna", "Hare", "Krishna", "Krishna", "Krishna", "Hare", "Hare", ":-O"];
+		print( unique(strings) );
+	</script>
+</body>
+</html>

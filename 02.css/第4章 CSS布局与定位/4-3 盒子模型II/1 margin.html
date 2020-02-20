@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		div{
+		    width: 100px;
+		    height: 100px;
+		    border: 2px solid red;
+		    /*图片、文字的水平垂直居中*/
+		    text-align: center;
+		    line-height: 100px;
+		    /*div水平居中*/
+		    margin: 0px auto;
+		}
+		#box2{
+			margin: 100px, auto;
+			border-style: solid;
+			border-color: red green blue gray; /*上、右、下、左*/
+		}
+		#box3{
+			border-style: solid;
+			border-color: red green blue; /*上、右、下、左(右)*/
+		}
+		#box4{
+			border-style: solid;
+			border-color: red green; /*上、右、下(上)、左(右)*/
+		}
+	</style>
+</head>
+<body>
+	<p>div标签有换行的效果，会独占一行</p>
+	<p>margin的合并：垂直方向合并，水平方向不合并</p>
+    <div id="box1">box1</div>
+    <div id="box2">box2</div>
+    <div id="box3">box3</div>
+    <div id="box4">box4</div>
+</body>
+</html>

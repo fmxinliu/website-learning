@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型方法</title>
+	<!-- https://zh.javascript.info/prototype-methods -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 引例 -->
+	<script>
+		var animal = {
+			eats: true
+		};
+
+		var rabbit = Object.create(animal); // <-- (1) 以 animal 为原型创建一个新对象
+		print(rabbit.__proto__ === animal);
+
+		print(Object.getPrototypeOf(rabbit) === animal); // <-- (2) 获取 rabbit 的原型
+
+		Object.setPrototypeOf(rabbit, {}); // <-- (3) 将 rabbit 的原型更改为 {}
+	</script>
+
+	
+	<!-- Object.create -->
+	<script>
+		var animal = {
+			eats: true,
+			_name: ''
+		};
+
+		// Object.creat 有一个可选的第二参数：属性描述
+		var rabbit = Object.create(animal, { // <-- 给新对象提供额外的属性
+			jump: {
+				value: true,
+				enumerable: true
+			},
+			sleep: {
+				value: true
+			},
+			say: {
+				get() {
+					return this._name;
+				},
+				set(value) {
+					this._name = value;
+				}
+			}
+		});
+
+		print(rabbit.jump); // true
+		print(animal.jump); // undefined
+
+		// Object.create 可以实现对象的完整复制，包含了所有属性： 数据属性、访问器属性、[[Prototype]]	
+		var clone = Object.create(Object.getPrototypeOf(rabbit), Object.getOwnPropertyDescriptors(rabbit));
+		print(clone.sleep); // 不可枚举的
+		clone.say = "rabbit"; // setter
+		print(clone.say); // getter
+		print(clone.__proto__ === animal); // [[Prototype]]
+		print(rabbit.__proto__ === animal);
+
+	</script>
+
+</body>
+</html>

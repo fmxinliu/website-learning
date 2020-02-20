@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数表达式</title>
+</head>
+<body>
+	<script>
+		// 1.函数表达式
+		let print = function(msg) { // 创建一个函数并放进变量 print
+			document.write(msg + "<br />");
+		}; // 这里的分号与函数表达式本身没有任何关系，它只是终止了声明语句
+
+		// 2.JavaScript 中，函数是一个值，可以把它当成值对待
+		function sayHi() {   // (1) create
+		  print( "Hello" );
+		}
+
+		let func = sayHi;    // (2) copy
+
+		func(); // Hello     // (3) run the copy (it works)!
+		sayHi(); // Hello    //     this still works too (why wouldn't it)
+
+		print(print); // （4）print code
+	</script>
+</body>
+</html>

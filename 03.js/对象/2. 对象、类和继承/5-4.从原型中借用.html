@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>从原型中借用</title>
+	<!-- https://zh.javascript.info/native-prototypes#cong-yuan-xing-zhong-jie-yong -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 方法借用 -->
+	<script>
+		function showArgs() {
+			// 从数组借用 join 方法并在 arguments 的上下文中调用
+			print( [].join.call(arguments, '-') ); // <-- this=arguments，将 this[0]，this[1] …… 连接在一起
+		}
+
+		showArgs("John", "Pete", "Alice"); // John - Pete - Alice
+	</script>
+
+	<!-- 更高效的方法借用 -->
+	<script>
+		function showArgs() {
+			print( Array.prototype.join.call(arguments, '-') ); // <-- 避免了一个额外数组对象 [] 的创建
+		}
+
+		showArgs("John", "Pete", "Alice"); // John - Pete - Alice
+	</script>
+
+</body>
+</html>

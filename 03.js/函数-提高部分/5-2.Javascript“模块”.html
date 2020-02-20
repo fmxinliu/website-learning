@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript“模块（异步调用）</title>
+	<!-- https://zh.javascript.info/global-object -->
+	<!-- 问题：所有脚本默认共享相同的全局作用域，一个脚本可能无意中修改了另一个脚本（可能来自不同的源）定义的变量，造成变量冲突 -->
+	<!-- 解决：使用“模块”，这样脚本有自己的顶级作用域（词法环境），不会干扰 window -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// document.write(msg + "<br />"); // 异步调用不允许使用
+			console.log(msg);
+		}
+	</script>
+
+	<!-- 两个模块的变量彼此不可见 -->
+	<script type="module">
+		print("a，b 只在“模块”内可见，不会被后续脚本引用");
+		var a = 1;
+		let b = 2;
+	</script>
+
+	<script type="module">
+		print("不能引用前面脚本“模块”，定义的全局变量");
+		// print(a); // 1
+		// print(b); // 2
+	</script>
+
+	<!-- 每个“模块”都有自己的顶级作用域，顶级 var x 不会成为 window 的属性 -->
+	<script type="module">	
+		print("“模块”中，顶级 var 变量和函数声明不会成为 window 的属性");
+		var x = 5;
+		alert(window.x); // undefined
+	</script>
+
+	<!-- 使用 <script type="module"> 后，通过将顶级作用域与 window 分开的方式来修复语言的设计缺陷 -->
+	<script type="module">	
+		print("“模块”中，this 的顶级值是 undefined，并不是 window ");
+		alert(this); // undefined
+	</script>
+	
+</body>
+</html>

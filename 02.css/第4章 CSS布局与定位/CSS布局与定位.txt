@@ -1,0 +1,33 @@
+1.CSS元素：盒子
+2.CSS定位：
+	2.1.文档流
+		（1）block
+			（a）独占一行，元素的height、width、margin、padding都可设置。
+			（b）常见的block元素：<div>、<p>、<h1>...<h6>、<ul>、<ol>、<table>、<form>
+		（2）inline
+		    （a）不独占一行，width、height不可设置（由它包含的文字或图片的宽度、高度决定）。
+			（b）常见的inline元素：<span>、<a>
+		（3）inline-block
+			（a）不单独占用一行，元素的height、width、margin、padding都可设置。
+			（b）常见的inline-block元素：<img>
+		（4）可以使用display属性，对默认元素类型进行相互转换。
+	2.2.浮动
+		（1）float
+			（a）none
+			（b）left 向左浮动，在文档流中的原位置不再存在。
+			（c）right
+		（2）clear
+			（a）both 清除两侧浮动，浮动元素并不会被删除。
+			（b）left
+			（c）right
+	2.3.层叠
+		（1）position - 定位的参照物是哪个元素？
+			（a）static（默认），没有定位，元素出现在正常的流中。top、bottom、left、right，z-index无效。
+			（b）fixed（固定定位），相对于浏览器窗口定位，位置不会随着滚动条移动，常用来设置网页左右边条中的广告。
+			（c）relative（相对定位），相对于文档流中的原位置定位，脱离正常的文档流，但在文档流中的原位置仍然保留。
+			（d）absolute（绝对定位），相对于relative/absolute/body/html父元素（第一个非static）定位，脱离正常的文档流，在文档流中的原位置不再存在。
+		（2）left - 定位位置？
+		（3）right
+		（4）top
+		（5）bottom
+		（6）z-index：值大在上层

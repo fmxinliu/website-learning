@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/class-patterns#tasks -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 继承中的错误 -->
+	<script>
+		function Animal(name) {
+		  	this.name = name;
+		}
+
+		Animal.prototype.walk = function() {
+		  	print(this.name + ' walks');
+		};
+
+		function Rabbit(name) {
+		 	this.name = name;
+		}
+
+		// Rabbit.prototype = Animal.prototype; // <-- 指向同一个对象
+		// Rabbit.prototype.__proto__ = Animal.prototype;
+		// Rabbit.prototype = Object.create(Animal);
+		Rabbit.prototype = Object.create(Animal.prototype);
+
+		Rabbit.prototype.walk = function() {
+		  	print(this.name + " bounces!");
+		};
+
+		let animal = new Animal("pig");
+		animal.walk(); // 猪跳！
+	</script>
+
+</body>
+</html>

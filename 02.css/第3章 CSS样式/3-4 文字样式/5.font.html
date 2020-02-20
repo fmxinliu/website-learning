@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>字体属性</title>
+	<style type="text/css">
+
+		/* font属性简化的使用方法 */
+		p{
+			font: normal bold 12px/1.5em '黑体'; /* 斜体 粗体 字号/行高 字体 */
+		}
+
+		/* 只能应用于span标签下，且class="data"时 */
+		span.data{
+			font-family: "HiraginoSans GB"， '幼圆' '黑体'; /* 依次查找字体1,2,3...直到找到第一个字体（如果存在空格，使用双引号） */
+			font-size: 150%; /* DOM树父节点字体（子节点继承）* 120% （px-像素，pt-镑<英文字体>）*/
+			font-style: italic; /* 斜体 */
+			font-weight: bold; /* 粗体 */
+		}
+	</style>
+</head>
+<body>
+	<p>2019<span>随着经济发展，人们的生活水平越来越好!</span></p>
+	<p>2019<span class="data">随着经济发展，人们的生活水平越来越好!</span></p>
+	<p class="data">2019<span>随着经济发展，人们的生活水平越来越好!</span></p>
+</body>
+</body>
+</html>

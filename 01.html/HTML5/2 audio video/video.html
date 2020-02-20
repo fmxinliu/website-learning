@@ -1,0 +1,34 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>htm5音频特性</title>
+</head> 
+<body>
+    <!-- 支持.mp4、webm、ogg格式视频文件 -->
+    <!-- 设置视频窗口大小时，只需设置宽度，浏览器会自适应高度 -->
+    <!-- 一个视频文件可以添加多个source，表示当前视频文件的多个格式，而不是多个视频文件 -->
+    <div style="text-align:center;">
+        <video id="myVideo" width="800" style="margin-top:15px;">
+            <source src="../../浏览器如何渲染网页？服务器的作用？.mp4" type="video/mp4" />
+            浏览器不支持HTML5:video
+        </video>
+        <button id="play" onclick="playPause()">播放</button>
+    </div> 
+
+    <script>
+        var v = document.getElementById("myVideo");
+        var control = document.getElementById("play");
+        function playPause(){ 
+            if (v.paused) {   
+                myVideo.play(); 
+                control.innerHTML = "暂停";
+            }
+            else {
+                v.pause();
+                control.innerHTML = "播放";
+            }
+        } 
+    </script> 
+</body> 
+</html>

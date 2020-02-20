@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>其他内置原型</title>
+	<!-- https://zh.javascript.info/native-prototypes#qi-ta-nei-zhi-yuan-xing -->
+	<!-- (1) 所有的内置原型顶端都是 Object.prototype。“一切都从对象 Object 上继承而来” -->
+	<!-- (2) 字符串、数字和布尔值并不是对象。
+	如果我们试图访问它们的属性，那么临时的包装对象将会被内置的构造函数String、 Number 或 Boolean创建。
+	这些对象的方法也驻留在它们的原型 String.prototype、Number.prototype 和 Boolean.prototype 中。 -->
+	<!-- (3) 特殊值 null 和 undefined 没有对象包装，所以它们没有自己的方法和属性，也没有相应的原型。 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- Array -->
+	<script>
+		var arr = [1, 2, 3]; // <-- 内部使用 new Array() 构造函数
+
+		// it inherits from Array.prototype?
+		print(arr.__proto__ === Array.prototype); // true
+
+		// then from Object.prototype?
+		print(arr.__proto__.__proto__ === Object.prototype); // true
+
+		// and null on the top.
+		print(arr.__proto__.__proto__.__proto__ ); // null
+
+		console.dir(arr); // <-- Chrome 开发者控制台，显示继承关系
+	</script>
+
+	<!-- Function -->
+	<script>
+		function f() {} // <-- 内部使用 new Function () 构造函数
+
+		print(f.__proto__ === Function.prototype); // true
+
+		print(f.__proto__.__proto__ === Object.prototype); // true
+
+		print(f.__proto__.__proto__.__proto__ ); // null
+
+		console.dir(f);
+	</script>
+
+</body>
+</html>

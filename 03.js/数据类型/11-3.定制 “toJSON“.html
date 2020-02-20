@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>定制 “toJSON”</title>
+	<!-- https://zh.javascript.info/json -->
+	<!-- JSON (JavaScript Object Notation) 是表示值和对象的通用格式 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		function test1() {
+			let room = {
+			  	number: 23
+			};
+
+			let meetup = {
+			  	title: "Conference",
+			  	date: new Date(Date.UTC(2017, 0, 1)),
+			  	room
+			};
+
+			print( JSON.stringify(meetup) );
+			// alert( JSON.stringify(meetup, null, 4) );
+			/*
+			  {
+			    "title":"Conference",
+			    "date":"2017-01-01T00:00:00.000Z",  // (1) Date 对象有一个内置的 toJSON 方法，返回一个字符串
+			    "room": {"number":23}               // (2)
+			  }
+			*/
+		}
+
+
+		// 像 toString 进行字符串转换，对象可以提供 toJSON 方法来进行 JSON 转换。JSON.stringify 会自动调用它。
+		// toJSON 既用于直接调用 JSON.stringify(room) 也可以用于嵌套对象。 
+		function test2() {
+			let room = {
+			  	number: 23,
+			  	toJSON() { // 会被调用
+			  		return this.number;
+			  	}
+			};
+
+			let meetup = {
+			  	title: "Conference",
+			  	date: new Date(Date.UTC(2017, 0, 1)),
+			  	room
+			};
+
+			print( JSON.stringify(meetup) );
+			// alert( JSON.stringify(meetup, null, 4) );
+			/*
+			  {
+			    "title":"Conference",
+			    "date":"2017-01-01T00:00:00.000Z",  // (1)
+			    "room": 23               			// (2) 调用 toJSON，返回 number 类型
+			  }
+			*/
+
+			print( JSON.stringify(room) );
+			// alert( JSON.stringify(room) );
+		}
+
+		function test3() {
+			let room = {
+			  	number: 23,
+			  	toJSON() { // 会被调用
+			    	return {
+			    		xxx: this.number
+			    	};
+			  	}
+			};
+
+			let meetup = {
+			  	title: "Conference",
+			  	date: new Date(Date.UTC(2017, 0, 1)),
+			  	room
+			};
+
+			print( JSON.stringify(meetup) );
+			// alert( JSON.stringify(meetup, null, 4) );
+			/*
+			  {
+			    "title":"Conference",
+			    "date":"2017-01-01T00:00:00.000Z",  // (1)
+			    "room": {
+					"xxx": 23						// (2) 调用 toJSON，返回 object 类型
+			    }           			
+			  }
+			*/
+
+			print( JSON.stringify(room) );
+			// alert( JSON.stringify(room) );
+		}
+
+
+		test1();
+		test2();
+		test3();
+
+	</script>
+</body>
+</html>

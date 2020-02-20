@@ -1,0 +1,22 @@
+div{
+   border: 1px solid red;
+}
+#box1{
+	float: left;
+	width: 400px;
+   	height: 300px;
+}
+#box2{
+	float: left;
+	width: 200px;
+   	height: 200px;
+   	margin-left: 5px;
+}
+#box3{
+	float: left;
+	clear: left;
+	width: 607px;
+   	height: 100px;
+   	border-color: green;
+   	margin-top: 5px;
+}

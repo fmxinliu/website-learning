@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mixin 模式</title>
+	<!-- https://zh.javascript.info/mixins -->
+	<!-- 在 JS 中：
+		 (1) 只能继承单个对象，每个对象只有一个 [[Prototype]] 原型。
+		 (2) 每个类只可以扩展另外一个类。
+		 (3) mixin 可以为其他类提供一些方法，而不必被其他类继承。 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 一个 Mixin 实例 -->
+	<script>
+		// mixin
+		let sayHiMixin = {
+			sayHi() {
+    			print(`Hello ${this.name}`);
+  			}
+		};
+
+		// 用法：
+		class User {
+			constructor(name) {
+				this.name = name;
+			}
+		}
+
+		// 拷贝方法
+		Object.assign(User.prototype, sayHiMixin);
+
+		// 现在 User 可以说 hi 了
+		new User("John").sayHi(); // Hello John
+	</script>
+
+	<!-- Mixin 可以在自己内部使用继承 -->
+	<script>
+		let sayMixin = {
+			say(phrase) {
+				print(phrase);
+			}
+		};
+
+		let sayHiMixin2 = {
+			__proto__: sayMixin,
+
+			sayHi() {							 // 专用属性 [[HomeObject]] == sayHiMixin2
+				super.say(`Hello ${this.name}`); // 保证了   super 实际上 sayHiMixin2.__proto__
+			}
+		};
+
+		class User2 extends class People {} {
+			constructor(name) {
+				super(); // <-- 必须先调用 super 构造 this
+				this.name = name;
+			}
+		}
+
+		// 拷贝方法
+		Object.assign(User2.prototype, sayHiMixin2);
+
+		// 现在 User 可以说 hi 了
+		new User2("John").sayHi(); // Hello John
+	</script>
+
+
+	<!-- EventMixin -->
+	<script>
+		let eventMinxin = {
+			/**
+			 * 订阅事件，用法：
+			 *  menu.on('select', function(item) { ... }
+			 */
+			on(eventName, handler) {
+				if (!this._eventHandlers) this._eventHandlers = {};
+				if (!this._eventHandlers[eventName]) {
+			 		this._eventHandlers[eventName] = [];
+				}
+				this._eventHandlers[eventName].push(handler);
+			},
+
+			/**
+			 * 取消订阅，用法：
+			 *  menu.off('select', handler)
+			 */
+			off(eventName, handler) {
+				let handlers = this._eventHandlers && this._eventHandlers[eventName];
+				if (!handlers) return;
+				for (let i = 0; i < handlers.length; i++) {
+					if (handlers[i] === handler) {
+						handlers.splice(i--, 1); // 删除一个元素，后面的元素会整体前移一位
+					}
+				}	
+			},
+
+			/**
+   			 * 触发事件并传递参数
+   			 *  this.trigger('select', data1, data2);
+   			 */
+   			trigger(eventName, ...args) {
+   				if (!this._eventHandlers || !this._eventHandlers[eventName]) {
+   					return; // 对应事件名没有事件处理函数。
+   				}
+
+   				// 调用事件处理函数
+   				this._eventHandlers[eventName].forEach(handler => handler.apply(this, args));
+   			}
+		};
+
+		// 用法：
+		// (1) 新建一个 class
+		class Menu {
+			choose(value) {
+				this.trigger("select", value);
+			}
+		}
+
+		// (2) 添加 mixin
+		Object.assign(Menu.prototype, eventMinxin);
+
+		// (3) 创建对象实例
+		let menu = new Menu();
+
+		// (4) 注册事件处理函数
+		menu.on("select", value => print(`Value selected: ${value}`));
+		function f() { print(`===`) }
+		menu.on("select", f);
+
+		// (5) 触发事件
+		menu.choose("123");
+
+		// (6) 解除注册 f
+		menu.off("select", f)
+
+		menu.choose("456");
+	</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>单链表遍历</title>
+	<!-- https://zh.javascript.info/recursion -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		let list = {
+		  value: 1,
+		  next: {
+		    value: 2,
+		    next: {
+		      value: 3,
+		      next: {
+		        value: 4,
+		        next: null
+		      }
+		    }
+		  }
+		};
+
+
+		printList(list);
+		printReverseList(list);
+
+		// 正向遍历
+		function printList(list) {
+			test1(list); print("<br/>");
+			test2(list); print("<br/>");
+
+			// (1) 递归
+			function test1(list) {
+				if (list) { // 等同于 list != null
+					print(list.value);
+					test1(list.next);
+				}
+			}
+
+			// (2) 循环
+			function test2(list) {
+				let tmp = list; // 不要改变 list，使用临时变量 tmp 来遍历链表
+
+				while (tmp) {
+					print(tmp.value);
+					tmp = tmp.next;
+				}
+			}
+		}
+
+		
+		// 反向遍历
+		function printReverseList(list) {
+			test1(list); print("<br/>");
+			test2(list); print("<br/>");
+
+			// (1) 递归
+			function test1(list) {
+				if (list) {
+					test1(list.next);
+					print(list.value);
+				}
+			}
+
+			// (2) 循环
+			function test2(list) {
+				let arr = [];
+				let tmp = list;
+
+				while (tmp) {
+					arr.push(tmp.value);
+					tmp = tmp.next;
+				}
+
+				for (let i = arr.length - 1; i >= 0; i--) {
+					print(arr[i]);
+				}
+			}
+		}
+		
+
+
+
+		print("====== TEST ======");
+		test();
+
+		function test() {
+			print("转number");
+			print(+''); // 0
+			print(+' '); // 0
+			print(+null); // 0
+			print(+undefined); // NaN
+
+			print("<br />转boolean");
+			print(!!''); // false
+			print(!!' '); // true
+			print(!!null); // false
+			print(!!undefined); // false
+
+			print("<br />是否相等（基本）");
+			print('' == false); // true
+			print(' ' == false); // true
+			print(null == false); // false
+			print(undefined == false); // false
+
+			print("<br />是否相等（null、undefined、NaN）");
+			print(null == null); // true
+			print(undefined == undefined); // true
+			print(NaN == NaN); // false
+			print(null == undefined); // true
+
+
+			print("<br />逻辑真/假");
+			f(0);
+			f(1);
+			f(null);
+
+			function f(value) {
+				if (value) {
+					print(`=== if(${value}) -> true`);
+				} else {
+					print(`=== if(${value}) -> false`);
+				}
+			}
+		}
+	</script>
+</body>
+</html>

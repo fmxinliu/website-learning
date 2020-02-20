@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>4*3布局</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			font-size: 14px;
+		}
+		#container{
+			margin: 0 auto;
+			width: 1000px;
+			height: 500px;
+			border: 1px solid red;
+		}
+		#header{
+			height: 10%;
+			background-color: #6cf;
+			margin-bottom: 5px;
+		}
+		#nav{
+			height: 8%;
+			background:#09c;
+			margin-bottom:5px;
+		}
+		#main{
+			height: 76%;
+		/*	background-color: #cff;*/
+			margin-bottom: 5px;
+		}
+		.aside{ /*左右边条公共的样式*/
+			float: left;
+			width: 12%;
+			height: 100%;
+			background-color: #6cf;
+		}
+		#aside1 { 
+			margin-right:5px;
+		}
+		#aside2 { 
+		    margin-left:5px;
+		}
+		#content{
+			float: left; /*左浮动*/
+			width: 75%;
+			height: 100%;
+			background-color: #cff;
+		}
+		#footer{
+			height: 3%;
+			background-color: #6cf;
+		}	
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div id="header"></div>
+		<div id="nav"></div>
+		<div id="main">
+			<div id="aside1" class="aside"></div>
+			<div id="content"></div>
+			<div id="aside2" class="aside"></div>
+		</div>
+		<div id="footer"></div>
+	</div>
+</body>
+</html>

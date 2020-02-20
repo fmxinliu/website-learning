@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>setInterval 调度</title>
+	<!-- https://zh.javascript.info/settimeout-setinterval#setinterval -->
+ 	<!-- setInterval - 让函数间隔一定时间周期性执行 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>	
+		test1();
+		test2();
+
+		// 使用 setInterval 执行调度，clearTimeout 来取消调度
+		function test1() {
+			let timerId = setInterval(() => alert('tick'), 2000); // 每 2 秒重复一次
+			setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000); // 5 秒之后停止
+		}
+		
+		// 弹窗会让 Chrome/Opera/Safari 内的时钟停止，而 IE/Firefox 不会停止
+		
+		// 所以，在执行以上代码时，如果在一定时间内没有关掉 alert 弹窗，那么在你关闭弹窗后，Firefox/IE 会立即显示下一个 alert 弹窗（前提是距离上一次执行超过了 2 秒），而 Chrome/Opera/Safari 这三个则需要再等待 2 秒以上的时间才会再显示（因为在 alert 弹窗期间，定时器并没有滴答）。
+
+	</script>	
+</body>
+</html>

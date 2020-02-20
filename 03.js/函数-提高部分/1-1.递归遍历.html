@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>递归遍历</title>
+	<!-- https://zh.javascript.info/recursion -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		let company = {
+			sales: [{name: 'John', salary: 1000}, {name: 'Alice', salary: 600 }],
+			development: {
+				sites: [{name: 'Peter', salary: 2000}, {name: 'Alex', salary: 1800 }],
+				internals: [{name: 'Jack', salary: 1300}]
+			}
+		};
+
+		// 获得所有薪酬总数
+		// (1) 这个部门是有一组人的『简单』部门 —— 这样我们就可以使用简单循环来求薪酬总额。【递归的基础】
+		// (2) 或者它是一个有 N 个子部门的对象 —— 这样我们可以用 N 个递归调用来求每一个子部门的总额然后合并它们。【递归步骤】
+		
+		// 用来完成作业的函数
+		function sumSalaries(department) {
+		  	if (Array.isArray(department)) { // 情况 (1)
+		  		return department.reduce((prev, current) => prev + current.salary, 0); // 求数组的和
+			} else { // 情况 (2)
+				let sum = 0;
+				// // for..in 遍历对象的属性，获取的是字符串
+				// for (let subdep in department) {
+				// 	sum += sumSalaries(department[subdep]); // 递归调用子部门，对结果求和
+				// }
+
+				// for..of 迭代对象的（属性）值
+				for (let subdep of Object.values(department)) {
+					sum += sumSalaries(subdep);
+				}
+				return sum;
+			}
+		}
+
+		alert(sumSalaries(company)); // 6700
+
+	</script>
+</body>
+</html>

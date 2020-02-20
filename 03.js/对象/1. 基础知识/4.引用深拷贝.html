@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>引用深拷贝</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		function printObj(obj) {
+			for (let key in obj) {
+				if (typeof(obj[key]) === "object") {
+					printObj(obj[key]);
+				} else {
+					print(obj[key]);
+				}
+			}
+		}
+
+
+		let user = { 
+			name: 'John',
+			age: 20,
+		};
+
+		// 1.手动复制
+		let clone = {};
+		for (let key in user) {
+			clone[key] = user[key];
+		}
+		for (let key in user) {
+			print(clone[key]);
+		}
+
+		// 2.
+		print("---------------------");
+		// let user = { name: "John" };
+		let permissions1 = { canView: true };
+		let permissions2 = { canEdit: true };
+
+		// 把 permissions1 和 permissions2 的所有属性都拷贝给 user
+		Object.assign(user, permissions1, permissions2);
+
+		permissions1.canView = false;
+		printObj(user); // 现在 user = { name: "John", canView: true, canEdit: true }
+		
+		print("---------------------");
+		// 如果接收的对象（user）已经有了同样属性名的属性，前面的会被覆盖
+		Object.assign(user, { name: "Pete", isAdmin: true });
+		printObj(user);
+
+		print("---------------------");
+		///  简单的复制方法 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		let userClone = Object.assign({}, user);
+		printObj(userClone);
+
+		print("-------嵌套对象的深拷贝探讨-------");
+		// 3.嵌套对象的深拷贝
+		let table = {
+		  name: "table",
+		  sizes: { // 属性指向一个对象
+		    height: 182,
+		    width: 50
+		  }
+		};
+		printObj(table);
+
+		let tableClone = Object.assign({}, table);
+		// print( table.sizes === tableClone.sizes ); // true，同一个对象
+		print("---------------------");
+		// table 和 tableClone 共享 sizes 对象
+		
+		table.sizes.width++;       // 在这里改变一个属性的值
+		
+		// print(tableClone.sizes.width); // 51，在这里查看属性的值
+		printObj(tableClone);
+
+		print("----------正确拷贝-----------");
+		function copy1(des, src) {
+			for(let key in src) {
+				if (typeof(src[key]) === "object") {
+					copy(des, src[key]);
+				} else {
+					des[key] = src[key];	
+				}
+			}
+
+			return des;
+		}
+		function copy(src) {
+			let obj = new Object; // 定义空对象
+			for(let key in src) {
+				if (typeof(src[key]) === "object") {
+					copy1(obj, src[key]);
+				} else {
+					obj[key] = src[key];	
+				}
+			}
+
+			return obj;
+		}
+
+		let tableClone2;
+		tableClone2 = copy(table);	
+		table.sizes.width++;       // 在这里改变一个属性的值
+		printObj(tableClone2);
+	</script>
+</body>
+</html>

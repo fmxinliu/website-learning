@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>为什么两只仓鼠都饱了？</title>
+	<!-- https://zh.javascript.info/prototype-inheritance#wei-shi-mo-liang-zhi-cang-shu-du-bao-liao -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		function eat(obj1, obj2) {
+			// This one found the food
+			obj1.eat("apple 嗄");
+			print( obj1.stomach ); // apple
+
+			// This one also has it, why? fix please.
+			print( obj2.stomach ); // apple
+		}
+	</script>
+
+	<!-- 原型继承数据属性共享的情况 -->
+	<script>
+		var hamster = {
+  			stomach: [], 
+
+  			eat(food) {
+    			this.stomach.push(food); // <-- this=speedy，共享原型中的 stomach
+  			}
+		};
+
+		var speedy = {
+			__proto__: hamster
+		};
+
+		var lazy = {
+			__proto__: hamster
+		};
+
+		eat(speedy, lazy);
+
+	</script>
+
+	<!-- 原型继承中数据属性不共享的情况 -->
+	<script>
+		var hamster = {
+  			stomach: [],
+
+  			eat(food) {
+    			this.stomach = [food]; // <-- 简单的赋值，不会共享原型中的 stomach
+  			}
+		};
+
+		var speedy = {
+			__proto__: hamster
+		};
+
+		var lazy = {
+			__proto__: hamster
+		};
+
+		eat(speedy, lazy);
+	</script>
+
+	<!-- 为了回避“原型共享”，每个对象维护自己的属性 -->
+	<script>
+		var hamster = {
+  			stomach: [],
+
+  			eat(food) {
+    			this.stomach.push(food);
+  			}
+		};
+
+		var speedy = {
+			__proto__: hamster,
+			stomach: []
+		};
+
+		var lazy = {
+			__proto__: hamster,
+			stomach: []
+		};
+
+		eat(speedy, lazy);
+	</script>
+</body>
+</html>

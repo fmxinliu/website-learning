@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>id选择器</title>
+
+	<!-- class选择器 - 在当前html中，可以多次被引用，作用于多个元素上 -->
+	<!-- id选择器 - 在当前html中，要被唯一的引用一次（如head、body等标签），可以是任何元素 -->
+	<style type="text/css">
+		#one{font-size: 12px}
+		#two{font-size: 24px}
+	</style>
+</head>
+<body>
+	<p id="one">文字1</p>
+	<p id="two">文字1</p>
+	<!-- <p id="two">文字2</p> --> <!-- 重复引用，错误！！！ -->
+</body>
+</html>

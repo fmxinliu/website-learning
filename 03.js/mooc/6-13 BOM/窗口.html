@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>窗口</title>
+</head>
+<body>
+	<!-- BOM专门操作浏览器窗口的API，没有标准，有兼容性问题 -->
+	<script>
+		/*
+		window - 整个窗口
+		history - 当前窗口打开后，成功访问过的历史url记录
+		navigator - 浏览器配置信息
+		document - 当前正在加载的网页内容
+		location - 当前窗口正在打开的url地址
+		screen - 屏幕的信息
+		event - 网页中的事件机制
+		*/
+		console.log(window.outerWidth+":"+window.outerHeight);
+		console.log(window.innerWidth+":"+window.innerHeight);
+		console.log(navigator);
+	</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>instanceof 搜索只与原型链以及 Class.prototype 有关</title>
+	<!-- https://zh.javascript.info/instanceof#ref-instanceof -->
+	<!-- obj instanceof Class 检测过程只和 obj 的原型链以及 Class.prototype 有关，构造器是不参与检测的!!! -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 测试函数 -->
+	<script>
+		function test(classType) {
+			let o = {};
+			print('');
+
+			// 更改前，新建
+			let o1 = new classType();
+			print(o1 instanceof classType);
+			classType.prototype = o;
+			print(o1 instanceof classType);
+
+			// 更改后，新建
+			let o2 = new classType();
+			print(o2 instanceof classType); // true
+
+			print("== function: " + (classType.prototype === o));
+			print("== class: " + (classType === classType.prototype.constructor));
+		}	
+	</script>
+
+	<!-- 两种不同方式 -->
+	<script>	
+		test( function Rabbit() {} ); // true  false  true
+
+		test( class Rabbit {} );  // true  true  true
+
+	</script>
+
+
+	<!-- Q: 无法修改 class 的 prototype ？？？ -->
+	<script>
+		class Rabbit {
+			sayHi() { print("Hi") }
+		}
+
+		print('');
+		new Rabbit().sayHi();
+		Rabbit.prototype = null;
+		print(Rabbit.prototype); // [object Object] ？？？
+		new Rabbit().sayHi();
+
+		// class 会新建变量 Rabbit 指向 constructor
+		print(Rabbit === Rabbit.prototype.constructor); // true 
+	</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>箭头函数</title>
+</head>
+<body>
+	<script>
+		// 'use strict' // 开启JS严格模式
+		function print(value) {
+			document.write(value + "<br />")
+		}
+
+
+		/*
+			(1)没有大括号：(...args) => expression — 右侧是一个表达式：该函数对其进行运行并返回结果。
+			(2)有大括号：(...args) => { body } — 括号允许我们在函数中写入多个语句，但是我们需要一个显式的 return 来返回一些东西。
+		*/
+
+		// 1.多个参数
+		let sum = (a, b) => a + b;
+		// let sum = function(a, b) {
+  // 			return a + b;
+		// };
+		print( sum(1, 2) );
+
+		// 2.单个参数
+		let double = n => n * 2;
+		print( double(12) );
+
+		// 3.没有参数
+		let sayHi = () => print("Hello!");
+		sayHi();
+
+
+
+
+		debugger;  // <-- 调试器会在这停止
+
+
+
+
+		// >>>>>>>>>>> 易错 <<<<<<<<<<<<<<<<<<
+		print(typeof null); // object
+		print(typeof function(){}); // function
+
+		// (1) == 相同类型直接比较，不同类型的值转换为 number 后比较
+		print(0 == ''); // true
+		print(0 == '0'); // true
+		print(0 == ' '); // true
+		print(0 == null); // false ------------  易错！！！！！
+		print(0 == undefined); // false 
+		print(null == undefined); // true ----------- 除了 null 和 undefined，它们彼此相等没有别的情况
+		print(0 == false); // true
+		print(false == '0'); // true
+
+		// (2) string转boolean
+		print( +undefined ); // NaN，string  -> number
+		print( +null ); // 0，string  -> number  ----------------- 易错！！！！！
+		print( +" " ); // 0，string  -> number
+		print( +"0" ); // 0，string  -> number
+		print( !!"0" ); // true，string  -> boolean
+		print( !!" " ); // true，string  -> boolean
+		print( !!null ); // false，string  -> boolean
+		print( !!undefined ); // false，string  -> boolean
+
+		// 
+		print(function(){大都督});
+
+		// return;返回undefined
+		print(print());
+	</script>
+</body>
+</html>

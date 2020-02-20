@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>类别选择器</title>
+
+	
+	<style type="text/css">
+		/* 作用于所有class属性引用的标签上 */
+		p 	{font-size: 12px;}
+		.one{font-size: 18px;}
+		.two{font-size: 24px;}
+		.head{font-size: 50px;}
+
+		/* 只作用于class="foot"的span标签上 */
+		span.foot{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<h6 class=head>6级标题</h6>
+	<p class=one>类别1</p>
+	<p class=one>类别1</p>
+	<p class=two>类别2</p>
+	<p class=two>类别2</p>
+	<p>普通段落中的文本</p>
+
+	<!-- 注意class的作用范围 -->
+	<p class="foot">段落脚标</p>
+	<span class="foot">行内脚标</span>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型继承</title>
+	<!-- https://zh.javascript.info/prototype-inheritance -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 对象有一个特殊的隐藏属性 [[Prototype]] , 可实现对象间的“继承” -->
+	<script>
+		var animal = {
+			eats: true,
+			walk() {
+				print("Animal walk");
+			}
+		};
+
+		var rabbit = {
+			jumps: true,
+		};
+
+		// __proto__ 是访问器属性，而 [[Prototype]] 是数据属性
+		rabbit.__proto__ = animal; // <-- 通过 __proto__ 设置 [[Prototype]]  (*)
+
+		print(rabbit.eats);  // true (**)
+		print(rabbit.jumps);
+		rabbit.walk(); // Animal walk
+	</script>
+
+
+	<!-- 原型链可以很长 -->
+	<script>
+		var longEar = {
+			earLength: 10,
+			__proto__: rabbit
+		};
+
+		longEar.walk(); // Animal walk(from Animal)
+		print(longEar.jumps); // true (from rabbit)
+	</script>
+
+	<!-- 原型继承的两个限制 -->
+	<script> 
+		// animal.__proto__ = rabbit; // <-- 1.引用不能形成闭环
+		longEar.__proto__ = animal;
+		print(longEar.jumps); // undefined <-- 2.对象只有一个 [[Prototype]]，不能继承自两个对象
+	</script>
+</body>
+</html>

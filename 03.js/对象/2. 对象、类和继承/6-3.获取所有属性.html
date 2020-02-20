@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>获取所有属性</title>
+	<!-- https://zh.javascript.info/prototype-methods#huo-qu-suo-you-shu-xing -->
+	<!-- 	
+		(1) Object.keys(obj) / Object.values(obj) / Object.entries(obj) —— 返回包含属性的名称/值/键值对的数组。（可枚举的）
+		(2) Object.getOwnPropertySymbols(obj) —— 返回包含所有 symbol 属性名称的数组。
+		(3) Object.getOwnPropertyNames(obj) —— 返回包含所有字符串属性名的数组。
+		(4) Reflect.ownKeys(obj) —— 返回包含所有属性名称的数组。
+		(5) ========= 上述所有方法，都不会操作 prototype 属性  ===============
+		(6) obj.hasOwnProperty(key)：如果 obj 拥有名为 key 的自身属性（非继承得来），返回 true。
+		(7) 所有返回对象属性的方法（如 Object.keys 以及其他）—— 都返回「自身」属性。
+		(8) for...in 循环有所不同：它会对继承得来的属性也进行循环。
+	-->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		function showProp(obj, prop) {
+			let descriptor = Object.getOwnPropertyDescriptor(obj, prop); // <-- 返回一个“属性描述符”对象：包含值和所有的标志
+			
+			print( JSON.stringify(descriptor, null, 2) );
+		}
+	</script>
+
+	<script>
+		let animal = {
+		  	eats: true
+		};
+
+		let rabbit = {
+		  	jumps: true,
+		  	__proto__: animal
+		};
+	</script>
+
+	<script>
+		// 这里只有自身的键
+		print(Object.keys(rabbit)); // jumps
+
+		// 这里包含了继承得来的键
+		for(let prop in rabbit) print(prop); // jumps，然后 eats
+	</script>
+
+	
+	<!-- 找出继承属性 -->
+	<script>
+		for(let prop in rabbit) {
+	  		let isOwn = rabbit.hasOwnProperty(prop);
+	  		print(`${prop}: ${isOwn}`); // jumps:true, then eats:false
+		}
+
+		console.dir(rabbit);
+		showProp(rabbit, 'hasOwnProperty'); // undefined
+		showProp(Object.prototype, 'hasOwnProperty'); // 不可枚举的，所以不能被 for...in 列出
+	</script>
+
+</body>
+</html>

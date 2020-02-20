@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JQuery查找&修改</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div id="container" discribe="box">
+		我是盒子
+	</div>
+	<script>
+		function print(e){
+			console.log(e);
+		}
+
+		/***************** 1.属性 *******************/
+		$("#container").attr("discribe", "new-box");
+		print($("#container").attr("discribe"));
+
+		/****************** 2.内容 ******************/
+		//（1）html操作
+		$("#container").html("<strong>你最喜欢的颜色是？</strong>");
+		print($("#container").html());
+
+		//（2）文本操作
+		$("#container").text("你多大了？");
+		print($("#container").text());
+
+		//（3）值操作
+		$("#container").val("30");
+		print($("#container").val());
+
+		/************** 3.css样式 *****************/
+		//（1）直接修改样式
+		$("#container").css("color", "red");
+		print($("#container").css("color"));
+
+		//（2）通过修改class批量修改样式
+		print($("#container").addClass("#container"));
+		print($("#container").hasClass("#container"));
+		print($("#container").removeClass("#container"));
+		print($("#container").hasClass("#container"));
+	</script>
+</body>
+</html>

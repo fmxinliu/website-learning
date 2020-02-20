@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>创建属性</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		var animal = { f() {} };
+
+		Object.defineProperties(animal, {
+			eats: { value: true, enumerable: true }, // <-- 数据属性:字段
+			say: { value() { return "animal"; }, enumerable: true },  // <-- 数据属性:函数
+			bye: { get() { return "bye" }, enumerable: true } // <-- 访问器属性
+		});
+
+		// JSON 无法列出 函数!!!!
+		alert( JSON.stringify(animal, null, 4) );
+
+		document.write( Object.keys(animal) ); // f,eats,say,bye
+	</script>
+</body>

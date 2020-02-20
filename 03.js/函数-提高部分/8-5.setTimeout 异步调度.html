@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>setTimeout 异步调度</title>
+	<!-- https://zh.javascript.info/settimeout-setinterval#settimeout0 -->
+	<!-- 浏览器内部的定时器会因各种原因而出现降速情况 -->
+	<!-- 有一点需要注意，所有的调度方法都不能保证延时的准确性，所以在调度代码中，万不可依赖它。 -->
+	
+</head>
+<body>
+	<div id="progress"></div>
+
+	<script>
+		function print(msg) {
+			console.log(msg);
+		}
+	</script>
+
+	<script>	
+		test1();
+
+		test2();
+		test2$1();
+		test2$2();
+		test2$3();
+
+		test3();
+		test3$1();
+
+
+		// (1) 0 延时调度 setTimeout(...,0) 用来安排在当前代码执行完时，需要尽快执行的函数, 即“异步”
+		function test1() {
+			setTimeout(() => print("World"), 0); // 当前代码执行完后立刻执行
+
+			print("Hello");
+
+			// Hello World
+		}
+
+		// (2) 分割 CPU 高占用的任务，这样脚本运行不会进入“挂起”状态
+		function test2() {
+			let i = 0;
+			let start = Date.now();
+
+			function count() {
+				// 执行一个耗时的任务，无法响应其他事件（如F12打开调试界面）
+				for (let j = 0; j < 1e9; j++) {
+				    i++;
+				}
+
+				print("Done in " + (Date.now() - start) + 'ms');
+			}
+
+			count();
+		}
+
+
+		// 优化1
+		function test2$1() {
+			let i = 0;
+			let start = Date.now();
+
+			function count() {
+				// 先完成一部分任务(*)
+			  	do {
+			    	i++;
+			  	} while (i % 1e6 != 0);
+
+			  	if (i == 1e9) {
+			  		print("Done in " + (Date.now() - start) + 'ms');
+			  	} else {
+			  		setTimeout(count, 0); // 安排下一次任务 (**)
+			  	}	
+			}
+
+			count();
+
+			// =>浏览器的 UI 界面即使在“计数”正在进行的情况下，也能正常工作了
+
+			// =>(*) 处代码是这么一步步完成任务的：
+			// 1.第一次做：i=1...1000000 的计数。
+			// 2.第二次做：i=1000001..2000000 的计数。
+			// 3.…等等，其中 while 语句检查 i 是否刚好能被 1000000 整除。
+			
+			// =>如果任务还没完成，在代码 (**) 处安排下一次调用。
+
+			// =>count() 调用的间隙足以让 JavaScript 引擎“缓口气了”，（浏览器）趁这段时间可以对用户的操作作出回应
+		}
+
+		// 优化2
+		function test2$2() {
+			let i = 0;
+			let start = Date.now();
+
+			// 计数开始前就安排好下一次计数任务，速度有所提升
+			function count() {
+				// 现在将调度放在开头
+			  	if (i < 1e9 - 1e6) {
+			  		setTimeout(count, 0); // 安排下一次调用
+			  	}
+
+			  	do {
+			    	i++;
+			  	} while (i % 1e6 != 0);
+
+			  	if (i == 1e9) {
+				    print("Done in " + (Date.now() - start) + 'ms');
+				}
+			}
+
+			count();
+		}
+
+
+		// 浏览器内，嵌套定时器的运行频率是受限制的
+		function test2$3() {
+			let start = Date.now();
+			let times = [];
+
+			setTimeout(function run() {
+				times.push(Date.now() - start); // 保存上次调用的延时
+
+				if (start + 100 < Date.now()) print(times); // 100 毫秒之后，显示延时信息
+				else setTimeout(run, 0); // 没超过 100 毫秒则再进行调度
+			}, 0);
+
+			// 示例输出：
+			// 1,1,1,1,9,15,20,24,30,35,40,45,50,55,59,64,70,75,80,85,90,95,100
+		}
+
+		// (3) 给浏览器渲染的机会，进程繁忙时也能让浏览器抽身做其它事情（例如绘制进度条）
+		function test3() {
+			let i = 0;
+
+			function count() {
+				for (let j = 0; j < 1e6; j++) {
+			      	i++;
+			      	progress.innerHTML = i; // 将当前 i 值放到 <div> 内
+			    }
+			}
+			count(); // i 值只在整个计数过程完成后才显示
+
+			// 因为浏览器在所有脚本执行完后，才会开始“重绘（repainting）”过程。
+			// 所以，如果运行一个非常耗时的函数，即便在这个函数中改变了文档内容，除非这个函数执行完，那么变化是不会立刻反映到页面上的。
+		}
+		
+		// 优化
+		function test3$1() {
+			let i = 0;
+
+			function count() {
+				// 每次只完成一部分 (*)
+				do {
+					i++;
+					progress.innerHTML = i;
+				} while (i % 1e3 != 0); // 以 1000 步长显示
+				
+				if (i < 1e9) {
+					setTimeout(count, 0);
+				}
+			}
+			count(); // 现在就可以观察到 <div> 里 i 值的增长过程了
+		}
+		
+	</script>	
+</body>
+</html>

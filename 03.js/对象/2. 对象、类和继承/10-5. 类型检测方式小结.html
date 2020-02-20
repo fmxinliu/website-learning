@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>类型检测方式小结</title>
+	<!-- https://zh.javascript.info/instanceof#zong-jie -->
+	<!--
+	 	下面，来总结下大家学到的类型检测方式：
+						用于																返回
+		===========================================================================================
+		typeof			基本数据类型														string
+		{}.toString		基本数据类型、内置对象以及包含 Symbol.toStringTag 属性的对象		string
+		instanceof		任意对象															true/false
+	-->
+	<!-- {}.toString 基本就是一增强版 typeof -->
+	<!-- instanceof 在涉及多层类结构的场合中比较实用，这种情况下需要将类的继承关系考虑在内 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<script>
+		function showType(context) {
+			print( typeof context );
+		}
+
+		function showInstanceof(obj, context) {
+			if (typeof obj === Object) {
+				print( obj instanceof context);
+			} else {
+				print( new context(obj) instanceof context);
+			}
+		}
+	</script>
+
+	<!-- typeof -->
+	<script>
+		// (1) 7 种基本类型
+		showType(123); 				// number
+		showType(true);				// boolean
+		showType(null);				// object
+		showType(undefined);		// undefined
+		showType({});				// object
+		showType(Symbol("123"));	// symbol
+		showType("123");			// string
+
+		print('');
+
+		// (2) 内置对象类型
+		showType([]);				// object
+		showType(new Map());		// object
+		showType(new Set());		// object
+		showType(function() {});	// function
+		showType(class Animal{});	// function
+		print('');
+	</script>
+
+
+
+	<script>
+		// (1) 7 种基本类型
+		showInstanceof(123, Number);
+		showInstanceof(true, Boolean);
+		// showInstanceof(null, Null);
+		// showInstanceof(undefined, Undefined);
+		showInstanceof({}, Object);
+		// showInstanceof(Symbol("123"), Symbol);
+		showInstanceof("123", String);
+
+		print('');
+
+		// (2) 内置对象类型
+		showInstanceof([], Array);
+	</script>
+</body>
+</html>

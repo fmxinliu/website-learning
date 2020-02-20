@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型继承链中的 this</title>
+	<!-- https://zh.javascript.info/prototype-inheritance#this-de-zhi -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<script>
+		// animal has methods
+		let animal = {
+			walk() {
+				if (!this.isSleeping) {
+					print("Animal walk");
+				}
+			},
+			sleep() {
+				this.isSleeping = true;
+			}
+		};
+
+		var rabbit = {
+			name: "White Rabbit",
+			__proto__: animal
+		};
+
+		
+		print("<br/>无论在哪里找到方法：在对象或者原型中。调用方法时，this 始终是点之前的对象。");
+		
+		// modifies rabbit.isSleeping
+		rabbit.sleep(); // <-- this = rabbit
+
+		print(rabbit.isSleeping); // true
+		print(animal.isSleeping); // undefined (no such property in the prototype)
+
+		print("方法是共享的，但对象状态不是");
+	</script>
+
+</body>
+</html>

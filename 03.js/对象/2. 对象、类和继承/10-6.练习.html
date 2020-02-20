@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/instanceof#tasks -->
+	
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 不按套路出牌的 instanceof -->
+	<script>
+		function A() {}
+		function B() {}
+
+		A.prototype = B.prototype = {};
+
+		let a = new A();
+
+		alert( a instanceof B ); // true
+		// a.__proto__ === A.prototype
+		// A.prototype = B.prototype
+		// a.__proto__ === B.prototype (match!) <-- instanceof 并不关心构造函数，它真正关心的是原型链
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>字符串</title>
+	<!-- https://zh.javascript.info/string -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		/* ------------- 反引号 -------------- */
+		// 反引号允许我们将任何表达式嵌入到字符串中
+		function sum(a, b) {
+		  return a + b;
+		}
+
+		print(`1 + 2 = ${sum(1, 2)}.`); // 1 + 2 = 3.
+
+		// 使用反引号允许字符串跨行（使用单引号或双引号，则会出错）
+		let guestList = `Guests:
+		 * John
+		 * Pete
+		 * Mary
+		`;
+
+		print(guestList); // 客人清单，多行
+
+		/* ---------- 转义字符 ----------- */
+		print( "\u00A9" ); // 版权符号的 unicode ©
+		print( 'I\'m the Walrus!' );
+		print( `I'm the Walrus!` );
+		print( `The backslash: \\` ); // The backslash: \
+		print( `My\n`.length ); // 3
+
+
+		/* ---------- 访问字符 ----------- */
+		let str = `Hello`;
+		print( str[1000] ); // undefined
+		print( str.charAt(1000) ); // '' (an empty string)
+
+		print("==使用 for..of 遍历字符：");
+		for (let char of "Hello") {
+		  print(char); // H,e,l,l,o (char becomes "H", then "e", then "l" etc)
+		}
+
+		/* ---------- 字符串不可变 ----------- */
+		print("==字符串不可更改，改变字符是不可能的");
+		str[0] = 'h';
+		print( str[0] );
+
+		/* ---------- 字符串大小写转换 ----------- */
+		print("==字符串大小写转换");
+		print( 'Interface'.toUpperCase() ); // INTERFACE
+		print( 'Interface'.toLowerCase() ); // interface
+		print( 'Interface'[0].toLowerCase() ); // 'i'
+
+		/* ---------- 字符串查找 ----------- */
+		print("==字符串查找");
+		str = "As sly as a fox, as strong as an ox";
+		let target = "as";
+
+		let pos = -1;
+		while ((pos = str.indexOf(target, pos + 1)) != -1) {
+		  print( `Found at ${pos}` );
+		}
+
+		// 对于 32-bit 整数，调用 ~n 的意思与 -(n+1) 完全一样（由于 IEEE-754 格式）
+		print("==按位取反");
+		print( ~2 ); // -3, the same as -(2+1)
+		print( ~1 ); // -2, the same as -(1+1)
+		print( ~0 ); // -1, the same as -(0+1)
+		print( ~-1 ); // 0, the same as -(-1+1)
+		/// 只有当 n == -1 时，~n 才为零   ==>if (~str.indexOf(...)) 读作 “if found”
+
+		print( "Midget".includes("id") ); // true
+		print( "Midget".includes("id", 3) ); // false, 位置 3 没有 "id"
+		print( "Widget".startsWith("Wid") ); // true, "Widget" 以 "Wid" 开始
+		print( "Widget".endsWith("get") );   // true, "Widget" 以 "get" 结束
+
+		/* ---------- 获取子字符串 ----------- */
+		print("==获取子字符串");
+		// (1) str.slice(start [, end])  ----- 返回从 start 到（但不包括）end 的字符串部分。
+		str = "stringify";
+		print( str.slice(0, 5) ); // 'strin', 从 0 到 5 的子字符串（不包括 5）
+		print( str.slice(0, 1) ); // 's', 从 0 到 1，但不包括 1，所以只有在 0 的字符
+		print( str.slice(2) ); // 从第二个位置直到结束
+		print( str.slice(-4, -1) ); // 'gif', 从右边的第四个位置开始，在右边的第一个位置结束
+
+		// (2) str.substring(start [, end]) ----- 返回 start 和 end 之间的字符串部分，它允许 start大于 end，但不支持反向。
+		print( str.substring(-2, -1) ); // "ring"
+		print( str.substring(6, 2) ); // "ring"
+		print( str.slice(2, 6) ); // "ring" (the same)
+		print( str.slice(6, 2) ); // "" (an empty string)
+
+		// (3) str.substr(start [, length]) ----- 从 start 开始返回给定 length 的字符串部分。
+		print( str.substr(2, 4) ); // ring，从第二位获得 4 个字符
+		print( str.substr(-4, 2) ); // gi，从尾部第 4 位获得 2 个字符
+
+		/*
+		method					selects…								negatives
+		---------------------------------------------------------------------------------------
+		slice(start, end)		from start to end (not including end)	allows negatives
+		substring(start, end)	between start and end					negative values mean 0
+		substr(start, length)	from start get length characters		allows negative start
+		*/
+
+		/* ---------- 字符串比较 ----------- */
+		// 所有的字符串都使用 UTF-16 编码
+		print( "A".codePointAt(0) ); // 65，返回在 pos 位置的字符代码 
+		print( String.fromCodePoint(90) ); // Z，通过 code 创建字符
+
+		// 拉丁字母和一些额外的字符
+		function show() {
+			let str = '';
+			for (let i = 65; i <= 220; i++) {
+				str += String.fromCodePoint(i);
+			}
+			print(str);
+			// ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+			// ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜ
+		}
+
+		show();
+		print("==字符串比较");
+		// 根据语言比较字符串时使用 localeCompare，否则将按字符代码进行比较
+		print(`'Österreich' > 'Zealand' : ${'Österreich' > 'Zealand' }`); // true
+		print(`'Österreich' > 'Zealand' : ${'Österreich'.localeCompare('Zealand') }`); // -1
+	</script>
+</body>
+</html>

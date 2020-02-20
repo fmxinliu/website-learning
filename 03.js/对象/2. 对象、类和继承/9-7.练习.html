@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/class-inheritance#tasks -->
+	<!-- 对比：
+	 	 class Rabbit									class Rabbit extends Object
+		======================================================================================
+		 –												needs to call super() in constructor
+		 Rabbit.__proto__ === Function.prototype		Rabbit.__proto__ === Object
+	-->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 引例 -->
+	<script>
+		class Rabbit extends Object {
+			constructor(name) {
+				super(); // <-- 需要在继承时调用父类的构造函数
+				this.name = name;
+			}
+		}
+
+		let rabbit = new Rabbit("Rab");
+
+		print( rabbit.hasOwnProperty('name') ); // true
+	</script>
+	
+	<!-- extends -->
+	<script>
+		+function() {
+			class Rabbit extends Object {}
+
+			print(Rabbit.prototype.__proto__ === Object.prototype); // (1) true
+			print(Rabbit.__proto__ === Object); // (2) true
+
+			// Rabbit 访问 Object 的静态方法，通常我们调用 Object.getOwnPropertyNames
+			print(Rabbit.getOwnPropertyNames({a: 1, b: 2})); // a, b
+			print('');
+		}();
+		
+	</script>
+
+
+	<!-- no extends -->
+	<script>
+		+function() {
+			class Rabbit {}
+
+			print(Rabbit.prototype.__proto__ === Object.prototype); // (1) true
+			print(Rabbit.__proto__ === Object); // (2) false
+
+			// 所有函数都是默认如此
+			print(Rabbit.__proto__ === Function.prototype); // (3) true
+			print(Rabbit.__proto__);
+
+			// 报错，Rabbit 上没有对应的函数
+			// print ( Rabbit.getOwnPropertyNames({a: 1, b: 2})); // Error
+			print('');
+		}();
+		
+	</script>
+
+
+
+	<!-- Object 的继承关系 -->
+	<script>
+		// (1) Object 对象继承链的顶端
+		print(Object.prototype.__proto__); // null
+
+		// (2) Object 构造函数继承链的顶端
+		print(Object.__proto__ === Function.prototype); // true		
+
+		function f() {}
+
+		// (3) 所有函数继承链的顶端
+		print(f.__proto__ === Function.prototype); // true
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>延迟装饰器</title>
+	<!-- https://zh.javascript.info/call-apply-decorators#yan-chi-zhuang-shi-qi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />"); // 异步加载的js是不允许使用document.write方法的
+		}
+	</script>
+
+
+
+	<script>
+		print("延迟装饰器：创建一个装饰器 delay(f, ms)，将每次调用 f 延迟 ms 毫秒");
+		function f(x) {
+		  	print(x);
+		}
+
+		function delay1(f, ms) {
+			// added variables to pass this and arguments from the wrapper inside setTimeout
+			return function(...args) {
+				// print(`this=${this}`);
+				// print(`arguments.length=${arguments.length}`);
+				let savedThis = this;
+				setTimeout(function() {
+					// f.apply(this, arguments); // this=window，arguments.length=0
+					f.apply(savedThis, args);
+				}, ms);
+			};
+		}
+
+		function delay(f, ms) {
+			return function() {
+				// 箭头函数没有自己的 this 和 arguments
+				setTimeout(() => f.apply(this, arguments), ms); // <--- 从包装器中获取 this 和 arguments
+			}; 
+		}
+
+		// create wrappers
+		let f1000 = delay(f, 1000);
+		let f1500 = delay(f, 1500);
+		let f2000 = delay1(f, 2000);
+
+		f1000("test"); // 在 1000 ms 后展示 "test"
+		f1500("test"); // 在 1500 ms 后展示 "test"
+		f2000("test"); // 在 2000 ms 后展示 "test"
+	</script>	
+
+</body>
+</html>

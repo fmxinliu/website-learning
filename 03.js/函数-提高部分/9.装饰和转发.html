@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>装饰和转发</title>
+	<!-- https://zh.javascript.info/call-apply-decorators -->
+	<!-- 不同 script 内可以定义同名函数 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />"); // 异步加载的js是不允许使用document.write方法的
+		}
+	</script>
+
+
+
+	<script>
+		function slow(x) {
+			// 这里会有一个 CPU 重负载的任务
+			print(`Called with ${x}`);
+			return x; // 结果是稳定的
+		}
+
+		let obj = {
+			someMethod() {
+				return 1;
+			},
+
+			slow(x) {
+				// 这里会有一个 CPU 重负载的任务
+				print(`Called with ${x}`);
+				return x * this.someMethod(); // (*)
+			}
+		};
+	</script>
+
+
+	<!-- 透明缓存 -->
+	<script>
+		// 装饰器
+		function cachingDecorator(func) {
+			let cache = new Map();
+
+			// 会丢失 this
+			return function(x) {
+				if (cache.has(x)) {
+					return cache.get(x);
+				}
+
+				let result = func(x); // (**)
+				
+				cache.set(x, result);
+				return result;
+			};
+		}
+
+		+function() {
+			print("普通方法 -> 缓存装饰器");
+
+			slow = cachingDecorator(slow);
+			print( slow(1) ); // slow(1) 被缓存起来了
+			print( "Again: " + slow(1) ); // 一样的
+		}();
+		
+		+function() {
+			print("对象方法 -> 缓存装饰器");
+			// 对象浅拷贝
+			let worker = Object.assign({}, obj);
+			worker.slow = cachingDecorator(worker.slow);
+			// print( worker.slow(1) ); // Whoops! Error: Cannot read property 'someMethod' of undefined	
+
+			//===============================================================================//
+			// 包装器将原始函数调用为 (**) 行中的 func(x)，当这样调用时，函数得到 this = undefined。
+			// 如下：
+			let func = worker.slow;
+			// func(2);  // this = undefined !!!!!!
+			//===============================================================================//
+		}();
+	</script>
+
+
+	<!-- 使用 “func.call” 作为上下文 -->
+	<script>
+		function cachingDecorator(func) {
+			let cache = new Map();
+
+			// 调用时传递 this
+			return function(x) {
+				if (cache.has(x)) {
+					return cache.get(x);
+				}
+
+				let result = func.call(this, x); // (***) // "this" 现在被正确的传递了
+				
+				cache.set(x, result);
+				return result;
+			};
+		}
+
+		+function() {
+			print("对象方法 -> 缓存装饰器（传递 this）");
+			
+			let worker = Object.assign({}, obj);
+			worker.slow = cachingDecorator(worker.slow);
+			print( worker.slow(1) );
+			print( "Again: " + worker.slow(1) );
+		}();
+	</script>
+
+
+	<!-- 语法：func.call(context, arg1, arg2, ...); 运行 func，提供的第一个参数作为 this，后面的作为参数 -->
+	<!-- 语法：func.apply(context, args); 运行 func，设置 this=context 并使用类似数组的对象 args 作为参数列表 -->
+	<script>
+		function say(time, phrase) {
+  			print(`[${time}] ${this.name}: ${phrase}`);
+		}
+
+		let user = { name: "John" };
+		let messageData = ['10:00', 'Hello'];
+
+		say.call( user, ...messageData); // 扩展运算符 ... 允许将 可迭代的 参数列表 作为列表传递给 call
+		say.apply( user, messageData ); // apply 只接受 类似数组一样的 参数列表
+	</script>
+
+
+	<!-- 使用 “func.apply” 来传递多参数 -->
+	<script>
+		let worker = {
+			slow(min, max) {
+				print(`Called with ${min},${max}`);
+				return min + max;
+			}
+		};
+
+		function cachingDecorator(func, hash) {
+			let cache = new Map();
+			
+			// 使用数组传递任意个参数
+			return function() {
+				print(`arguments is Array: ${Array.isArray(arguments)}`); // arguments 是类数组
+				let key = hash(arguments); // (*)
+				if (cache.has(key)) {
+					return cache.get(key);
+				}
+
+				let result = func.apply(this, arguments); // (**)
+				cache.set(key, result);
+    			return result;
+			};
+		}
+
+		function hash(args) {
+			return args[0] + ',' + args[1];
+		}
+
+		worker.slow = cachingDecorator(worker.slow, hash);
+		print( worker.slow(3, 5) ); // works
+		print( "Again " + worker.slow(3, 5) ); // same (cached)
+	</script>
+
+	
+	<!-- 呼叫转移 ： apply 将调用传递给另一个函数 -->
+	<script>
+		function sayHi() {
+		  	print(`hello ${this.name}`)
+		}
+
+		let people = { 
+			name: "Admin",
+			sayHi: sayHi
+		};
+
+		let wrapper1 = function() {
+			return people.sayHi();
+		};
+
+		// 丢失 this
+		let wrapper2 = function() {
+			return sayHi.apply(this, arguments); // this = window
+		};
+
+		let wrapper3 = function() {
+			return people.sayHi.apply(this, arguments); // this = window
+		};
+
+		// 手动传递 this
+		let wrapper4 = function(f, ...args) {
+			return sayHi.apply(f, args); // this = f
+		}
+
+		let wrapper5 = function(f, ...args) {
+			return people.sayHi.apply(f, args); // this = f
+		}
+
+		// this = window
+		print("=== 呼叫转移 ===");
+		people.sayHi(); // hello Admin
+		wrapper1(); // hello Admin
+		///////////////////////////
+		sayHi(); // hello           (*) 外部代码 无法区分调用 sayHi() 和 wrapper2()。
+		wrapper2(); // hello 		(*) wrapper2 传递它获得的所有内容：上下文 this 和 sayHi 的参数并返回其结果。
+		///////////////////////////
+		wrapper3(); // hello
+		wrapper4(people); // hello Admin
+		wrapper5(people); // hello Admin
+		print('');
+
+	</script>
+
+
+
+	<!-- 数组 join 方法 -->
+	<script>
+		let args = [1, 2, 3];
+		// join() 如果没有参数，则使用逗号 ","
+		print( `[1, 2, 3].join() = ${[1, 2, 3].join()}` ); // 1,2,3
+		print( `[1, 2, 3].join('') = ${[1, 2, 3].join('')}` ); // 123
+		print( `typeof [1, 2, 3].join() = ${typeof [1, 2, 3].join()} `); // string
+		print( `typeof [1, 2, 3].join('') = ${typeof [1, 2, 3].join('')}`); // string
+	</script>
+	
+	<!-- 方法借用：从一个对象中获取一个方法并在另一个对象的上下文中“调用”它 -->
+	<script>
+		function hash() {
+			return [].join.call(arguments); // this=arguments
+			// (1) 从常规数组 [].join 中获取（借用）连接方法。
+			// (2) 并使用 [].join.call 在 arguments 的上下文中运行它
+			// (3) 传递空参数给 [].join，则使用 "," 分割
+		}
+
+		print( hash(11, 22, 33, 44, 55) );
+	</script>
+
+</body>
+</html>

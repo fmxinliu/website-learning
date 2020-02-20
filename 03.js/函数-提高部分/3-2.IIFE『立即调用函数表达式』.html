@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>立即调用函数表达式</title>
+	<!-- https://zh.javascript.info/closure#iife -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		test1();
+
+		// (1) 创建一个函数表达式并立即调用
+		function test1() {
+			(function() {
+		  		let message = "Hello";
+				print(message); // Hello
+			})();
+		}
+
+		// 错误形式1
+		// function test1$1() {
+		// 	// Error: Unexpected token (
+		// 	function() { // <-- JavaScript 找不到函数名，遇到 ( 导致错误
+		//   		let message = "Hello";
+		// 		print(message);
+		// 	}();
+		// }
+
+		// 错误形式2
+		// function test1$2() {
+		// 	// syntax error because of brackets below
+		// 	function go() {
+		// 		let message = "Hello";
+		// 		print(message);
+		// 	}(); // <-- can't call Function Declaration immediately
+		// }
+
+		// 创建 IIFE 的方法
+
+		(function() {
+		  	print("Brackets around the function");
+		})();
+
+		(function() {
+		  	print("Brackets around the whole thing");
+		}());
+
+		!function() {
+		  	print("Bitwise NOT operator starts the expression");
+		}();
+
+		+function() {
+		  	print("Unary plus starts the expression");
+		}();
+
+	</script>
+</body>
+</html>

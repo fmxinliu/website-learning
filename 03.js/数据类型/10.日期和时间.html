@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>日期和时间</title>
+	<!-- https://zh.javascript.info/date -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+
+		function test1() {
+			let now = new Date();
+			print( now ); // 显示当前的日期/时间
+
+			//////////////////////////////////////////////////
+			// 0 表示 01.01.1970 UTC+0
+			let Jan01_1970 = new Date(0);
+			print( Jan01_1970 );
+
+			// 增加 24 小时，得到 02.01.1970 UTC+0
+			let Jan02_1970 = new Date(24 * 3600 * 1000);
+			print( Jan02_1970 );
+
+			let date = new Date("2017-01-26");
+			print(date); // Thu Jan 26 2017 ...
+
+			// 语法：new Date(year, month, date, hours, minutes, seconds, ms) :创建一个 Date 对象，参数是当地时区的日期组合信息。只有前两个参数是必须的。
+			//             - `year` ：`2013` 是合法的，`98` == 1998。
+			//             - `month` 计数从 `0` （一月） 开始，到 `11` （12月）。
+			//             - `date` 是当月的具体某一天，如果缺失，默认是 `1`。
+			//             - 如果 `hours/minutes/seconds/ms` 缺失的话，它们默认值是 `0`。
+
+			print( new Date(2011, 0, 1, 0, 0, 0, 0) ); // Jan 01 2011, 00:00:00
+			print( new Date(11, 0) ); // 1911-1-1 00:00:00
+
+			print( new Date(2011, 0, 1, 2, 3, 4, 567) ); // 1.01.2011, 02:03:04.567
+		}
+		
+		//
+		function test2() {
+			let now = new Date();
+
+			let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+			print(`当前时间：
+				${days[now.getDay()]}
+				${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}
+				${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}.${now.getMilliseconds()}`);
+			print( "时间戳：" + now.getTime() ); // 从 1970-1-1 00:00:00 UTC+0 开始的毫秒数
+
+			// 如果你在时区 UTC-1，输出 60
+			// 如果你在时区 UTC+3，输出 -180
+			print( "时区偏移数:" + now.getTimezoneOffset() + ", 时区：UTC" + now.getTimezoneOffset() / -60);
+		}
+
+		// 设置日期信息
+		function test3() {
+			let today = new Date();
+
+			today.setHours(0);
+			print(today); // 日期依然是今天，只不过小时数改为 0
+
+			// 可设置 hour [, min, sec, ms]
+			today.setHours(0, 0, 0, 0);
+			print(today); // 日期依然是今天，时间为 00:00:00。
+		}
+
+		// 自动校准 - 我们可以设置超范围的数值，它会自动校准
+		function test4() {
+			let date = new Date(2013, 0, 33); // 1 月只有 31 天 ???
+			print(date); // 2013-2-2
+
+			// 当月的第一天
+			date.setDate(1);
+			print(date); // 2013-2-1
+
+			// 上月的最后一天
+			date.setDate(0); // 天数最小可以设置为 1，所以这里设置为上一月的最后一天
+			print(date); // 2013-1-31
+
+			// 上月的倒数第二天
+			// date.setDate(-1); // error !!!!!!
+			date.setDate(date.getDate() - 1);
+			print(date); // 2013-1-30
+		}
+
+		// 日期转化为数字，日期差值 <单位：ms>
+		function test5() {
+			// (1) Date 对象转化为数字时，得到的是对应的时间戳，相当于 date.getTime()
+			let date = new Date()
+			print( "时间戳：" + +date);
+
+			// (2) 时间间隔
+			let start = new Date();
+			for (let i = 0; i < 100000; i++) {
+				let doSomething = i * i * i;
+			}
+			let end = new Date();
+			print( `The loop took ${end - start} ms` ); // 日期相减：依赖「日期-数字」的转化
+
+			// (3) Date.now()，它会返回当前的时间戳
+			print( "时间戳：" + Date.now() );
+		}
+
+		// 基准
+		function test6() {
+			// 如果我们想要为一个很耗 CPU 性能的函数提供一个可靠的基准，我们应该小心一点
+			// 举个例子：我们想判断两个计算日期差值的函数，那个更快？
+			// 我们有 date1 和 date2，哪个函数会更快返回两者的时间差？
+			function diffSubtract(date1, date2) {
+			  return date2 - date1; // <单位：ms>
+			}
+
+			// or
+			function diffGetTime(date1, date2) {
+			  return date2.getTime() - date1.getTime(); // <单位：ms>
+			}
+
+			function bench(f) {
+			  let date1 = new Date(0);
+			  let date2 = new Date();
+
+			  let start = Date.now();
+			  for (let i = 0; i < 100000; i++) f(date1, date2);
+			  return Date.now() - start;
+			}
+
+			function test1() {
+				// 想象一下当运行 bench(diffSubtract) 的同时，CPU 还在并行处理其他事务。然而，运行 bench(diffGetTime) 的时候，并行处理的事务完成了。
+				// 这是一个对于现代多进程操作系统来说，毫不夸张的场景。
+				// 结果就是，第一个函数相比于第二个，缺少 CPU 资源，这可能导致错误的结论。
+				print("==不太可靠的基准");
+				print( 'Time of diffSubtract: ' + bench(diffSubtract) + 'ms' );
+				print( 'Time of diffGetTime: ' + bench(diffGetTime) + 'ms' );
+			}
+
+			function test2() {
+				let time1 = 0;
+				let time2 = 0;
+
+				// 交替运行 bench(diffSubtract) 和 bench(diffGetTime) 10 次
+				for (let i = 0; i < 10; i++) {
+				  time1 += bench(diffSubtract);
+				  time2 += bench(diffGetTime);
+				}
+
+				print("==为了得到更加可靠的基准，所有的时间间隔需要多次返回");
+				print( 'Total time for diffSubtract: ' + time1 );
+				print( 'Total time for diffGetTime: ' + time2 );
+			}
+		
+			// 使用 getTime() 这种方式快得多！原因是它没有类型转化，这样对引擎优化来说更加简单
+			test1();
+			test2();
+		}
+
+		// 字符串 -> 日期
+		function test7() {
+			// 语法: Date.parse(str) 转化一个特定格式的字符串，返回一个时间戳。如果格式不正确，返回 NaN
+			// str: YYYY-MM-DDTHH:mm:ss.sssZ  【字符串 "T" 是一个分隔符】【可选字符 'Z' 代表时区。单个字符 Z 代表 UTC+0】
+			let ms = Date.parse('2012-01-26T13:51:50.417-07:00'); // 13 + (7 + 8) - 24 = 4（UTC+8）
+			// let ms = Date.parse('2012-01-26T13:51:50.417Z'); // 13 + 8 = 21（UTC+8）
+			// let ms = Date.parse('2012-01-26T13:51:50.417+08:00');
+			print(ms); // 1327611110417  (时间戳，不受时区影响)
+
+			let date = new Date(ms);
+			print(date); // 输出当前时区 UTC+8 对应的时间
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+		test5();
+		test6();
+		test7();
+
+		// JavaScript 自身并不能度量微秒
+		// 浏览器拥有 performance.now() 方法来提供页面加载的微秒数（毫秒的小数点再右移三位）
+		print(`Loading started ${performance.now()}ms ago`); // 小数点后只有前3位是正确的
+
+	</script>
+</body>
+</html>

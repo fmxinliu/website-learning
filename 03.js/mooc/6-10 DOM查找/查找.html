@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>dom查找元素</title>
+</head>
+<body>
+	<ul id="myList">
+		<li id="m1">首页</li>
+		<li id="m2">企业介绍</li>
+		<li id="m3">联系我们</li>
+	</ul>
+	
+	<form id="registerForm">
+		<input type="checkbox" name="boy" />
+		<input type="checkbox" name="boy" />
+		<input type="checkbox" name="boy" />
+	</form>
+
+	<div id="news">
+		<p class="mainTitle">新闻标题1</p>
+		<p id="subTitle">新闻标题2</p>
+		<p class="mainTitle">新闻标题3</p>
+	</div>
+
+	<script>
+		function print(msg){
+			console.log(msg);
+			// document.write(msg+"<br />");
+		}
+
+		// 1.通过 id 属性查找
+		var ul = document.getElementById("myList");
+		print(ul);
+
+		// 2.按标签名查找
+		var elems = ul.getElementsByTagName("li");
+		print(elems);
+		print(typeof elems);
+
+		// 3.通过 name 属性查找
+		var list = document.getElementsByName("boy");
+		print(list);
+
+		// 4.通过 class 属性查找
+		var div = document.getElementById("news");
+		var elems = div.getElementsByClassName("mainTitle");
+		print(elems);
+
+		// 5.通过 CSS 选择器查找
+		var div = document.getElementById("news");
+		var elem = div.querySelector(".mainTitle"); // 只找一个元素
+		print(elem);
+		var elems = div.querySelectorAll(".mainTitle"); // 找多个元素
+		print(elems);
+	</script>
+</body>
+</html>

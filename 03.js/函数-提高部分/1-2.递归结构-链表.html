@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>递归结构-链表</title>
+	<!-- https://zh.javascript.info/recursion -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// (1) 创建
+		function create() {
+			let list = { value: 1 };
+			list.next = { value: 2 };
+			list.next.next = { value: 3 };
+			list.next.next.next = { value: 4 };
+			list.next.next.next.next = null;
+			print(JSON.stringify(list), null, 4);
+
+			return list;
+		}
+	
+		// (2) 拆分
+		function split(list) {
+			let secondList = list.next.next;
+			list.next.next = null;
+
+			print(JSON.stringify( list ), null, 4);
+			print(JSON.stringify( secondList ), null, 4);
+			return secondList;
+		}
+
+
+		//  合并
+		function merge(list, sublist) {
+			list.next.next = sublist;
+			print(JSON.stringify( list ), null, 4);
+			print(JSON.stringify( sublist ), null, 4);
+			return list;
+		}
+
+		// (3) 添加头节点
+		function addhead(list, value) {
+			list = { value: value, next: list };
+			print(JSON.stringify( list ), null, 4);
+			return list;
+		}
+
+		// (4) 删除节点
+		function deleteNode(list) {
+			list.next = list.next.next;
+			print(JSON.stringify( list ), null, 4);
+			return list;
+		}
+
+		let list = create();
+		/*
+		let list = {
+		  value: 1,
+		  next: {
+		    value: 2,
+		    next: {
+		      value: 3,
+		      next: {
+		        value: 4,
+		        next: null
+		      }
+		    }
+		  }
+		};
+		*/
+
+		merge( list, split(list) );
+		addhead(list, 0);
+		deleteNode(list);
+
+	</script>
+</body>
+</html>

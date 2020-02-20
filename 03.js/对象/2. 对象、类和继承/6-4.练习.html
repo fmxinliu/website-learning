@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/prototype-methods#tasks -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 给字典对象添加 toString 方法，且不可被枚举 -->
+	<script>
+		var dictionary = Object.create(null); // prototype=null，不存在“继承”
+
+		// 添加 dictionary.toString 方法的代码
+		// (1) toString 是可枚举的
+		// dictionary.toString = function() {
+		// 	return Object.keys(this).join();
+		// }
+
+		// (2) toString 是 getter，不能以 函数 的方式调用
+		// Object.defineProperty(dictionary, 'toString', {
+		// 	get() {
+		// 		return Object.keys(this).join();
+		// 	},
+		// 	enumerable: false
+		// });
+
+		// (3) 使用 Object.definePropert
+		// Object.defineProperty(dictionary, 'toString', { // <-- 这里，必须以字符串的形式指定属性名
+		// 	value() { // value 是一个函数
+		// 		return Object.keys(this).join();
+		// 	},
+		// 	enumerable: false
+		// });
+
+		// (4) 使用 Object.create
+		var dictionary = Object.create(null, { // <-- prototype=null，不存在“继承”
+			toString: { // 定义 toString 方法
+				value() { // value 是一个函数
+					return Object.keys(this).join();
+				}
+			}
+		}); 
+
+		// 添加一些数据
+		dictionary.apple = "Apple";
+		dictionary.__proto__ = "test"; // <-- __proto__ 在这里是“正常”属性
+
+		for(let key in dictionary) { // <-- 无法列举“可枚举的”、“继承”来的属性
+		  print(key);
+		}
+
+		// 必须自己实现 toString 方法
+		print(dictionary);
+
+		print("");
+	</script>
+
+
+	<!-- 调用方式的差异 -->
+	<script>
+		function Rabbit(name) {
+		  	this.name = name; // <-- 属性 name 被创建于 新建的 rabbit 对象中 
+		}
+		Rabbit.prototype.sayHi = function() {
+		  	print(this.name); // <-- this 永远是 sayHi 之前的对象
+		};
+
+		let rabbit = new Rabbit("Rabbit");
+
+		rabbit.sayHi();                        // Rabbit
+		Rabbit.prototype.sayHi();              // undefined
+		Object.getPrototypeOf(rabbit).sayHi(); // undefined
+		rabbit.__proto__.sayHi();              // undefined
+	</script>
+</body>
+</html>

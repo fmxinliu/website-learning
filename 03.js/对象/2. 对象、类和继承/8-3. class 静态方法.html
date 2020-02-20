@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>class 静态方法</title>
+	<!-- https://zh.javascript.info/class#jing-tai-fang-fa -->
+	
+	<!-- 基础的 class 语法:
+		class MyClass {
+		  constructor(...) { // <-- MyClass 是一个指向 constructor 的构造函数
+		    // ...
+		  }
+		  method1(...) {} // <-- 方法被添加到 prototype 上
+		  method2(...) {}
+		  get something(...) {} // <-- getter/setter被添加到 prototype 上
+		  set something(...) {}
+		  static staticMethod(..) {} // <-- 静态方法被添加为 class 自身的属性（但只属于类本身），通过 MyClass.staticMethod() 的形式进行调用
+		  // ...
+		} -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	
+	<!-- 直接给 function 赋值一个函数属性 -->
+	<script>
+		function f() { }
+
+		f.staticMethod = function() {
+			print("function: " + (this === f));
+		}
+
+		f.staticMethod(); // true
+
+	</script>
+
+	<!-- class 的 静态方法 与 非静态方法 -->
+	<script>
+		class User {
+			static staticMethod() { // <-- 和直接给函数赋值一个函数属性是一样的（*）
+				print("静态方法: " + (this === User));	
+			}
+
+			sayHi() {
+				print("非静态方法：" + (this.__proto__ === User.prototype));
+			}
+		}
+
+		// (1) “静态方法”调用
+		User.staticMethod(); // <-- this 判断规则之 “this 指向方法的调用者”
+		
+		// (2) “非静态方法”调用
+		let user = new User();
+		// user.staticMethod(); // Error !!!  <-- “静态方法” 专属于 class，而不是任何 clss 实例对象
+		user.sayHi();
+
+	</script>
+
+
+	<!-- 示例 -->
+	<script>
+		class Article {
+			constructor(title, date) {
+				this.title = title;
+				this.date = date;
+			} 
+
+			static createTodays() {
+				// 记住 this = Article
+				return new this("Today's digest", new Date()); // <-- 通过当天的日期，创建一个空对象
+			}
+
+			// 属于 Article 类，不属于任何实例对象
+			static compare(articleA, articleB) {
+				return articleA.date - articleB.date;
+			}
+
+			// 属于 Article.prototype，被所有实例对象所共享
+			toString() {
+				return `[${this.title} : ${this.date}]<br/>`;
+			}
+		}
+
+		debugger
+
+		let articles = [
+			new Article("Mind", new Date(2016, 1, 1)),
+			new Article("Body", new Date(2016, 0, 1)),
+			new Article("JavaScript", new Date(2016, 11, 1))
+		];
+
+		articles.sort(Article.compare);
+		print( articles );
+
+		// 另一种 创建 article 实例的方法
+		let article = Article.createTodays();
+		print( article.title ); // Todays digest
+
+	</script>
+</body>
+</html>

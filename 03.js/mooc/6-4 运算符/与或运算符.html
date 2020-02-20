@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>与或运算符</title>
+</head>
+<body>
+	<h3>与C++区别的地方：只有当2个操作数都是逻辑数时，结果才为真/假。</h3>
+	<h4>虽然被称为“逻辑”，这些运算符却可以被应用于任意类型的值，而不仅仅是布尔值。结果也同样可能是任意类型</h4>
+	<script>
+		document.write((true&&false) + "<br />"); // 相同
+		document.write((true&&99.9) + "<br />"); // 不同
+
+		var a = 0, b = 7, c = 8.8;
+
+		// 2个数都不为0，结果为第2个数，否则为0
+		document.write((a&&b) + "<br />"); // 0
+		document.write((b&&a) + "<br />"); // 0
+		document.write((b&&c) + "<br />"); // c
+		document.write((c&&b) + "<br />"); // b
+
+		// 结果为：第一个不为0的数，否则为0
+		document.write((a||b) + "<br />"); // b
+		document.write((b||a) + "<br />"); // b
+		document.write((b||c) + "<br />"); // b
+		document.write((c||b) + "<br />"); // c
+
+		// 两个非运算 !! 有时候用来将某个值转化为布尔类型：
+		alert( !!"non-empty string" ); // true
+		alert( !!null ); // false
+
+		// 对 alert 的调用没有返回值。或者说返回的是 undefined。
+		alert( alert(1) ); 
+		alert( alert(1) || 2 || alert(3) );
+	</script>
+
+</body>
+</html>

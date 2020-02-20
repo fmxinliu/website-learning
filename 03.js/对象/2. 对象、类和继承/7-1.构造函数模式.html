@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数模式</title>
+	<!-- https://zh.javascript.info/class-patterns#gou-zao-han-shu-mo-shi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+	</script>
+
+	<script>
+		function User(name) {
+		  	this.sayHi = function() { // <-- 每个对象都有它自己的方法的副本
+		    	print(name + age); // <-- 共享 function User 内部声明的变量
+		  	};
+
+		  	let age = 100;
+		}
+
+		var user = new User("John");
+		user.sayHi(); // John
+
+	</script>
+
+	<script>
+		function User(name, birthday) {
+			function calcAge() { // <-- 私有
+				return new Date().getFullYear() - birthday.getFullYear();
+			}
+
+			this.sayHi = function() { // <-- 公有
+				print(`${name}, age:${calcAge()}`);
+			};
+		}
+
+		var user = new User("John", new Date(2000, 0, 1));
+		user.sayHi(); // John, age:19
+
+	</script>
+
+	<!-- 证明每个对象都有自己的方法副本，并不是共享 -->
+	<script>
+		var u1 = new User("John", 10);
+		var u2 = new User("Anna", 20);
+
+		console.dir(u1);
+		console.dir(u2);
+
+		print(u1.sayHi === u2.sayHi); // false
+
+	</script>
+</body>
+</html>

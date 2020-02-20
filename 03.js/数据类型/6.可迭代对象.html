@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>可迭代对象</title>
+	<!-- https://zh.javascript.info/iterable#symboliterator -->
+	<!-- 可以应用 for..of 的对象被称为可迭代对象 -->
+	<!-- 有索引和 length 的对象被称为类数组对象 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		
+		/* ------------------- 可迭代对象 ------------------------*/
+		let range = {
+			from: 1,
+			to: 5
+		};
+
+		// 我们希望 for..of 这样运行：
+		// for(let num of range) ... num=1,2,3,4,5
+
+		// 1. 使用 for..of 将会首先调用它：
+		range[Symbol.iterator] = function() {
+
+			 // 2. ...它返回一个迭代器：
+			 return {
+    			current: this.from,
+    			last: this.to,
+
+			 	// 3. next() 将在 for..of 的每一轮循环迭代中被调用
+			 	next() {
+			 		// 4. 它将会返回 {done:.., value :...} 格式的对象
+			 		if (this.current <= this.last) {
+			 			return { done: false, value: this.current++ };
+			 		} else {
+			 			return { done: true };
+			 		}
+			 	}
+			 };
+		};
+
+		// 现在它可以运行了！
+		for (let num of range) {
+			print(num); // 1, 然后 2, 3, 4, 5
+		}
+
+
+		/* ------------------- 可迭代字符串 ------------------------*/
+		for (let char of "test") {
+  			print( char ); // t，然后 e，然后 s，然后 t
+		}
+
+		/* ------------------- 显式调用迭代器 ------------------------*/
+		let str = "Hello";
+
+		// 和下面代码完成的功能一致
+		// for (let char of str) print(char);
+
+		let iterator = str[Symbol.iterator](); // 获取迭代器对象
+
+		while (true) {
+			let result = iterator.next();
+			if (result.done) break;
+			print(result.value); // 一个一个输出字符
+		}
+
+		/* ------------------- “可迭代对象” 与 “类数组对象” ------------------------*/
+		// (1) 可迭代对象 --- for..of
+		// (2) 类数组对象 --- 有索引和length。这种对象也许也有其他属性和方法，但是没有数组的内建方法。
+		let arrayLike = { // 有索引和长度 => 类数组对象
+			0: "Hello",
+			1: "World",
+			length: 2,
+
+			from: 0,
+			to: 1,
+
+			[Symbol.iterator]() {
+				this.current = this.from;
+				return this; // ===============既是 “迭代器对象” 也是 “迭代对象”
+			},
+
+			next() {
+				if (this.current <= this.to) {
+					return { done: false, value: this[this.current++]};
+				} else {
+					return { done: true };
+				}
+			}
+		};
+
+		print(`${arrayLike[0]} ${arrayLike[1]}`);
+
+		for (let item of arrayLike) {
+			print(item);
+		}
+
+		debugger;
+
+		/* ------------------- Array.from ------------------------*/
+		// 语法：Array.from(obj[, mapFn, thisArg]) 以一个可迭代对象或者类数组对象作为参数并返回一个真正的 Array 数组
+		let arr = Array.from(arrayLike);
+		print( arr.pop() ); // 数组方法 pop
+
+		arr = Array.from(range, num => num * num);
+		print( arr );
+
+
+		debugger;
+		//////////////////////////
+		str = "hello world";
+		print(Array.from( str ));
+
+		function f1(str) {
+			let chars = []; // Array.from 内部完成了同样的循环
+			for (let char of str) {
+				chars.push(char);
+			}
+
+			return chars;
+		}
+
+		print( f1(str) );
+
+		////////////////////////
+		function slice(str, start, end) {
+			return Array.from(str).slice(start, end).join(''); // 创建能处理 UTF-16 扩展字符的 slice 方法
+		}
+
+		str = '𝒳😂𩷶';
+
+		print( slice(str, 1, 3) ); // 😂𩷶
+
+		// 原生方法不支持识别 UTF-16 扩展字符
+		print( str.slice(1, 3) ); // 乱码（两个不同 UTF-16 扩展字符碎片拼接的结果）
+
+		for (let char of str) {
+			print(char); // 字符串迭代器能够识别 UTF-16 扩展字符
+		}
+	</script>
+</body>
+</html>

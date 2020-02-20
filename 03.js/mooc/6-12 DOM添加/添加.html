@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>dom添加元素</title>
+</head>
+<body>
+	<ul id="menu">
+		<li>首页</li>
+		<li>联系我们</li>
+	</ul>
+
+	<script>
+		function print(msg){
+			console.log(msg);
+			// document.write(msg+"<br />");
+		}
+
+		// 1.创建空元素
+		var div = document.createElement('div');
+		var a = document.createElement('a');
+		print(div);
+
+		// 2.设置关键属性
+			// 属性
+			a.innerHTML = "百度";
+			a.href = "http://www.baidu.com";
+			print(a);
+
+			// 样式
+			a.style.opacity = "1";
+			a.style.cssText = "width: 100px;height: 100px;" // cssText设置多个样式
+			print(a);
+
+		// 3.将元素添加到DOM树
+		var p = document.createElement('p');
+		var txt = document.createTextNode('版权声明');
+
+			// 末尾添加
+			p.appendChild(txt);
+			div.appendChild(a); 
+			div.appendChild(p);
+		
+		document.body.appendChild(div); // 只有将创建好的元素挂在DOM树上，才能在页面中显示
+
+
+			// 元素前插入
+			var ul = document.getElementById('menu');
+			var newLi = document.createElement('li');
+			newLi.innerHTML = "新插入";
+			ul.insertBefore(newLi, ul.firstChild);
+
+		// 问题：每次修改DOM树，都导致重新layout => 尽量少的操作DOM树！！！
+		// 优化思想：
+		// (1)如果同时创建父、子元素时，建议先将所有子元素添加到父元素上，再将父元素一次性挂到页面
+		// (2)如果只创建多个平级子元素时，先将所有子元素临时添加到文档片段（虚拟父元素）上，再将文档片段挂在DOM树上（文档片段会自动释放，不会占用元素）
+		var frag = document.createDocumentFragment();
+		frag.appendChild(document.createTextNode('frag1'));
+		frag.appendChild(document.createTextNode('frag2'));
+		div.appendChild(frag);
+		// document.body.appendChild(div);
+	</script>
+</body>
+</html>

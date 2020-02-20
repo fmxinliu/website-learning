@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Object 的原型 Object</title>
+	<!-- https://zh.javascript.info/native-prototypes#objectprototype -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- Object.prototype -->
+	<script>
+		var obj = {};
+		print(obj);
+
+		print(obj.__proto__ === Object.prototype); // true
+		print(obj.toString());
+		print(obj.__proto__.toString());
+		print(Object.prototype.toString());
+		print(Object.prototype.__proto__); // null  <-- Object.prototype 上没有额外的 [[Prototype]] 属性
+		/*
+		（1）obj = {} 和 obj = new Object() 是一个意思，其中 Object 是一个内置的对象构造函数。
+			并且这个方法有一个 Object.prototype 属性，这个属性引用了一个庞大的对象。
+			这个庞大的对象有 toString 方法和其他的一些方法。
+		（2）
+		*/
+	</script>
+
+	
+</body>
+</html>

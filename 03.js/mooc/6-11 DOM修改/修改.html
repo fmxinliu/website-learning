@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>dom读取、修改、删除属性</title>
+</head>
+	<h3 id="news" class="head">标题</h3>
+<body>
+	<script>
+		function print(msg){
+			console.log(msg);
+			// document.write(msg+"<br />");
+		}
+
+		// 1.读取属性值
+		var elem = document.getElementById("news");
+
+		// (1)获取属性节点对象
+		var attrNode = elem.attributes[1]; // 下标/属性名
+		print(attrNode);
+		var attrNode = elem.getAttributeNode("id"); // 属性名
+		print(attrNode);
+		// (2)获取属性值
+		print(attrNode.value);
+
+		// =>直接获取属性值
+		var value = elem.getAttribute("class"); // 属性名
+		print(value);
+
+		// 2.修改属性值
+		elem.setAttribute("class", "news_head");
+		print(elem.getAttribute("class"));
+
+		// 3.判断是否包含指定属性
+		var bool = elem.hasAttribute("class");
+		print(bool);
+
+		// 4.移除属性
+		elem.removeAttribute("class");
+		var bool = elem.hasAttribute("class");
+		print(bool);
+	</script>
+</body>
+</html>

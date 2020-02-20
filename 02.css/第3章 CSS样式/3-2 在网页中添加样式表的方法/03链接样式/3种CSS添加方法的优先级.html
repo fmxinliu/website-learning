@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3种CSS添加方法的优先级</title>
+
+	<!-- 1.多重样式可以层叠，可以覆盖 -->
+	<!-- 2.优先级按照“就近原则”(离元素越近的样式越起作用) -->
+	<!-- 3.行内样式 > 内嵌样式(链接样式) > 浏览器默认样式 -->
+	
+	<style> /*#2*/
+		p{
+			color: red;
+			font-size: 12px;
+			font-style: normal;
+		}
+	</style>
+
+	<link rel="stylesheet" href="style.css"> <!-- #3 -->
+	
+</head>
+<body>
+	<p style="color: blue"> <!-- #1 -->
+		CSS样式优先级比较
+	</p>
+</body>
+</html>

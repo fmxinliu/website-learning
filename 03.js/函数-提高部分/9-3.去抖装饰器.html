@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>去抖装饰器</title>
+	<!-- https://zh.javascript.info/call-apply-decorators#qu-dou-zhuang-shi-qi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />"); // 异步加载的js是不允许使用document.write方法的
+		}
+	</script>
+
+
+
+	<script>
+		print("去抖装饰器：创建一个 debounce(f, ms)装饰器，它每隔几毫秒调用一次 f");
+		function debounce(f, ms) {
+			let isCooldown = false; // 准备好执行
+
+			return function() {
+				if (isCooldown) return;
+				
+				f.apply(this, arguments);
+
+				isCooldown = true; // 等待时间结束
+
+				setTimeout(() => isCooldown = false, ms);
+			}; 
+		}
+
+		let f = debounce(print, 1000);
+
+		f(1); // 立即执行
+		f(2); // 忽略
+
+		setTimeout( () => f(3), 100); // 忽略 (只过去了12 ms)
+		setTimeout( () => f(4), 1100); // 运行
+		setTimeout( () => f(5), 1500); // 忽略 (离最后一次执行不超过1000 ms)
+	</script>	
+
+</body>
+</html>

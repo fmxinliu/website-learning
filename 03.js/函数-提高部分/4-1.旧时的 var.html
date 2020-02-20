@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>旧时的“var”</title>
+	<!-- https://zh.javascript.info/var -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+
+		test1();
+		test2();
+		test3();
+		test4$1();
+		test4$2();
+		test4$3();
+		test5$1();
+		test5$2();
+		test6();
+
+		// (1) “var” 变量没有块级作用域。
+		// (2) “var” 变量穿透了 if、for 或其它块级代码，无法成为块级或循环的局部变量。
+		// (3) “var” 变量会成为一个函数级的局部变量，在最小函数级可见。
+		// (4) “var” 变量会在函数开头被定义，与它在代码里定义的位置无关。
+		// (5) “var” 变量声明会被提升，但是赋值不会。
+		// (6) let 和 const 不存在上述现象，在词法环境中的行为完全一样
+
+		function test1() {
+			if (true) {
+			  	var test = `123`;
+			} 
+
+			print(test); // 变量在 if 结束后仍存在
+		}
+
+		function test2() {
+			for (var i = 0; i < 10; i++) {
+  				// ...
+			}
+
+			print(i); // 10, "i" 在循环结束后仍然可见
+		}
+
+		function test3() {
+			function sayHi() {
+			  	if (true) {
+			    	var phrase = "Hello";
+			  	}
+
+			  	print(phrase); // works
+			}
+
+			sayHi();
+			// alert(phrase); // 报错：phrase is not defined，phrase 穿透了 if 块，但没有穿透 sayHi 函数块，成为 sayHi() 的局部变量。
+		}
+
+
+		// 声明会被提升
+		function test4$1() {
+  			phrase = "Hello$1";
+  			print(phrase);
+  			var phrase; // 等同于定义在函数起始处
+		}
+
+		function test4$2() {
+  			phrase = "Hello$2";
+
+  			if (true) {
+  				var phrase; // 等同于定义在函数起始处
+  				print(phrase);
+  			}
+
+  			print(phrase);	
+		}
+
+		function test4$3() {
+  			phrase = "Hello$3";
+
+  			if (false) {
+  				var phrase; // 等同于定义在函数起始处，即使 if (false) 分支永远都不会执行
+  			}
+
+  			print(phrase);	
+		}
+
+
+		// 赋值不会被提升
+		function test5$1() {
+  			print(phrase);
+  			
+  			var phrase = "Hello"; // 包含两个步骤: (1)使用 var 声明变量 (2)使用 = 给变量赋值
+		}
+
+
+		function test5$2() {
+	  		var phrase; // 声明在开头工作
+  			
+  			print(phrase); // undefined
+  			
+  			phrase = "Hello"; // 赋值 — 当执行到这里时。
+		}
+
+
+		// let 和 const 在词法环境中的行为完全一样
+		function test6() {
+			print(phrase); // 报错：phrase is not defined
+  			
+  			// let phrase = "Hello";
+  			const phrase = "World";
+		}
+
+	</script>
+</body>
+</html>

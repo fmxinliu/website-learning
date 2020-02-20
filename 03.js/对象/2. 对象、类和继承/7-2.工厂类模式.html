@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>工厂类模式</title>
+	<!-- https://zh.javascript.info/class-patterns#gong-chang-lei-mo-shi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+	</script>
+
+
+	<script>
+		function User(name, birthday) {
+			function calcAge() { // <-- 私有
+				return new Date().getFullYear() - birthday.getFullYear();
+			}
+
+			return { // <-- User 返回一个带有公共属性和方法的对象，唯一好处是：可以省略 new 关键字来创建一个类
+				sayHi() {
+					print(`${name}, age:${calcAge()}`);
+				}
+			};
+		}
+
+		var user = User("John", new Date(2000, 0, 1));
+		user.sayHi(); // John, age:19
+
+	</script>
+</body>
+</html>

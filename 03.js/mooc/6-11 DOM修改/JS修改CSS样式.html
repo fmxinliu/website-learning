@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS修改CSS样式</title>
+</head>
+	<style>
+		#container{
+			height: 100px;
+			width: 100px;
+			background-color: #ccc;
+			color: #fff;
+		}
+	</style>
+<body>
+	<div id="container"></div>
+	<script>
+		// 属性名：去横线，变驼峰
+		// 调用方式：elem.style.属性名="属性值";
+		var elem = document.getElementById("container");
+		elem.style.backgroundColor = "red"; // background-color => backgroundColor
+	</script>
+</body>
+</html>

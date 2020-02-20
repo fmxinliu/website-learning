@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>包装异常</title>
+	<!-- https://zh.javascript.info/custom-errors#bao-zhuang-yi-chang -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 外部调用，不需要知道“低级异常”，抛出“高级异常” -->
+	<script>
+		class ReadError extends Error {
+			constructor(message, cause) {
+				super(message);
+				this.cause = cause;
+				this.name = this.constructor.name;
+			}
+		}
+
+		class ValidationError extends Error {}
+
+		class PropertyRequiredError extends Error {
+			constructor(property) {
+				super("No property: " + property);
+				this.name = this.constructor.name;
+			}
+		}
+	</script>
+
+	<script>
+		// 处理属性缺失
+		function validateUser(user) {
+			if (!user.name) {
+		    	throw new PropertyRequiredError("name");
+		  	}
+
+			if (!user.age) {
+		    	throw new PropertyRequiredError("age");
+		  	}
+		}
+		
+		// 处理解析错误
+		function readUser(json) {
+			let user;
+
+			try {
+				user = JSON.parse(json);
+				return user;
+			} catch(err) {
+				if (err instanceof SyntaxError) {
+					throw new ReadError("Syntax Error", err);
+				} else {
+					throw err;
+				}
+			}
+		}
+
+	</script>
+
+	<!-- 测试 -->
+	<script>
+		window.onerror = function(message, url, line, col, error) { // <-- 必须在脚本前面注册
+			print(`${message}\n At ${line}:${col} of ${url}`);
+		}
+
+		try {
+			let user;
+			// readUser('{bad json}');
+	  		user = readUser('{ "age": 25 }');
+	  		validateUser(user);
+		} catch (e) {
+		  	if (e instanceof ReadError) { // <-- 不必列出所有可能的异常类型
+		    	print(e);
+		    	print("Original error: " + e.cause);
+		  	} else {
+		  		print(e);
+		  		throw e;
+		  	}
+		}
+
+		print('');
+	</script>
+</body>
+</html>

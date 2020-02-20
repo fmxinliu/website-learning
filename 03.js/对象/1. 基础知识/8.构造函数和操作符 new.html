@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数和操作符 new</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	/* 构造函数在技术上是常规函数。不过有两个约定：
+	 *  1.他们首先用大写字母命名。
+	 *  2.它们只能用 "new" 操作符来执行。
+	 */
+
+	 	// 1.构造函数
+	 	function User(name) {
+			// this = {};（隐式创建）
+
+			// 添加属性到 this
+			this.name = name;
+			this.isAdmin = false;
+
+			// return this;（隐式返回）
+		}
+
+		let user = new User("Jack");
+		print(user.name);
+		print(user.isAdmin);
+
+		// user.User("lili"); // 构造函数不能被再次调用，只在创建时调用
+		// print(user.name);
+
+		// 2.任何函数都可以用作构造函数
+		let user2 = new function() {
+			this.age = 20;
+		}
+		print(user2.age);
+
+		// 3.双语法构造函数：new.target
+		function Work(time) {
+			if (!new.target) { // 如果你没有运行 new
+				return new Work(time); // ...会为你添加 new
+			}
+
+			this.time = time;
+		}
+
+		let work = Work("12:00"); // 重新调用 new User
+		print(work.time);
+
+
+
+		User(); // 如果构造函数不包含 new.target，会直接报错!!!!!!!
+
+
+	</script>
+</body>
+</html>

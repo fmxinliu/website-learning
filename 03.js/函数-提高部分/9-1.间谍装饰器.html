@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>间谍装饰器</title>
+	<!-- https://zh.javascript.info/call-apply-decorators#jian-die-zhuang-shi-qi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />"); // 异步加载的js是不允许使用document.write方法的
+		}
+	</script>
+
+
+
+	<script>
+		print("间谍装饰器：创建一个装饰器 spy(func)，它在 calls 属性中保存所有函数调用");
+		function work(a, b) {
+		  	print( a + b );  // work 是一种任意的函数或方法
+		}
+
+		function spy(func) {
+			let calls = [];
+			// print( `${typeof func}` ); // function
+			// func.calls = [1, 2, 3]; // <--- 通过 func 给 work 添加 calls 属性 !!! （*）
+			// work.calls = [1, 2, 3]; // <--- 直接给 work 添加 calls 属性 !!! （**）
+			
+			// return func; // <--- （*）(**) ok !!!
+
+			// 返回一个新的函数对象 
+			return function f() { // <--- （*）(**) fail !!!
+				let args = Array.from(arguments);
+				calls.push(args); // 记录每次调用参数
+				func.apply(this, args); // 转发调用
+				f.calls = calls;
+			};
+		}
+
+		function spy1(func) {
+			f.calls = []; // 增加一个可迭代的属性
+
+			function f() {
+				let args = Array.from(arguments);
+				f.calls.push(args); // 记录每次调用参数
+				func.apply(this, args); // 转发调用
+			}
+
+			return f; // 返回一个新的函数对象 
+		}
+
+
+		work = spy(work);
+		// work = spy1(work);
+		
+		print(`测试 work.calls = ${work.calls}`);
+
+		work(1, 2); // 3
+		work(4, 5); // 9
+
+		for (let args of work.calls) {
+		  	print( 'call:' + args.join() ); // "call:1,2", "call:4,5"
+		}
+
+	</script>
+
+
+	<!-- 易错 -->
+	<script>
+		function func(a, b) {
+			return a + b;
+		}	
+
+		print(`<br />易错：函数 -> 变量（相当于函数指针）`);
+
+		////////////////////////////////////////////////
+		let f = function() {}; // 即使 f 是函数对象也不行
+		print( `(typeof f) : ${typeof f}` ); // function
+		print('');
+		////////////////////////////////////////////////
+
+		f = func(1, 2); 
+
+		// (1) 通过 f 无法添加属性
+		f["size"] = 123;
+		print(f.size); // undefined
+		print(func.size); // undefined
+		print('');
+
+		// (2) 通过 func 添加属性，f 无法获取
+		// func.time = Date.now(); // 时间戳
+		func.time = new Date() // 可读字符串
+		print(f.time); // undefined
+		print(func.time); // Mon May 13 2019 23:41:56 GMT+0800 (中国标准时间)
+		print('');
+
+		// (3) 重新赋值，扔无法获取新添加属性
+		f = func(1, 2);
+		print(f.time); // undefined
+		print('');
+
+		// (4) 类型
+		print( `(f == func) : ${f == func}` ); // false
+		print( `(typeof f) : ${typeof f}` ); // number
+		print( `(typeof func) : ${typeof func}` ); // function
+		print('');
+		print( `将函数对象赋值给另外一个变量(即使是“函数对象”)，不能通过形参操作原来的函数对象。` );
+	</script>
+	
+	<script>
+		function func(a, b) {
+			return a + b;
+		}	
+
+		print(`<br />易错：函数 -> 函数参数`);
+
+		+function(f) {
+			// (1) 通过 f 添加属性
+			f["size"] = 123;
+			print(f.size); // 123
+			print(func.size); // 123
+			print('');
+
+			// (2) 通过 func 添加属性，f 获取
+			// func.time = Date.now(); // 时间戳
+			func.time = new Date() // 可读字符串
+			print(f.time); // Mon May 13 2019 23:41:56 GMT+0800 (中国标准时间)
+			print(func.time); // Mon May 13 2019 23:41:56 GMT+0800 (中国标准时间)
+			print('');
+
+			// (4) 类型
+			print( `(f == func) : ${f == func}` ); // true
+			print( `(typeof f) : ${typeof f}` ); // function
+			print( `(typeof func) : ${typeof func}` ); // function
+			print('');
+			print( `将函数对象作为实参传递给另一个函数，类似对象间的引用赋值，可以通过形参操作原来的函数对象。` );
+		}(func);
+		
+	</script>
+
+</body>
+</html>

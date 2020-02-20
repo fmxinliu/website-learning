@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JQuery添加&删除</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<ul type="水果">
+		<li title="苹果">苹果</li>
+		<li title="菠萝">菠萝</li>
+		<li title="梨">梨</li>
+	</ul>
+	<script>
+		/************** 1.添加 *****************/
+		//（1）创建新元素
+		var $li = $("<li title='香蕉'>香蕉</li>");
+		//（2）将新元素结尾添加到DOM树
+		var $parent = $("ul"); // 查找DOM树上的ul标签
+		// var $parent = $("<ul></ul>"); // 创建新的ul标签
+		$parent.append($li);
+		$("body").append($parent);
+
+		/************** 2.删除 *****************/
+		$("ul li:eq(2)").remove();
+		$("ul li").remove("li[title!=菠萝]");
+	</script>
+</body>
+</html>

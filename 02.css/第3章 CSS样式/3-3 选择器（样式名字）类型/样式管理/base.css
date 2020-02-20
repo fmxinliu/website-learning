@@ -1,0 +1,54 @@
+/*=====1.以下大多数组合，都不能作用于h1-h6标签=====*/
+/*=====2.DOM树中，子类可以继承父类的样式属性=====*/
+
+/* 标签1 标签2 */
+p span{
+	color: red; /*1.作用于p标签的子标签span*/
+}
+
+/* 标签样式 */
+h2.span{
+	color: blue; /*2.作用于h2标签的span样式*/
+}
+
+/* 标签 样式 */
+h1 .span{
+	color: green; /*3.作用于h1子标签的span样式*/
+}
+
+/* 样式 标签 */
+.color span{
+	color: red; /*4.作用于父标签样式为color的子标签span*/
+}
+
+/* 样式样式*/
+.people.age{
+	color: blue; /*5.作用于父标签样式为people age叠加的样式*/
+}
+
+
+/* 样式 样式*/
+.color .size{
+	color: green; /*6.作用于父标签样式为color的子标签样式为size*/
+}
+
+
+/* 7.使用方法:
+	（1）Login定义为html文件名，作用于html节点;
+	（2）background、head、body、foot作用于Login.html;
+	 (3) 在一个css库文件base.css中，定义了很多基础样式，可以很方便的管理每个html文件的样式 */
+#Login .background{
+	background-color: #ccc;
+}
+
+#Login .head{
+	background-color: #f00;
+}
+
+#Login .body{
+	background-color: #0f0;
+}
+
+#Login .foot{
+	background-color: #00f;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>setTimeout 调度</title>
+	<!-- https://zh.javascript.info/settimeout-setinterval#settimeout -->
+<!-- 	语法：let timerId = setTimeout(func|code, delay[, arg1, arg2...]) 。将函数的执行推迟到一段时间之后再执行
+		  (1) func|code ：想要执行的函数或代码字符串。
+		  (2) delay ：执行前的延时，以毫秒为单位。
+		  (3) arg1，arg2… ：要传入被执行函数（或代码字符串）的参数列表 -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>	
+		test1();
+		test2();
+
+		// 使用 setTimeout 执行调度
+		function test1() {
+			setTimeout('document.write("hi")', 1000); // 不推荐! 
+			setTimeout((phrase, who) => print(phrase + ', ' + who), 1000, "Hello", "John"); // Hello, John
+		}
+		
+		// 用 clearTimeout 来取消调度
+		function test2() {
+			let timerId = setTimeout(() => alert("never happens"), 1000);
+			print(timerId); // 定时器 id
+
+			clearTimeout(timerId);
+			print(timerId); // 还是那个 id 没变（并没有因为调度被取消了而变成 null）
+		}
+
+		
+	</script>	
+</body>
+</html>

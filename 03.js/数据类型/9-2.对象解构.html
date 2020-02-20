@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>对象解构</title>
+	<!-- https://zh.javascript.info/destructuring-assignment -->
+	<!-- 对象让我们能够把许多信息打包到一个单一的实体中，数组则让我们能够存放有序的集合 -->
+	<!-- 解构赋值是一种特殊的语法，它让我们可以将数组或对象进行“拆包”，存放到一系列的变量中 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// 语法： let {prop : varName = default, ...rest} = object;
+		
+		let options = {
+			title: "Menu",
+			width: 100,
+			height: 200
+		};
+
+		// 1.变量可以调换顺序
+		function test1() {
+			let {title, width, height} = { title: "Menu", height: 200, width: 100 }; // 按属性/变量名字一一映射
+			// let {title, width, height} = { title: "Menu", height: 200, width: 100 };
+			print(`title=${title}, width=${width}, height=${height}`);
+		}
+
+		// 2.自定义映射关系
+		function test2() {
+			// { 原属性：目标变量 }
+			let {width: w, height: h, title} = options; // 把一个属性赋值给不同名字的变量
+			// width -> w
+			// height -> h
+			// title -> title
+			print(`title=${title}, w=${w}, h=${h}`);
+		}
+
+		// 3.默认值
+		function test3() {
+			let options = {
+				title: "Menu"
+			}
+			let {width = 100, height = 200, title} = options; // 对于可能缺失的属性，可以使用 "=" 来指定默认值
+			print(`title=${title}, width=${width}, height=${height}`);
+			// 冒号和等号一起使用
+			let {width: w = 100, height: h = 200, title : t} = options;
+			print(`t=${t}, w=${w}, h=${h}`);
+		}
+
+		// 4.剩余操作符
+		function test4() {
+			let {title, ...rest} = options; // now title="Menu", rest={height: 200, width: 100}
+			print(title);
+			print(rest.width);
+			print(rest.height);
+		}
+
+		// 5.不使用 let 的疑难病症
+		function test4() {
+			let title, width, height;
+
+			// 这一行发生错误
+			// {title, width, height} = options;// error !!!!!!
+
+			// 现在就正确了
+			({title, width, height} = {title: "Menu", width: 200, height: 100});
+
+			print(`title=${title}, width=${width}, height=${height}`);
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+		test5();
+
+	</script>
+</body>
+</html>

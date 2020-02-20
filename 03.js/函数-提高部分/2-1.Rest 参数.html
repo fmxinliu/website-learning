@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rest 参数（剩余参数）...</title>
+	<!-- https://zh.javascript.info/rest-parameters-spread-operator#rest-can-shu-sheng-yu-can-shu -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		test1();
+		test2();
+
+		print(`typeof 3 = ${typeof [3]}`); // 数组
+		print(`[3] + [4] + [7] = ${[3] + [4] + [7]}`); // "347"
+		print(`typeof([3] + [4] + [7]) = ${typeof([3] + [4] + [7])}`); // string
+
+		// (1) 可传入“过多”的参数，“多余的参数”被忽略
+		function test1() {
+			print( sum(1, 2, 4, 5) ); // 3
+			function sum(a, b) { // 4, 5 被忽略
+				return a + b;
+			}
+		}
+		
+		// (2) 使用 Rest 参数，“把剩余的参数都放到一个数组中”
+		function test2() {
+			print( sum(1, 2, 4, 5) ); // 3
+			function sum(a, b, ...args) { // 4, 5 被忽略
+				let sum = a + b;
+				
+				let  allArgs = arguments.length;
+				print(`args is Array? ${Array.isArray(args)}`);
+		  		debugger
+
+				// args 是一个数组
+				sum = args.reduce((prev, value) => {
+					print(value);
+					return prev += value;
+				}, sum);
+				
+				return sum;
+			}
+		}
+
+		// (3) Rest 参数必须放到参数列表的末尾
+		// function test3(arg1, ...rest, arg2) { // error 
+		// }
+
+	</script>
+</body>
+</html>

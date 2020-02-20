@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>finally 和 return</title>
+	<!-- https://zh.javascript.info/try-catch#trycatchfinally -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- finally and return -->
+	<script>
+		function func() {
+			try {
+			  	print('try start');
+			  	throw 1;
+			  	print('try end');
+			} catch(err) {
+			  	print('catch start');
+			  	return 2;
+			  	print('catch end');
+			} finally {
+				print('finally start');
+				return 3;
+				print('finally end');
+			}
+		}
+
+		print( func() );
+	</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>if...else</title>
+</head>
+<body>
+	<script>
+		test("");
+		test("我");
+		test(0);
+		test(0.0);
+		test(null);
+		test(undefined);
+		test(NaN);
+
+		// con会自动转换为boolean类型
+		function test(con){
+			if (con){
+				document.write(con + " is true" + "<br />");
+			} else {
+				document.write(con + " is false" + "<br />");
+			}
+		}
+	</script>
+</body>
+</html>

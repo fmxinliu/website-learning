@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数据类型</title>
+</head>
+<body>
+	<ul>
+		<h3>数据类型：</h3>
+		<li>基本类型
+			<ol style="list-style: decimal;">
+				<li>数字类型(number)</li>
+				<li>字符串类型(string)</li>
+				<li>布尔类型(boolean)</li>
+				<li>空(null)</li>
+				<li>未定义(undefined)</li>
+			</ol>
+		</li>
+		<li>引用类型</li>
+		<li>symbol</li>
+	</ol>
+
+	<hr/>
+	
+	<script>
+		// year
+		let year = prompt('In which year was ECMAScript-2015 specification published?', '');
+		alert(year); // 输入"2015" -> year=""2015""
+		alert(year == 2015);
+		alert("2015" == 2015);
+
+		// 1.变量类型
+		document.write(typeof Math);document.write('<br />'); // "object"
+		document.write(typeof null);document.write('<br />'); // "object"
+		document.write(typeof alert);document.write('<br />'); // "function"
+		document.write(typeof undefined);document.write('<br />'); // "undefined"
+
+		// 5种“原生类型” number string boolean null【无、空】 undefined【未被赋值】
+		// 2种“复杂类型” object symbol【唯一的标识符】
+
+		// 2.在 JavaScript 中，有三种包含字符串的方式。
+		let name = "John";
+		// embed a variable
+		alert( `Hello, ${name}!` ); // Hello, John!
+		alert( `Hello, ${"name"}!` ); // Hello, name!
+		// embed an expression
+		alert( `the result is ${1 + 2}` ); // 结果是 3
+
+		// 3.类型转换
+		alert(typeof("6"/"2")); // number，自动转换：string->number
+		alert(typeof Number("666")); // string
+		alert(Number(null)); // 0
+		alert(Number(undefined)); // NaN
+		alert(Boolean("")); // false
+		alert(Boolean(" ")); // 空白, 也是 true (任何非空字符串是 true)
+		alert(Boolean("0")); // true
+		alert(Boolean(null)); // false
+		alert(Boolean(undefined)); // false
+		alert(Boolean(NaN)); // false
+		alert(Boolean(Infinity)); // true
+
+		// 转化非数字>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		alert( +true ); // 1
+		alert( +"" );   // 0
+		alert( +" " );   // 0
+		alert( '02' == 2 ); // true，字符串 '02' 会被转为数字 2
+
+		// 两个非运算 !! 有时候用来将某个值转化为布尔类型>>>>>>>>>>>>>>>>>>>>>>>
+		alert( !!"non-empty string" ); // true
+		alert( !!null ); // false
+
+
+		// 在二元运算符加号起作用之前，所有的值都转为数字
+		alert( +"2" + +"3" ); // 5
+
+		/* 一个有趣的现象 */
+		let a = 0;
+		alert( Boolean(a) ); // false
+
+		let b = "0";
+		alert( Boolean(b) ); // true
+
+		alert(a == b); // true! 当不同类型的值进行比较时，它们会首先被转为数字（number）再判定大小
+
+		// https://zh.javascript.info/comparison
+		alert( '' == false ); // true
+		alert( '' === false ); // false
+		//---------------------------------------------------//
+		var type=typeof(123);
+		document.write(type);
+		document.write('<br />');
+
+		var type=typeof "123"; // 可以定义同名变量？？？
+		document.write(type);
+		document.write('<br />');
+
+		document.write(isNaN(123));document.write('<br />');
+		document.write(isNaN("123"));document.write('<br />'); // false，不区分"123"与123？？？
+		document.write(isNaN("Hello"));document.write('<br />');
+		document.write(isNaN("2005/12/12"));document.write('<br />');
+	</script>
+</body>
+</html>

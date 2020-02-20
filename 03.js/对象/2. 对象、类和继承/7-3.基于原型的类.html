@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>基于原型的类</title>
+	<!-- https://zh.javascript.info/class-patterns#ji-yu-yuan-xing-de-lei -->
+	<!-- 相比构造函数模式的优势：
+		 (1) 在构造函数模式中，每个对象都有它自己的方法的副本。我们在构造器中指定一个 this.sayHi = function() {...} 和其他方法的隔离的副本。
+		 (2) 在原型模式中，所有的方法都在 User.prototype 上，并对所有的 user 对象共享，对象本身只存储数据。 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+	</script>
+
+	
+	<!-- 原型模式实现一个类 -->
+	<script>
+		// (1) 构造器 User 只是初始化当前对象的状态
+		function User(name, birthday) {
+			this._name = name;
+			this._birthday = birthday;
+
+			let age = 100;
+		}
+
+		// (2) 方法被添加到 User.prototype 中
+		User.prototype._calcAge = function() { // <-- 被所有对象所共享，存储效率更高
+			// print(age); // <-- 不共享 function User 内部声明的变量
+			return new Date().getFullYear() - this._birthday.getFullYear();
+		};
+
+		User.prototype.sayHi = function() {
+			print(`${this._name}, age:${this._calcAge()}`);
+		}
+
+		var user = new User("John", new Date(2000, 0, 1));
+		user.sayHi(); // John, age:19
+
+	</script>
+
+	<!-- 证明所有对象共享原型 User.prototype 的方法 -->
+	<script>
+		var u1 = new User("John", 10);
+		var u2 = new User("Anna", 20);
+
+		console.dir(u1);
+		console.dir(u2);
+
+		print(u1.sayHi === u2.sayHi); // true
+
+	</script>
+</body>
+</html>

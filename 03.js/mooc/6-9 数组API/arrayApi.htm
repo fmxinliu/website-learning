@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组Api</title>
+</head>
+<body>
+	<script>
+		function print(msg){
+			document.write(msg+"<br />");
+		}
+
+		var arr1 = ['h','e','l','l','o'];
+		var arr2 = ["hello","world"];
+		var arr3 = ['??','!','?'];
+
+		// 1.Array转String
+		
+		var s1 = String(arr1);
+		print(typeof(s1));
+		print(typeof(arr1))
+
+		//【用于鉴别是否数组被修改过】
+		print(s1 == String(arr1));
+
+		// 2.连接【将字符组成单词】
+		var s2 = arr1.join(""); // 默认使用逗号
+		print(s2);
+
+		//【将单词组成句子】
+		print(arr2.join(" "));
+
+		//【动态页面】
+
+		// 3.拼接
+		var arr = arr2.concat("!", arr3); // 不修改原有数组
+		print(arr);
+		print(arr2);
+
+		// 4.选取（含头不含尾）
+		var subArr1 = arr2.slice(0, 1); // 原数组保持不变
+		var subArr2 = arr2.slice(1);
+		var subArr3 = arr2.slice(-2, -1); // 反向选取，相当于(2-2, 2-1)即(0, 1)
+		var subArr4 = arr2.slice(); // 复制数组
+		print(subArr1);
+		print(subArr2);
+		print(subArr3);
+		print(subArr4);
+
+		// 5.删除
+		var deletes = arr3.splice(0, 2);
+		print(deletes);
+		print(arr3);
+
+		// 6.替换
+		var data = [1, 2, 3, 4, 5];
+		var r1 = data.splice(0, 2, 0, 0, 0);
+		print(data);
+		var r2 = data.splice(0, 3, [100, 101, 102]); // 插入数组
+		print(data);
+
+		// 7.插入
+		var i = data.splice(0, 0, 98, 99);
+		print(data);
+
+		// 8.颠倒
+		var r = data.reverse(); // 不会跌倒插入的数组[100, 101, 102]!!!
+		print(data);
+		print(arr2.reverse()); // 颠倒原数组顺序
+
+		// 9.排序
+		// sort()将所有元素转为字符串再排序，
+		// 问题：只能排列字符串类型的元素
+		// 解决：使用自定义比较强函数
+		
+	</script>
+</body>
+</html>

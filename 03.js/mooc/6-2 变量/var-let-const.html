@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>变量</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		
+		// js新特性   let声明变量
+		let value = 100;
+		document.write(value);
+		document.write('<br />');
+		// const 声明常量
+		const PI = 3.14;
+		document.write(PI);
+		document.write('<br />');
+
+
+		// 1.声明变量时，不要省略var关键字，否则声明的是“全局变量”
+		var stuName="张三", $stuName='李四';
+		document.write(stuName);
+		document.write('<br />');
+		document.write($stuName);
+		document.write('<br />');
+
+		// 2.未初始化的变量，提示undefined [警告]
+		var age;
+		console.log(age); // undefined
+		document.write(age);
+		document.write('<br />');
+
+		// 3.未定义的变量或属性，报错JS脚本无法继续执行 [错误]
+		console.log(school);
+		document.write(school);
+		document.write('<br />');
+
+		document.write('END');
+		document.write('<br />');
+	</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>闭包</title>
+	<!-- https://zh.javascript.info/closure -->
+
+	<!-- (1) 函数保存其外部的变量并且能够访问它们称之为闭包。 -->
+	<!-- (2) JS 中函数天生闭包（new Function 创建除外）。他们会通过隐藏的 [[Environment]] 属性记住创建它们的位置，所以它们都可以访问外部变量。 -->
+	<!-- (3) [[Environment]] 属性和词法环境原理 -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		test1();
+		test2();
+		test3();
+		test4();
+
+		// ================================= 问题 ============================================
+		function test1() {
+			let name = "John";
+
+			function sayHi() {
+				print("Hi, " + name);
+			}
+
+			name = "Pete";
+
+			sayHi(); // 它会显示 "John" 还是 "Pete" 呢？
+		}
+		
+		function test2() {
+			function makeWorker() {
+			  	let name = "Pete";
+			  	return function() {
+			    	print(name);
+			  	};
+			}
+
+			let name = "John";
+			let work = makeWorker();
+			work(); // 它显示的是什么呢？"Pete"（创建位置的 name）还是"John"（调用位置的 name）呢？
+		}
+
+		// ================================== [[Environment]] 和词法环境 =============================================
+		function test3() {
+			// 构造函数返回一个新对象
+			function User(name) {
+			  	// 这个对象方法为一个嵌套函数
+			  	this.sayHi = function() {
+			    	print(name);
+			  	};
+			}
+
+			let user = new User("John");
+			user.sayHi(); // 该方法访问外部变量 name
+		}
+
+		function test4() {
+			function makeCounter() {
+				let count = 0;
+				// 返回『嵌套函数』
+				return function() { // 隐藏的 [[Environment]] 属性 -> 引用着 makeCounter 词法环境  （*）
+					return count++;
+				};
+			}
+
+			// 一次调用 —— 一个词法环境
+			let counter1 = makeCounter();
+			let counter2 = makeCounter();
+
+			//请注意这里的内存管理工作机制。
+			// 虽然 makeCounter() 执行已经结束，但它的词法环境仍保存在内存中，因为仍然有一个嵌套函数的 [[Environment]] 在引用着它。
+
+			print( counter1() ); // 0
+			print( counter1() ); // 1
+
+			print( counter2() ); // 0 （独立的）
+			print( counter2() ); // 1
+		}
+
+	</script>
+</body>
+</html>

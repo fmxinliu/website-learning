@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>翻转卡片</title>
+	<style>
+		#stage{
+			width: 200px;
+			/*height: 100px;*/
+			margin: 100px auto; /*必须设置div的宽度，才能水平居中*/
+			/*border: 2px solid red;*/
+		}
+		.fbox{
+			float: left;
+			position: relative;
+			transform-style: preserve-3d;
+			transition:1.5s;
+		}
+		.fbox:hover{
+			transform:rotateY(180deg);
+		}
+		.box{
+			width: 100px;
+			height: 100px;
+		}
+		#box1{
+			background-color: red;
+			position: absolute;
+		}
+		#box2{
+			background-color: blue;
+			transform: rotateY(180deg);
+		}
+		#box3{
+			background-color: green;
+			position: absolute;
+		}
+		#box4{
+			background-color: yellow;
+			transform: rotateY(180deg);
+		}
+	</style>
+</head>
+<body>
+	<div id="stage">
+		<div class="fbox">
+			<div id="box1" class="box">123</div>
+			<div id="box2" class="box">456</div>
+		</div>
+		<div class="fbox">
+			<div id="box3" class="box">789</div>
+			<div id="box4" class="box">000</div>
+		</div>
+	</div>
+</body>
+</html>

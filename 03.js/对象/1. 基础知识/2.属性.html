@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>对象属性</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		/*属性的键必须是String 类型或者 Symbol 类型（通常是字符串）。
+		  值可以是任何类型
+		*/
+		
+		// 1.保留字段可以用作属性名 >>>>>>>>>>>>>
+		let obj = {
+		  for: 1,
+		  let: 2,
+		  return: 3
+		};
+		print( obj.for + obj.let + obj.return );  // 6
+
+		// 2.属性值简写 >>>>>>>>>>>>>>>>>>>>>>>>
+		function makeUser(name, age) {
+		  return {
+		    name, // 与 name: name 相同
+		    age   // 与 age: age 相同
+		  };
+		}
+		let user = makeUser("John", 30);
+		print(user.name); // John
+
+		// 3.属性存在检查 >>>>>>>>>>>>>>>>>>>>>>
+		print(user.sex == undefined); // true 意思是没有这个属性
+		print( "age" in user ); // true，user.age 存在
+		print( "blabla" in user ); // false，user.blabla 不存在。
+
+		//////////////
+		checkAttr();
+		function checkAttr() {
+			let obj = {
+				test: undefined, //////// 请使用 null
+			};
+			print(obj.test); //  它是 undefined，所以难道它不存在吗？
+			print("test" in obj); // true，属性存在！
+		}
+		for(let key in user) {
+			print(key + ":" + user[key]);
+		}
+
+		// 4.属性排序 >>>>>>>>>>>>>>>>>>>
+		let codes = {
+		  "49": "Germany",
+		  "41": "Switzerland",
+		  "44": "Great Britain",
+		  // ..,
+		  "1": "USA"
+		};
+		// 整数属性是以升序来排列
+		for(let code in codes) {
+		  print(code); // 1, 41, 44, 49
+		}
+		// 非整数属性是按照创建的顺序来排列的
+		for (let prop in user) {
+		  print( prop ); // name, age
+		}
+
+		//// 把整数属性转换成非整数的，在前面增加一个 "+" 就行了
+		let codes2 = {
+		  "+49": "Germany",
+		  "+41": "Switzerland",
+		  "+44": "Great Britain",
+		  // ..,
+		  "+1": "USA"
+		};
+
+		for(let code in codes2) {
+		  print( +code ); // 49, 41, 44, 1
+		}
+	</script>
+</body>
+</html>

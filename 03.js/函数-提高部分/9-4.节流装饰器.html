@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>节流装饰器</title>
+	<!-- https://zh.javascript.info/call-apply-decorators#jie-liu-zhuang-shi-qi -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />"); // 异步加载的js是不允许使用document.write方法的
+		}
+	</script>
+
+
+	<!-- 比“去抖装饰器”最后多一个刷新步骤（如：鼠标位置刷新） -->
+	<script>
+		print("节流装饰器：创建一个装饰器 throttle(f, ms)，它每隔几毫秒将调用最多传递给 f 一次");
+		function f(a) {
+		  	print(a);
+		};
+
+		function throttle(f, ms) {
+			let isThrottled = false,
+			    savedArgs,
+			    savedThis;
+
+			function wrapper() {
+				if (isThrottled) { // (2)
+					savedArgs = arguments;
+			      	savedThis = this;
+				    return;
+				}
+
+				f.apply(this, arguments);  // (1)
+
+				isThrottled = true;
+
+				setTimeout(function() {
+					isThrottled = false; // (3)
+					if (savedArgs) {
+						wrapper.apply(savedThis, savedArgs); // 最后一次，也要节流
+						savedArgs = savedThis = null;
+					}
+				}, ms);
+			}
+
+			return wrapper;
+		}
+
+
+		// f1000 passes calls to f at maximum once per 1000 ms
+		let f1000 = throttle(f, 1000);
+
+		f1000(1); // shows 1
+		f1000(2); // (throttling, 1000ms not out yet)
+		f1000(3); // (throttling, 1000ms not out yet)
+
+		// when 1000 ms time out...
+		// ...outputs 3, intermediate value 2 was ignored
+	</script>	
+
+</body>
+</html>

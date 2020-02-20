@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>instanceof 的 2 个执行过程</title>
+	<!-- https://zh.javascript.info/instanceof#ref-instanceof -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 过程 1 -->
+	<script>
+		class People {
+			static [Symbol.hasInstance](obj) { // <-- (1) 如果提供了静态方法 Symbol.hasInstance，那就直接用这个方法进行检测
+				if (obj.canEat) return true;
+			}
+		}
+
+		let o1 = { canEat: true };
+		let o2 = { canEat: false };
+		print(o1 instanceof People); // true
+		print(o2 instanceof People); // false
+
+	</script>
+
+	<!-- 过程 2 -->
+	<script>
+		// <-- (2) 如果没有 Symbol.hasInstance，检查 Class.prototype 是否与 obj 的原型链中的任何一个原型相等
+		// obj.__proto__ === Class.prototype
+		// obj.__proto__.__proto__ === Class.prototype
+		// obj.__proto__.__proto__.__proto__ === Class.prototype
+		// ...
+
+		class Animal {}
+		class Rabbit extends Animal {}
+
+		let rabbit = new Rabbit();
+		print(rabbit instanceof Animal); // true
+		// rabbit.__proto__ === Rabbit.prototype
+		// rabbit.__proto__.__proto__ === Animal.prototype (match!)
+	</script>
+
+</body>
+</html>

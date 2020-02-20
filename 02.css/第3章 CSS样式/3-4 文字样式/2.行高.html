@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>行高-垂直居中</title>
+	<style type="text/css">
+		.lineheight { font-size: 14px;
+			line-height: 1.5em; /* 行高1.5倍字符（em自适应于字体）*/
+		}
+
+		.backgroundcolor {
+			height: 40px; /* 定义一个层，表示层高度 */
+			background-color: #ccc;
+			font-size: 14px;
+		}
+
+		/* 水平居中 */
+		.horizontalcenter {
+			text-align: center; 
+		}
+
+		/* 垂直居中: */
+		.verticalcenter {
+			line-height: 40px; /* 设置文字间上下距离 */
+		}
+
+		/* 两端对齐 */
+		.justifyalignment {
+			text-indent: 2em; /* 首行缩进2字符 */
+			text-align: justify; /* 不会在两端出现空白 */
+		}
+	</style>
+</head>
+<body>
+	<p class="lineheight">
+		这里是web前端开发课程...<br />
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, ex corrupti! Labore, consequuntur, quam? Minus nulla optio, ratione tenetur ipsa ipsam doloribus sint quidem, voluptatem eaque enim ab placeat reiciendis?
+	</p>
+
+	<p class="backgroundcolor horizontalcenter">web前端开发课程（默认样式）</p>
+	<p class="backgroundcolor horizontalcenter verticalcenter">web前端开发课程（垂直居中）</p>
+
+	<p>
+		&nbsp;&nbsp;&nbsp;&nbsp;2月25日消息，企鹅科技于去年11月获蚂蚁金服近亿元战略投资，此轮融资将用于市场拓展和技术研发等方面。企鹅科技成立于2017年11月，是一家集自主研发，商业运营，合作推广为一体的智慧物联平台服务商，为自助洗衣运营商提供一体化物联网改造方案和SaaS移动支付解决方案。蚂蚁投资企鹅科技，在用户端，通过支付宝小程序即可获取洗衣房周边位置及查询机具工作状态后，用户只需手机预约、扫码支付就可体验洗、烘为一体的自助洗衣服务。硬件的升级提升了消费者体验，同步满足消费升级。如今，自助洗衣房卫生问题仍备受消费者关注。而企鹅科技利用技术手段保障洗衣设备卫生安全。据悉，目前企鹅科技已经累计接入216个城市1000多所高校的10万台校园自助洗衣机。蚂蚁投资企鹅科技，将来给用户使用的体验更加好。
+	</p>
+
+	<!-- 去掉两端空白字符 -->
+	<p class="justifyalignment">
+		2月25日消息，企鹅科技于去年11月获蚂蚁金服近亿元战略投资，此轮融资将用于市场拓展和技术研发等方面。企鹅科技成立于2017年11月，是一家集自主研发，商业运营，合作推广为一体的智慧物联平台服务商，为自助洗衣运营商提供一体化物联网改造方案和SaaS移动支付解决方案。蚂蚁投资企鹅科技，在用户端，通过支付宝小程序即可获取洗衣房周边位置及查询机具工作状态后，用户只需手机预约、扫码支付就可体验洗、烘为一体的自助洗衣服务。硬件的升级提升了消费者体验，同步满足消费升级。如今，自助洗衣房卫生问题仍备受消费者关注。而企鹅科技利用技术手段保障洗衣设备卫生安全。据悉，目前企鹅科技已经累计接入216个城市1000多所高校的10万台校园自助洗衣机。蚂蚁投资企鹅科技，将来给用户使用的体验更加好。
+	</p>
+</body>
+</html>

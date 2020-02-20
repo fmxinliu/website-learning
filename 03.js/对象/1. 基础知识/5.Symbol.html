@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Symbol</title>
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		// Symbol 保证是唯一的，两个描述相同的 Symbol —— 它们不相等
+		let id1 = Symbol("id"); // 描述只是一个不影响任何东西的标签
+		let id2 = Symbol("id");
+		print(id1 == id2); // false
+		// alert(id1); // 类型错误：无法将 Symbol 值转换为 String。
+		print(id1.toString()); // Symbol(id)，现在它起作用了
+
+
+		/////////////  使用 Symbol 做键，来“隐藏”属性【外部脚本不知道“符号”无法访问该属性（for...in被跳过）】  ////////////////
+		let id = Symbol("id");
+		let user = {
+			name: "John",
+			age: 20,
+			[id]: 123 // []表示需要变量 id 的值作为键，而不是 String “id”
+		};
+
+
+		// 1.Symbol 在 for…in 中被跳过（另一个脚本或库在我们的对象上循环，它不会访问一个 Symbol 类型的属性）
+		for (let key in user) print(key); // name, age (no symbols)
+		// 被 Symbol 任务直接访问
+		print( "Direct: " + user[id] );
+
+		// 2.Symbol 属性可以被拷贝
+		let clone = Object.assign({}, user);
+		alert( clone[id] ); // 123
+
+		// 3.我们只能在对象中使用 string 或 symbol 作为键，其它类型转换为 sString。
+		let obj = {
+		  0: "test" // same as "0": "test"
+		};
+		// 两个 alert 都访问相同的属性（Number 0 被转换为 String "0"）
+		print( obj["0"] ); // test
+		print( obj[0] ); // test （相同属性）
+
+
+		//// 全局 symbol【同名 Symbol 相等】>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// 从全局注册表中读取
+		let idOrg = Symbol.for("id"); // 如果该 Symbol 不存在，则创建它
+
+		// 再次读取
+		let idAgain = Symbol.for("id");
+
+		// 相同的 Symbol
+		alert( idOrg === idAgain ); // true
+
+		// Symbol.for  +++++ Symbol.keyFor
+		let sym = Symbol.for("name");
+		let sym2 = Symbol.for("id");
+
+		// 从 symbol 中获取 name 
+		print( Symbol.keyFor(sym) ); // name
+		print( Symbol.keyFor(sym2) ); // id
+
+		//
+		print( Symbol.keyFor(Symbol.for("name")) ); // name, 全局 Symbol
+		print( Symbol.keyFor(Symbol("name2")) ); // undefined, 参数不是一个全局 Symbol
+	</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>垃圾收集</title>
+	<!-- https://zh.javascript.info/closure#la-ji-shou-ji -->
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		test1();
+		test2();
+
+		// (1) 理论上当函数可达时，它外部的所有变量都将存在
+		function test1() {
+			function f() {
+			  	let value = Math.random();
+			  	function g() { print(value); }
+			  	return g;
+			}
+
+			let g = f(); // g 可达，f 的词法环境存在
+			g = null; // g 不可达，f 的词法环境被清理
+		}
+
+		// (2) 实际优化 - 如果有变量没被使用的话它也会被清除
+		function test2() {
+			function f() {
+			  	let value = Math.random();
+
+			  	function g() {
+			    	debugger; // 在控制台中输入 alert( value );没有该值！
+			  	}
+
+			  	return g;
+			}
+
+			let g = f();
+			g();
+		}
+
+		// V8（Chrome、Opera）的一个重要副作用是这样的变量在调试是无法访问的。
+
+	</script>
+</body>
+</html>

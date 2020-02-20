@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>重写构造函数</title>
+	<!-- https://zh.javascript.info/class-inheritance#zhong-xie-gou-zao-han-shu -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<script>
+		class Animal {
+
+		  	constructor(name) {
+		    	this.speed = 0;
+		    	this.name = name;
+		  	}
+
+		  	run(speed) {
+		    	this.speed += speed;
+		    	print(`${this.name} runs with speed ${this.speed}.`);
+		  	}
+
+		  	stop() {
+		    	this.speed = 0;
+		    	print(`${this.name} stopped.`);
+		  	}
+
+		}
+
+		class Rabbit extends Animal {
+			// 为没有构造函数的继承类生成以下的构造函数
+			// constructor(...args) {
+			//     super(...args);
+			// }
+
+			// 自定义构造函数
+			constructor(name, earLength) {
+				super(name); // <-- 在使用 this 之前调用 super()
+				this.speed = 10;
+				this.name = name;
+				this.earLength = earLength;
+			}
+		}
+
+		let rabbit = new Rabbit("White Rabbit", 10);
+		rabbit.run(5); // White Rabbit runs with speed 15.
+		print(rabbit.name); // White Rabbit
+		print(rabbit.earLength); // 10
+
+	</script>
+
+</body>
+</html>

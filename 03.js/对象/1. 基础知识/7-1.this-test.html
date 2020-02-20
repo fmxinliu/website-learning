@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>this-test</title>
+</head>
+<body>
+	<script>
+		"use strict"
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		function makeUser() {
+			return {
+				name : "John",
+				ref : this,  // #0
+
+				ref2() {
+					return this; // ##
+				}
+			};
+		};
+		
+		// 1.
+		// let user1 = makeUser(); // undefined		#1
+		// print(user1.ref.name); // error !!!!
+
+		// 2.
+		let x = {
+			name : "lili",
+		};
+
+		x.f = makeUser;
+		let user2 = x.f(); // x		#2
+		print(user2.ref.name); // John
+   
+   		// 3.
+   		let user3 = makeUser(); // undefined		#3
+   		print(user3.ref2().name); // John
+
+
+   		// 4.
+   		let user4 = makeUser(); // undefined		#4
+   		let f = user4.ref2();
+   		print(f.name); // John
+
+
+   		/*
+			user4.ref2().name     	<==  user4.ref2()方法调用，user4.ref2 返回的引用类型，会传递 this 给 ref2()
+								  	<== ## this 的值设置为点 . 之前的这个对象
+   		*/
+	</script>
+</body>
+</html>

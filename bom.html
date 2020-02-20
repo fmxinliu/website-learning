@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>BOM</title>
+</head>
+<body>
+	<script>
+		document.write(navigator.platform); // 操作系统平台
+		document.write("<br />");
+		document.write(location.href); // 当前URL
+
+		if (confirm("Go to baidu?")) {
+			location.href = "https://www.baidu.com"; // redirect the browser to another URL
+		}
+	</script>
+</body>
+</html>

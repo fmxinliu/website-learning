@@ -1,0 +1,15 @@
+div{
+   width: 200px;
+   height: 200px;
+   border: 1px solid red;
+}
+#box1{
+	float: left;
+}
+#box2{
+	float: left;	
+}
+#box3{
+	float: left;
+	clear: left; /*box3左侧不允许有浮动，所以box3会换到下一行*/
+}

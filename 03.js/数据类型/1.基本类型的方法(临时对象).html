@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>基本类型的方法(临时对象)</title>
+</head>
+<body>
+	<script>
+	/* 基本类型不是对象，不能存储属性。所有的属性/方法操作都是在临时对象的帮助下执行的。
+	 *
+	 */
+
+		// 我能添加一个字符串属性吗？
+		let str = "Hello";
+
+		str.test = 5; // 创建一个“包装对象” -> 操作属性 -> “包装对象”消失
+
+		alert(str.test); // 创建一个新的“包装对象”
+	</script>
+</body>
+</html>

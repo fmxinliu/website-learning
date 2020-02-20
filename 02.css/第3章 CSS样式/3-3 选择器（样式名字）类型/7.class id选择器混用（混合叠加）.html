@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>样式的混合叠加</title>
+
+	<!-- 多个class选择器可以混用，id选择器不可以多个同时使用 -->
+	<style type="text/css">
+		/*id选择器*/
+		#my{font-style: italic;} 
+		
+		/*class选择器*/
+		.one{font-size: 12px;}
+		.green{color: green;}
+		.center{text-align: center;}
+	</style>
+</head>
+<body>
+	<h1>欢迎访问论坛</h1>
+	<p id="my" class="one green center">欢迎访问论坛</p>
+	<h2>欢迎访问论坛</h2>
+	欢迎访问论坛
+</body>
+</html>

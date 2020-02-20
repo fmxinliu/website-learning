@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>箭头函数</title>
+	<!-- https://zh.javascript.info/arrow-functions -->
+	<!-- setTimeout 有点特殊，无论是否在“严格模式”下，都是 this=window -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+	</script>
+
+	<!-- 1.箭头函数没有 “this”，从上下文中进行查找，与普通变量搜索顺序完全相同 -->
+	<!-- 2.不具有 this 自然意味着另一个限制：箭头函数不能用作构造函数。他们不能用 new 调用 -->
+	<script>	
+		"use strict"
+		let group = {
+			title: "Our Group",
+			students: ["John", "Pete", "Alice"],
+
+			showList() {
+				this.students.forEach(
+					student => print(this.title + ': ' + student) // <-- this=group
+				);
+			},
+
+			showList2() {
+				let saveThis = this;
+				this.students.forEach(function(student) {
+					// print(this.title + ': ' + student); // <-- this=undefined
+					print(saveThis.title + ': ' + student);
+				});
+			}
+		};
+
+		group.showList();
+		group.showList2();
+		
+	</script>
+
+	<!-- 3.箭头函数没有 “arguments”（参数） -->
+	<script>
+		"use strict"
+
+		function defer(f, ms) {
+			return function() {
+				setTimeout(() => f.apply(this, arguments), ms);
+			};
+		}
+
+		function defer2(f, ms) {
+			return function(...args) {
+				let ctx = this; // <-- this=undefined
+				setTimeout(function() {
+					print(this); // <-- this=window
+					print(ctx);  // <-- this=undefined
+					f.apply(ctx, args);
+				}, ms);
+			}
+		}
+
+		function sayHi(who) {
+			print('Hello, ' + who);
+		}
+
+		let sayHiDeferred = defer(sayHi, 2000);
+		sayHiDeferred("John"); // 2 秒后打印 Hello, John
+
+
+		sayHiDeferred = defer2(sayHi, 2000);
+		sayHiDeferred("John"); // 2 秒后打印 Hello, John
+	</script>
+
+	<!-- 4.箭头函数也没有 “super” -->
+	<script>
+		class Animal {
+			say() { 
+				print("Animal")
+			}
+		}
+
+		class Rabbit extends Animal {
+			say() { 
+				setTimeout(() => super.say(), 1000); // 1 秒后调用父类的 say 函数
+			}
+
+			// sayHi() {
+			// 	setTimeout(function() { super.say() }, 1000); // Error !!! <-- // 未定义的 super
+			// }
+		}
+
+		new Rabbit().say();
+		
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>class 继承</title>
+	<!-- https://zh.javascript.info/class-inheritance -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- class 继承 -->
+	<script>
+		class Animal {
+
+		  	constructor(name) {
+		    	this.speed = 0;
+		    	this.name = name;
+		  	}
+
+		  	run(speed) {
+		    	this.speed += speed;
+		    	print(`${this.name} runs with speed ${this.speed}.`);
+		  	}
+
+		  	stop() {
+		    	this.speed = 0;
+		    	print(`${this.name} stopped.`);
+		  	}
+
+		}
+
+		// 从 Animal 继承
+		class Rabbit extends Animal { // <-- extends 关键字：(1) Rabbit.prototype.__proto__ = Animal.prototype (2) Rabbit.__proto__ = Animal
+			hide() {
+				print(`${this.name} hides!`);
+			}
+		}
+
+		let rabbit = new Rabbit("White Rabbit");
+		rabbit.run(5); // White Rabbit runs with speed 5.
+		rabbit.hide(); // White Rabbit hides!
+
+	</script>
+
+	<!-- 类语法不仅允许在 extends 后指定一个类，也允许指定任何表达式 -->
+	<script>
+		function f(phrase) {
+			return class {
+				sayHi() { print(phrase) }
+			}
+		}
+
+		// class User 继承自 f("Hello") 的执行结果
+		class User extends f("Hello") {}
+
+		new User().sayHi(); // Hello
+	</script>
+</body>
+</html>

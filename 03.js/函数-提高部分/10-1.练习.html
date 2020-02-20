@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/bind#tasks -->
+	<!-- 严格模式下，this 丢失： this=undefine。如果调用对象属性，会报错 -->
+	<!-- 非严格模式下，this 丢失： this=window -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			// console.log(msg);
+			document.write(msg + "<br />");
+		}
+
+	</script>
+
+	<!-- 作为方法的边界函数 -->
+	<script>
+		"use strict"	
+		function f() {
+			print(this);
+		}
+
+		var user = {
+			g: f.bind(null) // 边界函数的上下文是硬绑定的，没有办法继续修改
+		};
+
+		user.g(); // null
+
+	</script>
+
+	<!-- 二次绑定 -->
+	<script>
+		function f() {
+			print(this.name);
+		}
+
+		// f = f.bind( {name: "John"} ).bind( {name: "Ann"} );
+
+		let g = f.bind( {name: "John"} );  // <-- f.bind(...) 返回的外来的 绑定函数 对象仅在创建的时候记忆上下文（如果提供了参数）
+		f = g.bind(  {name: "Ann"} );
+
+		f();  // John
+
+	</script>
+
+	<!-- bind 过后的函数属性 -->
+	<script>
+		function sayHi() {
+			// test: 5, // <-- 不能给 sayHi 添加属性 test
+			print(this.name);
+		}
+		sayHi.test = 5; // <-- 给 sayHi 添加属性 test
+
+		let bound = sayHi.bind({ // <-- bind 的结果是另一个对象，它并没有 test 属性
+			name: "John"
+		});
+		
+		print(bound.test); // undefined
+	</script>
+
+	<script>
+		"use strict"
+		function askPassword(ok, fail) {
+			let password = prompt("Password?", 'rockstar');
+			if (password == "rockstar") ok();
+			else fail();
+		}
+
+		var user = {
+			name: 'John',
+
+			loginOk() {
+				print(`${this.name} logged in`);
+			},
+
+			loginFail() {
+				print(`${this.name} failed to log in`);
+			}
+		};
+
+		// askPassword(user.loginOk, user.loginFail); // error <-- “this” 丢失
+
+		askPassword(function() { user.loginOk(); }, function() { user.loginFail() });
+
+		askPassword(() => user.loginOk(), () => user.loginFail());
+
+		// 执行期间，并不依赖于 user，前两种依赖 user
+		askPassword(user.loginOk.bind(user), user.loginFail.bind(user));
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>「极简」对象</title>
+	<!-- https://zh.javascript.info/prototype-methods#ji-jian-dui-xiang -->
+	<!-- (1)__proto__ 属性很特别：它必须是对象或者 null 值，字符串不能成为 prototype
+		 (2)__proto__ 根本不是一个对象的属性，只是 Object.prototype 的访问属性。
+		 (3)__proto__ 是访问 [[Prototype]] 的方式，而不是 [[prototype]] 本身 -->
+	<!-- 如果 obj.__proto__ 被读取或者赋值，那么对应的 getter/setter 从它的原型被调用，它会获取/设置 [[Prototype]] -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<!-- 对象做关联数组来存储键值对，如果用户输入 "__proto__" 作为键值，会出错 -->
+	<script>
+		var obj = {};
+
+		var key = prompt("What's the key?", "__proto__");
+		obj[key] = "some value";
+
+		print(obj[key]); // [object Object]，而不是 "some value"！
+	</script>
+
+	
+	<!-- Object.create(null) 创建一个“极简”对象 -->
+	<script>
+		var obj = Object.create(null); // <-- 创建了一个空对象，prototype = null
+
+		var key = prompt("What's the key?", "__proto__");
+		obj[key] = "some value";
+
+		print(obj[key]); // some value
+
+		// print(obj); // Error  <-- 没有 toString 方法
+
+		print(Object.keys(obj)); // __proto__   <-- Object.keys(obj) 不在 prototype 中
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Map、Set练习</title>
+	<!-- https://zh.javascript.info/map-set-weakmap-weakset -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		print("过滤唯一数组元素");
+		function unique(arr) {
+			return Array.from( new Set(arr) ); // Array.from(obj) 将可迭代对象 -> 转换为数组
+		}
+
+		let values = ["Hare", "Krishna", "Hare", "Krishna",
+		  "Krishna", "Krishna", "Hare", "Hare", ":-O"
+		];
+
+		print( unique(values) ); // Hare, Krishna, :-O
+
+		print("过滤 anagrams");
+		function aclean1(arr) {
+			let map = new Map();
+
+			for (let word of arr) {
+				// 将单词打散为字母，排序然后拼接回来
+				let sorted = word.toLowerCase().split('').sort().join(''); // (*)
+				map.set(sorted, word);
+			}
+
+			return Array.from(map.values());
+		}
+
+		function aclean2(arr) {
+			let obj = {}; // 键是字符串，可以使用对象代替 Map
+
+			for (let i = 0; i < arr.length; i++) {
+				let sorted = arr[i] // PAN
+				  .toLowerCase() // pan
+				  .split('') // ['p','a','n']
+				  .sort() // ['a','n','p']
+				  .join(''); // anp
+
+				obj[sorted] = arr[i]; // 修改属性
+			}
+
+			return Array.from(Object.values(obj));
+		}
+
+		print( aclean1(["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"]) ); // "nap,teachers,ear" or "PAN,cheaters,era"
+		print( aclean2(["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"]) ); // "nap,teachers,ear" or "PAN,cheaters,era"
+
+		print("迭代键");
+		map = new Map;
+		map.set("name", "John");
+		let keys = map.keys(); // map.keys() 返回的是迭代器而非数组
+		// keys.push("more"); // 错误：numbers.push 不是一个函数
+		keys = Array.from(keys); // Array.from 来将它转化为数组
+		keys.push("more");
+		print(keys);
+
+		print(`存储 "unread" 标识`);
+		function test3() {
+			let messages = [ // 被其他代码管理
+			    {text: "Hello", from: "John"},
+			    {text: "How goes?", from: "John"},
+			    {text: "See you soon", from: "Alice"}
+			];
+
+			let readMessages = new WeakSet();
+
+			// readMessages 会自动清理，但是作为交换我们不能对它进行迭代，直接获取所有已读消息。
+			// 但是我们可以通过迭代所有消息，然后找出存在于 set 的那些消息来完成这个功能
+			for (let message of messages) {
+				if (!readMessages.has(message)) { // message 未读
+					readMessages.add(message);
+					print(`Read message : "${message.text}" ` + readMessages.has(messages[0])); // 回答：message 已读？
+				}
+			}
+
+			messages.shift();
+			// 现在 readMessages 删除第一个消息（技术上来说内存可能稍后被清理）
+		}
+
+		function test4() {
+			let messages = [ // 被其他代码管理
+			    {text: "Hello", from: "John"},
+			    {text: "How goes?", from: "John"},
+			    {text: "See you soon", from: "Alice"}
+			];
+
+			// 附：如果消息被其他代码管理，那么仅为了自己的功能给每个消息添加一个属性也许会很危险，但是我们可以将它改为 symbol 来规避冲突。
+			let isRead = Symbol("isRead"); // the symbolic property is only known to our code
+			messages[0][isRead] = true;
+			messages[1][isRead] = false;
+			messages[2][isRead] = true;
+			for (let message of messages) {
+				 // print(`Read message : "${message.text}" ${message.isRead}`);  // message.isRead 未定义 ==================
+				 print(`Read message : "${message.text}" ${message[isRead]}`);
+			}
+
+			// 删除
+			for (let i = 0; i < messages.length; i++) {
+				if (messages[0][isRead] === true) {
+					messages.splice(i, 1);
+				}
+			}
+		}
+
+		test3();
+		test4();
+
+		print("保存阅读日期");
+		function test5() {
+			let messages = [
+			    {text: "Hello", from: "John"},
+			    {text: "How goes?", from: "John"},
+			    {text: "See you soon", from: "Alice"}
+			];
+
+			let readMap = new WeakMap();
+
+			// 添加读取日期
+			readMap.set(messages[0], new Date(2019, 5, 4));
+			
+			// readMap.delete(messages[0]);
+			messages.shift();
+			// 现在 messages 删除第一个消息（技术上来说内存可能稍后被清理）
+		}
+
+		test5();
+
+	</script>
+</body>
+</html>

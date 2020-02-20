@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+	<!-- https://zh.javascript.info/function-object#ren-yi-duo-ge-kuo-hao-qiu-he -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+	</script>
+
+	<script>
+		print("任意多个括号求和");
+
+		function sum(a) {
+			let currentSum = a; // 保存计算结果
+
+			function f(b) {
+				currentSum += b;
+				return f; // <-- 返回函数对象
+			} 
+
+			// f.toString() { // <-- error !!!
+			f.toString = function() {
+				return currentSum; // 转换
+			};
+
+			return f;
+		}
+
+		print( `sum(1)(2)(3) = ${sum(1)(2)(3)}` ); // 6
+		print( `typeof sum(1)(2)(3) = ${typeof sum(1)(2)(3)}` ); // function
+
+		// 调用 f.toString()，自动转换
+		print( sum(1)(2)(3) == 6 ); // true
+		
+		debugger
+		
+		// 不会自动转换
+		print( sum(1)(2)(3) === 6 ); // false	
+
+	</script>	
+</body>
+</html>

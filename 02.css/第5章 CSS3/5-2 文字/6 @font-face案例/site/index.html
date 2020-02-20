@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>定义web字体</title>
+	<style> 
+		@font-face{
+			font-family: kastlerFont;
+			src: url('fonts/kastler.ttf'), /*Firefox、Safari、Opera*/
+			     url('fonts/kastler.eot'), /*IE4.0+*/
+			     url('fonts/kastler.woff'), /*Chrome、Firefox*/
+			     url('fonts/kastler.svg'); /*Chrome、IPhone*/
+			}
+		p{
+			font-family: kastlerFont;
+		}
+	</style>
+</head>
+<body>
+	<h3>网页使用特殊字体</h1>
+	<ol>
+		<li>在客户端安装字体文件</li>
+		<li>把特殊字体做成图片</li>
+		<li>利用@font-face规则，定义web字体，引用服务器端部署的字体文件</li>
+	</ol>
+	
+	<p>Web front-end development</p>
+</body>
+</html>

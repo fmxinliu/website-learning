@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>2种周期性调度对比</title>
+	<!-- https://zh.javascript.info/settimeout-setinterval#di-gui-ban-settimeout -->
+</head>
+<body>
+	<script>
+		// 打印
+		function print(msg) {
+			document.write(msg + "<br />");
+		}
+
+		// 延时
+		function sleep(ms) {
+			let start = Date.now();
+
+			while (true) {
+				if (Date.now() - start > ms) {
+					break;
+				}
+			}
+		}
+	</script>
+
+	<script>	
+		// test1();
+		// test2();
+		print("如果不时有一些占用 CPU 的任务，我们可以通过衡量执行时间来安排下次调用是应该提前还是推迟。")
+		print("递归版 setTimeout 能保证每一轮执行的最小时间间隔，setInterval 却不能够。");
+
+		function func(i) {
+			print(i);	
+			sleep(1000); // 1s
+		}
+
+		// (1) setInterval
+		function test1() {
+			let i = 0;
+			setInterval(function() {
+				func(i++);
+			}, 100);
+
+			// =>使用 setInterval 时，func() 的实际调用间隔比 100 ms 短，因为 func() 的执行时间抵消掉了一部分间隔时间。
+			// =>还有一种可能，如果 func() 的执行时间超出了 100 ms呢？
+			// 这时候，JavaScript 引擎会等待 func() 执行完，然后向调度器询问是否时间已到，如果是，那么立马再执行一次。
+			// =>极端情况下，如果函数每次执行时间都超过 delay 设置的时间，那么每次调用之间将毫无停顿。
+		}
+
+		// (2) 递归版 setTimeout
+		function test2() {
+			let i = 0;
+			setTimeout(function run() {
+				func(i++);
+				setTimeout(run, 100);
+			}, 100);
+
+			// =>递归的 setTimeout 就能确保延时的固定（这里用的是 100 毫秒）。这是因为下一次调用是在前一次调用完成时再调度的。
+		}
+
+	</script>	
+</body>
+</html>

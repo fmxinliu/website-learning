@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>重写一个方法</title>
+	<!-- https://zh.javascript.info/class-inheritance#zhong-xie-yi-ge-fang-fa -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<script>
+		class Animal {
+
+		  	constructor(name) {
+		    	this.speed = 0;
+		    	this.name = name;
+		  	}
+
+		  	run(speed) {
+		    	this.speed += speed;
+		    	print(`${this.name} runs with speed ${this.speed}.`);
+		  	}
+
+		  	stop() {
+		    	this.speed = 0;
+		    	print(`${this.name} stopped.`);
+		  	}
+
+		}
+
+		class Rabbit extends Animal {
+			hide() {
+				print(`${this.name} hides!`);
+			}
+
+			// 重写方法
+			stop() {
+				super.stop(); // 调用父类的 stop 函数
+				this.hide();
+			}
+		}
+
+		let rabbit = new Rabbit("White Rabbit");
+		rabbit.run(5); // White Rabbit runs with speed 5.
+		rabbit.stop(); // White Rabbit stopped. White rabbit hides!
+
+	</script>
+
+</body>
+</html>

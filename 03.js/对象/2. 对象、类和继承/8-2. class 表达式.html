@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>class 表达式</title>
+	<!-- https://zh.javascript.info/class#class-biao-da-shi -->
+	<!-- class 本质上是 function。因此，可以定义在其他表达式中，也同样可以被当作参数传递、作为返回值返回等 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	
+	<!-- class 工厂 -->
+	<script>
+		function makeClass(phrase) {
+			// 声明一个 class 并作为返回值返回。
+			return class {
+				sayHi() {
+					print(phrase);
+				}
+			};
+		}
+		
+		let User = makeClass("Hello");
+		new User().sayHi(); // Hello
+
+	</script>
+
+	<!-- 为 class 取名 -->
+	<script>
+		let Animal = class MyClass {
+			sayHi() {
+				print(MyClass);
+			}
+		}
+
+		new Animal().sayHi();
+		// print(MyClass); // <-- 类名 MyClass 只在类内部可见
+	</script>
+</body>
+</html>

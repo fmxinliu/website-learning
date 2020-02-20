@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>解构赋值-练习</title>
+	<!-- https://zh.javascript.info/destructuring-assignment -->
+	<!-- 对象让我们能够把许多信息打包到一个单一的实体中，数组则让我们能够存放有序的集合 -->
+	<!-- 解构赋值是一种特殊的语法，它让我们可以将数组或对象进行“拆包”，存放到一系列的变量中 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+		let salaries = {
+		  "John": 100,
+		  "Pete": 300,
+		  "Mary": 250
+		};
+
+		function topSalary(salaries) {
+			let keyValues = Object.entries(salaries);
+			
+			if ( !keyValues.length ) return null;
+
+			print( f1(keyValues) );
+			print( f2(keyValues) );
+			print( f3(keyValues) );
+
+			return f3(keyValues);
+		}
+
+
+		function f1(keyValues) {
+			// 方法1：数组排序
+			keyValues.sort( (kv1, kv2) => kv2[1] - kv1[1] ); // 从大 -> 小
+
+			return keyValues[0][0];
+		}
+
+		function f2(keyValues) {
+			let max = 0;
+			let name = '';
+
+			// 方法2：map 分离  键值对
+			let map = new Map(keyValues);
+			for (let key of map.keys()) {
+				if (max <= map.get(key)) {
+					max = map.get(key);
+					name = key;
+				}
+			}
+
+			return name;
+		}
+
+		function f3(keyValues) {
+			let max = 0;
+			let name = '';
+
+			// 方法3：解构赋值  解析戒指对
+			for (let [user, salarie] of keyValues) {
+				if (max <= salarie) {
+					max = salarie;
+					name = user;
+				}
+			}
+
+			return name;
+		}
+
+		print( topSalary(salaries) );
+
+	</script>
+</body>
+</html>

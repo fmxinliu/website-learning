@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原生方法是可扩展的</title>
+	<!-- https://zh.javascript.info/class-inheritance#yuan-sheng-fang-fa-shi-ke-kuo-zhan-de -->
+
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	
+	<!-- Array 的原生方法，默认返回新对象 PowerArray -->
+	<script>
+		class PowerArray extends Array {
+			isEmpty() {
+				return this.length === 0;
+			}
+		}
+
+		let arr = new PowerArray(1, 2, 5, 10, 50);
+		print(arr.isEmpty()); // false;
+		print(arr.constructor === PowerArray); // true
+		print(PowerArray.__proto__ === Array); // true
+
+		// filter，map 或者其他原生的方法，都会根据继承的类型返回新的对象
+		let filteredArr = arr.filter(item => item >= 10);
+		print(filteredArr); // 10, 50
+		print(filteredArr.isEmpty()); // false
+		print(filteredArr.constructor === PowerArray); // true
+	</script>
+
+	
+	<!-- 如果存在静态的 getter Symbol.species，那么就会使用它的返回值作为构造函数 -->
+	<script>
+		class PowerArray2 extends Array {
+			isEmpty() {
+				return this.length === 0;
+			}
+
+			static get [Symbol.species]() {
+				return Array; // <-- 原生方法，返回 Array 对象
+			}
+		}
+
+		let arr2 = new PowerArray2(1, 2, 5, 10, 50);
+		print(arr2.isEmpty()); // false
+
+		// filter 使用 arr2.constructor[Symbol.species] 作为构造函数创建了新数组
+		let filteredArr2 = arr2.filter(item => item >= 10);
+
+		// filteredArr2 不是 PowerArray2，而是一个 普通数组
+		print(filteredArr2.isEmpty()); // Error: filteredArr2.isEmpty is not a function
+	</script>
+
+</body>
+</html>

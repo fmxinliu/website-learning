@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>属性的标准和描述符</title>
+	<!-- https://zh.javascript.info/property-descriptors -->
+	<!-- 数据属性包括：
+			value - 值。
+			writable — 如果为 true，则可以修改，否则它是只读的。
+			enumerable — 如果是 true，则可在循环中列出，否则不列出。
+			configurable — 如果是 true，则此属性可以被删除，相应的特性也可以被修改，否则不可以。 --> 
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+
+	</script>
+
+	<script>
+		"use strict"
+		function showProp(obj, prop) {
+			let descriptor = Object.getOwnPropertyDescriptor(obj, prop); // <-- 返回一个“属性描述符”对象：包含值和所有的标志
+			
+			print( JSON.stringify(descriptor, null, 2) );
+		}
+
+		function showObj(obj) {
+			print( JSON.stringify(obj, null, 2) );
+		}
+	</script>
+
+
+	<!-- 查询属性的完整信息 -->
+	<script>
+		showProp( { name: "John" }, 'name' );
+		/*
+		{
+		  "value": "John",
+		  "writable": true, <-- 用“常用的方式”创建一个属性时，默认为 true
+		  "enumerable": true,
+		  "configurable": true
+		}
+	 	 */
+
+		showObj( { name: "John" } );
+
+	</script>
+
+	<!-- 修改属性标志 -->
+	<script>
+		"use strict"
+		var user = {};
+
+		// (1) 属性不存在，则创建并添加
+		Object.defineProperty(user, "name", {
+			value: "John",
+			// enumerable: true
+		});
+
+		showProp(user, "name");
+		/*
+		{
+		  "value": "John",
+		  "writable": false,  <-- 没有提供标志，默认为 false
+		  "enumerable": false,
+		  "configurable": false
+		}
+		 */
+
+		print(user.name); // John
+		showObj(user); // {}  <-- 无法列出 ????????????????????  设置是否可枚举
+
+	</script>
+
+	<script>
+		// "use strict"
+		var user = {
+			name: "John"
+		};
+
+		// (2) 只读
+		Object.defineProperty(user, "name", {
+			writable: false
+		});
+
+		user.name = "Pete"; // <-- 严格模式下，会报错；非严格模式，不会修改只读属性
+
+		showProp(user, 'name');
+		/*
+		{
+		  "value": "John", <-- 不会被修改
+		  "writable": false, <-- 只读
+		  "enumerable": true, <-- 可枚举
+		  "configurable": true <-- 可配置
+		}
+		 */
+
+	</script>
+	
+	<script>
+		// "use strict"
+		var user = {
+			name: "John",
+			toString() {
+				return this.name;
+			}
+		};
+
+		// 默认情况下，我们的两个属性都会列出：
+		for (let key in user) print(key); // name, toString
+
+		print("==" + Object.keys(user));
+
+		// (3) 不可枚举
+		Object.defineProperty(user, "toString", {
+			enumerable: false
+		});
+
+		// 现在 toString 消失了：
+		for (let key in user) print(key); // name  <-- 不会被 for...in 列出
+
+		print("==" + Object.keys(user)); // <-- 不会被 Object.keys 列出
+
+		showObj(user); // <-- 不会被 JSON 列出
+	</script>
+
+	<script>
+		"use strict"
+		var user = { };
+
+		// (4) 不可配置
+		Object.defineProperty(user, "name", {
+		  	value: "John",
+		  	// writable: false,
+		  	configurable: false
+		});
+
+		// 下面的所有操作都不起作用：
+		//   user.name = "Pete" <-- 不适用于不可写的属性
+		//   delete user.name <-- 不适用于不可配置的属性
+		//   defineProperty(user, "name", ...) <-- 不适用于不可配置、不可写的属性
+	</script>
+
+
+	<!-- 一次定义多个属性 -->
+	<script>
+		var user = {};
+		Object.defineProperties(user, {
+			name: { value: "John", writable: false, enumerable: true },
+		  	surname: { value: "Smith", writable: false, enumerable: true },
+		  	// ...
+		});
+
+		showObj(user);
+
+	</script>
+
+	<!-- 一次性获取所有属性 -->
+	<script>
+		// 克隆对象
+		let clone = Object.defineProperties({}, // 给空对象，创建所有属性
+			Object.getOwnPropertyDescriptors(user) // <-- 一次获取所有属性描述符，包含 symbolic 属性
+		);
+
+		showObj(clone);
+
+		// 复制属性
+		let clone2 = {};
+		for (let key in user) {
+			clone2[key] = user[key]; // <-- 不能复制标志，无法复制 symbolic 属性
+		}
+
+		showProp(clone, 'name');
+		showProp(clone2, 'name');
+	</script>
+
+</body>
+</html>

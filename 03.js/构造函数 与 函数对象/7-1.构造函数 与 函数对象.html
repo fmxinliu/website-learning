@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数 与 函数对象</title>
+	<!-- 作为构造函数：在内部添加属性，外部不能添加 -->
+	<!-- 作为函数对象：在外部添加属性，内部不能添加 -->
+</head>
+<body>
+	<script>
+		function print(msg) {
+			document.write(msg);
+			document.write("<br />");
+		}
+	</script>
+
+	<script>
+		function User() {
+			this.sayHi = function() {
+				print(`hi`);
+			};
+		}
+
+		//=======构造函数：外部，无法添加属性 =======
+		User.sayBye = function() {
+			print(`bye bye`);
+		};
+
+		User._name = "John";
+		
+
+		// (1) 作为构造函数，创建对象
+		var user = new User();
+		user.sayHi(); // hi
+		// user.sayBye(); // <-- error !!! 
+		print(user.name); // undefined
+
+		// (2) 作为函数对象，调用属性
+		User.sayBye(); // bye bye
+		print(User._name); // John
+		print(User.name); // User
+	</script>
+</body>
+</html>
